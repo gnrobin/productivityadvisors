@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GTM Systems Playbook · Productivity Advisors</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<meta name="author" content="Productivity Advisors">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600&display=swap">
+<style>
+/* Interim wrapper: shows the Playbook PDF from Google Drive until it is converted to HTML. */
+html,body{height:100%}
+body{margin:0;display:flex;flex-direction:column;background:#F7F7F4;color:#2A2A2C;font-family:"Google Sans","Product Sans",-apple-system,"Segoe UI",sans-serif}
+.doc{flex:1;display:flex;flex-direction:column;min-height:0}
+.doc iframe{flex:1;width:100%;border:0;background:#FFFFFF;min-height:70vh}
+.fallback{font-size:13px;color:#55574F;padding:10px max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px))}
+.fallback a{color:#3F6118}
+</style>
+</head>
+<body>
+<!-- Productivity Advisors brand bar (hidden when the page is shown inside the site's viewer) -->
+<style>
+html.pa-framed .pa-bar{display:none}
+.pa-bar{background:#FFFFFF;font-family:"Google Sans","Product Sans",-apple-system,"Segoe UI",sans-serif}
+.pa-bar .pa-stripe{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));height:3px}
+.pa-bar .pa-row{display:flex;align-items:center;gap:12px;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid #ECEDE8}
+.pa-bar a{color:#3B3B3D;text-decoration:none;font-size:14px;line-height:1.2}
+.pa-bar .pa-home{display:flex;align-items:center;gap:10px;font-weight:500}
+.pa-bar .pa-home img{height:24px;width:auto;display:block}
+.pa-bar .pa-home b{color:#5D8A25;font-weight:600}
+.pa-bar .pa-back{margin-left:auto;font-size:13px;color:#55574F;border:1px solid #E6E7E1;border-radius:20px;padding:6px 14px}
+.pa-bar .pa-back:hover{border-color:#A9C584;color:#3F6118}
+.pa-bar a:focus-visible{outline:2px solid #5D8A25;outline-offset:2px;border-radius:6px}
+</style>
+<script>if(window.self!==window.top)document.documentElement.classList.add('pa-framed');</script>
+<div class="pa-bar"><div class="pa-stripe" aria-hidden="true"><span style="background:#5D8A25"></span><span style="background:#CA4F2E"></span><span style="background:#3B3B3D"></span><span style="background:#D4B42B"></span></div>
+<div class="pa-row"><a class="pa-home" href="../index.html"><img src="../assets/pa-wordmark.png" alt="Productivity Advisors"></a><a class="pa-back" href="../index.html#resources">All resources</a></div></div>
+<main class="doc">
+  <iframe src="https://drive.google.com/file/d/1arHb2E3iP0hhYgZqR2Z3dtQhiXmpW3IE/preview" title="GTM Systems Playbook" allow="autoplay"></iframe>
+  <p class="fallback">Document not loading? <a href="https://drive.google.com/file/d/1arHb2E3iP0hhYgZqR2Z3dtQhiXmpW3IE/view" target="_blank" rel="noopener">Open the Playbook in Google Drive</a>.</p>
+</main>
+</body>
+</html>

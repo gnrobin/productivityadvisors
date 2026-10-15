@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CPQ Discovery to Build · Productivity Advisors</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<meta name="author" content="Productivity Advisors">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap">
+<style>:root{
+  --ink:#1f2733; --muted:#5b6472; --faint:#8a93a0; --rule:#e3e6ea;
+  --ground:#dde1e7; --paper:#ffffff; --panel:#f3f4f6;
+  --dark:#21252c; --dark2:#2a2f38; --red:#b91c1c; --learnbg:#fdecec;
+  --navy:#1d3557;
+  --font:"Google Sans","Product Sans",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--font);padding-inline:16px;padding-block:24px 48px;-webkit-font-smoothing:antialiased}
+.deck{max-width:1280px;margin:0 auto;container-type:inline-size;display:flex;flex-direction:column;gap:24px;counter-reset:pg}
+.slide{--u:1cqw;--c:var(--navy);counter-increment:pg;position:relative;width:100%;aspect-ratio:16/9;background:var(--paper);border-radius:10px;box-shadow:0 1px 3px rgba(20,30,50,.08),0 8px 24px rgba(20,30,50,.06);padding:calc(var(--u)*3.4) calc(var(--u)*5.2) calc(var(--u)*3.2);display:flex;flex-direction:column;overflow:hidden}
+.slide::after{content:counter(pg);position:absolute;right:calc(var(--u)*2.4);bottom:calc(var(--u)*1.4);font-size:calc(var(--u)*1.05);color:var(--faint);font-variant-numeric:tabular-nums}
+.slide.dark{background:var(--dark);color:#fff}
+.slide.dark::after{color:#6b7280}
+
+.eyebrow{font-size:calc(var(--u)*1.45);font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.eyebrow.sec{color:var(--c)}
+.eyebrow.light{color:#9ca3af}
+.eyebrow .code{display:inline-block;margin-left:.5em;padding:.05em .45em;border-radius:4px;background:var(--c);color:#fff;font-size:.85em;letter-spacing:.02em}
+h1,h2,h3{margin:0;text-wrap:balance}
+h2{font-size:calc(var(--u)*3.05);font-weight:700;color:#1f2937;margin-top:calc(var(--u)*1.2);letter-spacing:-.005em}
+h2.lt{color:#fff}
+.lbl{font-size:calc(var(--u)*1.25);font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#7c8591;margin-bottom:calc(var(--u)*1.2)}
+
+/* title */
+.title{padding-inline:calc(var(--u)*6.8);justify-content:center;gap:0}
+.title .eyebrow{margin-bottom:calc(var(--u)*5)}
+.title h1{font-size:calc(var(--u)*4.4);font-weight:700;line-height:1.1;letter-spacing:-.01em}
+.title .sub{font-size:calc(var(--u)*1.9);color:#d1d5db;margin:calc(var(--u)*4) 0 calc(var(--u)*6);max-width:62ch;line-height:1.45}
+.tchips{display:grid;grid-template-columns:repeat(5,1fr);gap:calc(var(--u)*1.2)}
+.tchip{border-radius:8px;padding:calc(var(--u)*1.3) calc(var(--u)*1.2);font-size:calc(var(--u)*1.4);display:flex;gap:.6em;align-items:center;line-height:1.2}
+.tchip.build{background:transparent;border:1.5px solid #6b7c96;color:#dbe3ee}
+.title .note{font-style:italic;color:#9ca3af;font-size:calc(var(--u)*1.5);margin:calc(var(--u)*4.5) 0 0}
+
+/* two columns */
+.cols{display:grid;grid-template-columns:47fr 53fr;gap:calc(var(--u)*3.6);margin-top:calc(var(--u)*2.8);flex:1;min-height:0}
+ul.pov{margin:0;padding-left:1.1em;font-size:calc(var(--u)*1.9);line-height:1.45;color:#374151}
+ul.pov li{margin-bottom:calc(var(--u)*2.4)}
+ul.pov li::marker{color:var(--faint)}
+ol.qs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:calc(var(--u)*2.6)}
+ol.qs li{display:flex;gap:calc(var(--u)*1.3);align-items:flex-start;font-size:calc(var(--u)*1.85);line-height:1.38;color:#374151}
+.qn{flex:none;width:calc(var(--u)*3.1);height:calc(var(--u)*3.1);border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-weight:700;font-size:calc(var(--u)*1.45);margin-top:-.1em}
+.learn{margin-top:auto;background:var(--learnbg);border-radius:8px;padding:calc(var(--u)*1.8) calc(var(--u)*2.3);font-size:calc(var(--u)*1.65);color:var(--red);line-height:1.4}
+.learn b{margin-right:.35em}
+
+/* framing */
+.cols.framing{grid-template-columns:1fr 1fr;align-items:start;margin-top:calc(var(--u)*5)}
+ul.pov.big{font-size:calc(var(--u)*1.95)}
+.flow{display:flex;flex-direction:column;align-items:stretch}
+.fbox{background:var(--panel);border-radius:8px;padding:calc(var(--u)*2) calc(var(--u)*2.3);display:flex;flex-direction:column;gap:calc(var(--u)*.6)}
+.fbox b{font-size:calc(var(--u)*2);color:#1f2937}
+.fbox span{font-size:calc(var(--u)*1.5);color:var(--muted);line-height:1.4}
+.farrow{height:calc(var(--u)*3.2);position:relative}
+.farrow::before{content:"";position:absolute;left:50%;top:18%;width:calc(var(--u)*1.1);height:40%;background:#c3c9d2;transform:translateX(-50%)}
+.farrow::after{content:"";position:absolute;left:50%;top:55%;transform:translateX(-50%);border-left:calc(var(--u)*1.2) solid transparent;border-right:calc(var(--u)*1.2) solid transparent;border-top:calc(var(--u)*1.1) solid #c3c9d2}
+
+/* rubric */
+.rgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:calc(var(--u)*2);margin-top:calc(var(--u)*3.6);flex:1}
+.rcard{background:var(--cb);border-radius:10px;padding:calc(var(--u)*2.2) calc(var(--u)*2)}
+.rcard .dot{width:calc(var(--u)*3.5);height:calc(var(--u)*3.5);border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-weight:700;font-size:calc(var(--u)*1.7)}
+.rcard h3{color:var(--c);font-size:calc(var(--u)*1.95);margin:calc(var(--u)*1.8) 0 calc(var(--u)*2.6)}
+.rcard ul{margin:0;padding-left:1em;font-size:calc(var(--u)*1.6);color:#374151;line-height:1.35}
+.rcard li{margin-bottom:calc(var(--u)*.9)}
+.foot{text-align:center;font-style:italic;color:var(--muted);font-size:calc(var(--u)*1.45);margin:calc(var(--u)*2.4) 0 0}
+.foot.left{text-align:left;font-size:calc(var(--u)*1.25)}
+.lede{font-size:calc(var(--u)*1.7);color:var(--muted);margin:calc(var(--u)*1.4) 0 0;max-width:80ch;line-height:1.45}
+
+/* tables */
+.tblwrap{overflow-x:auto;margin-top:calc(var(--u)*1.8)}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+.ptable th,.ptable td{padding:calc(var(--u)*.5) calc(var(--u)*.9);text-align:left;vertical-align:top;font-size:calc(var(--u)*1.14);line-height:1.26;border-bottom:1px solid var(--rule);color:#374151}
+.ptable thead th{border-bottom:2px solid var(--c);padding-bottom:calc(var(--u)*1.1)}
+.ptable thead th b{display:block;font-size:calc(var(--u)*1.55);color:#1f2937}
+.ptable thead th span{font-size:calc(var(--u)*1.15);color:var(--c);font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.rh{font-weight:700;color:#1f2937;white-space:nowrap}
+.ptable td.rh{font-size:calc(var(--u)*1.15);text-transform:uppercase;letter-spacing:.04em;color:var(--muted);width:10%}
+.ptable tr.watch td{background:var(--learnbg);color:var(--red)}
+.ptable tr.watch td.rh{color:var(--red)}
+
+.mtable th,.mtable td{padding:calc(var(--u)*.28) calc(var(--u)*1.1);font-size:calc(var(--u)*1.32);border-bottom:1px solid var(--rule);text-align:center}
+.mtable thead th{background:var(--navy);color:#fff;font-weight:700;padding-block:calc(var(--u)*.8)}
+.mtable thead th:first-child{text-align:right}
+.mtable td.rh{text-align:right;white-space:normal;font-weight:500;color:#374151;width:34%}
+.mtable tr.grp td{background:#eef1f5;font-weight:700;text-align:left;color:var(--navy);font-size:calc(var(--u)*1);text-transform:uppercase;letter-spacing:.05em;font-size:calc(var(--u)*1.15)}
+.mtable td.na{color:#c0c6cf}
+.mtable td.ok{color:#1f2937;font-weight:500}
+
+.htable th,.htable td{padding:calc(var(--u)*.62) calc(var(--u)*1.2);font-size:calc(var(--u)*1.42);border-bottom:1px solid var(--rule);text-align:left;color:#374151}
+.htable thead th{font-size:calc(var(--u)*1.2);text-transform:uppercase;letter-spacing:.05em;color:#9aa3ae;border-bottom:2px solid var(--navy)}
+.htable td.rh{color:var(--navy)}
+
+/* build */
+.cols.build{grid-template-columns:58fr 42fr;gap:calc(var(--u)*3.4);margin-top:calc(var(--u)*2.4)}
+ul.reqs{margin:0;padding-left:1.1em;font-size:calc(var(--u)*1.62);line-height:1.34;color:#374151}
+ul.reqs li{margin-bottom:calc(var(--u)*.75)}
+ul.reqs li::marker{color:var(--navy)}
+.rside .lbl{margin-top:0}
+.rside .lbl~.lbl{margin-top:calc(var(--u)*2.2)}
+.chips{display:flex;flex-wrap:wrap;gap:calc(var(--u)*.7)}
+.chip{background:var(--cb);color:var(--c);border-radius:999px;padding:calc(var(--u)*.45) calc(var(--u)*1.1);font-size:calc(var(--u)*1.35);white-space:nowrap}
+.chips.sm .chip{font-size:calc(var(--u)*1.2);padding:calc(var(--u)*.35) calc(var(--u)*.9)}
+p.side{margin:0 0 calc(var(--u)*1.1);font-size:calc(var(--u)*1.5);line-height:1.45;color:#4b5563}
+p.side b{color:#1f2937}
+.bgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:calc(var(--u)*1.4);margin-top:calc(var(--u)*2.4);flex:1;align-content:start}
+.bcard{background:#e7ecf3;border-radius:10px;padding:calc(var(--u)*1.4) calc(var(--u)*1.5);display:flex;flex-direction:column;gap:calc(var(--u)*1.1);}
+.bnum{width:calc(var(--u)*2.8);height:calc(var(--u)*2.8);border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:700;font-size:calc(var(--u)*1.3)}
+.bcard h3{font-size:calc(var(--u)*1.75);color:var(--navy)}
+.bcard .chips{flex-direction:column;align-items:flex-start;gap:calc(var(--u)*.4)}
+.bcard .bnum{width:calc(var(--u)*2.5);height:calc(var(--u)*2.5)}
+
+/* visuals */
+.cols.vis{grid-template-columns:26fr 74fr;margin-top:calc(var(--u)*3.4);align-items:center}
+.chart svg{width:100%;height:auto;display:block}
+.wf text.v{font-size:21px;font-weight:700;fill:#1f2937}
+.wf text.v.neg{fill:#b91c1c}
+.wf text.l{font-size:17px;fill:#4b5563}
+.chart.full{margin-top:calc(var(--u)*1.6);flex:1;min-height:0;display:flex;justify-content:center}
+.chart.full svg{max-height:100%;width:auto;max-width:100%}
+.arr .bt{font-size:19px;font-weight:700}
+.arr .bs{font-size:16px;fill:#4b5563}
+.arr .lane{font-size:16px;font-weight:700;letter-spacing:.08em}
+.arr .al{font-size:14.5px;fill:#5b6472;font-style:italic}
+
+.cols.vis2{grid-template-columns:1fr 1fr;margin-top:calc(var(--u)*3)}
+.qle{border:1px solid #d8dde4;border-radius:8px;overflow:hidden;margin-bottom:calc(var(--u)*2.2)}
+.qle table th{background:#f3f4f6;color:var(--muted);font-weight:500;font-size:calc(var(--u)*1.12);text-transform:uppercase;letter-spacing:.03em;padding:calc(var(--u)*.7) calc(var(--u)*.9);text-align:right}
+.qle table td{font-size:calc(var(--u)*1.4);padding:calc(var(--u)*.8) calc(var(--u)*.9);text-align:right;border-top:1px solid var(--rule)}
+.qle table th:first-child,.qle table td:first-child{text-align:left}
+.qle td.hot{color:#c2410c;font-weight:700}
+.qmeta{background:#fafbfc;border-top:1px solid var(--rule);font-size:calc(var(--u)*1.2);color:var(--muted);padding:calc(var(--u)*.6) calc(var(--u)*.9)}
+.callout{background:#e7ecf3;border-radius:8px;padding:calc(var(--u)*1.5) calc(var(--u)*1.7);font-size:calc(var(--u)*1.5);line-height:1.45;color:#1f2937}
+
+.cols.vis3{grid-template-columns:64fr 36fr;margin-top:calc(var(--u)*1.2)}
+.ttable th{font-size:calc(var(--u)*1.3);color:#fff;background:var(--navy);padding:calc(var(--u)*.9) calc(var(--u)*1);text-align:center}
+.ttable th:first-child{text-align:left}
+.ttable td{border-bottom:1px solid var(--rule);padding:calc(var(--u)*1.2) calc(var(--u)*.9);vertical-align:middle}
+.ttable td.rh{font-size:calc(var(--u)*1.45)}
+.band{display:flex;flex-direction:column;gap:calc(var(--u)*.45)}
+.band span,.legend span{border-radius:5px;padding:calc(var(--u)*.4) calc(var(--u)*.8);font-size:calc(var(--u)*1.3);font-variant-numeric:tabular-nums}
+.b0{background:#e3f1ea;color:#0f6e4c}
+.b1{background:#fdf1e3;color:#9a4a0c}
+.b2{background:var(--learnbg);color:var(--red)}
+.legend{display:flex;gap:calc(var(--u)*.8);margin-top:calc(var(--u)*1.4);flex-wrap:wrap}
+
+/* engage */
+.egrid{display:grid;grid-template-columns:repeat(4,1fr);gap:calc(var(--u)*1.6);margin-top:calc(var(--u)*5)}
+.ecard{background:var(--dark2);border-radius:10px;padding:calc(var(--u)*2.2) calc(var(--u)*1.9);min-height:calc(var(--u)*24)}
+.enum{width:calc(var(--u)*3.4);height:calc(var(--u)*3.4);border-radius:50%;background:var(--red);display:grid;place-items:center;font-weight:700;font-size:calc(var(--u)*1.6)}
+.ecard h3{font-size:calc(var(--u)*2);margin:calc(var(--u)*2.8) 0 calc(var(--u)*1.2)}
+.ecard p{margin:0;color:#c3c8d0;font-size:calc(var(--u)*1.55);line-height:1.45}
+.contact{margin-top:auto;text-align:center;color:#9ca3af;font-size:calc(var(--u)*1.5)}
+.slide.dark:not(.title){padding-inline:calc(var(--u)*6.8)}
+
+/* phone */
+@media (max-width:720px){
+  .slide{--u:7.2px;aspect-ratio:auto;padding:22px 18px 30px}
+  .cols,.cols.framing,.cols.build,.cols.vis,.cols.vis2,.cols.vis3{grid-template-columns:1fr;gap:20px}
+  .rgrid,.bgrid,.egrid{grid-template-columns:1fr 1fr}
+  .tchips{grid-template-columns:1fr 1fr}
+  .learn{margin-top:20px}
+  .title{padding:28px 18px}
+  .slide.dark:not(.title){padding-inline:18px}
+  .ecard{min-height:0}
+  .chip{white-space:normal}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* print: one slide per page */
+@media print{
+  @page{size:1280px 720px;margin:0}
+  body{background:#fff;padding:0}
+  .deck{max-width:none;width:1280px;gap:0}
+  .slide{border-radius:0;box-shadow:none;break-after:page;page-break-after:always;width:1280px;height:720px;aspect-ratio:auto}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+<!-- Productivity Advisors brand bar (hidden when the page is shown inside the site's viewer) -->
+<style>
+html.pa-framed .pa-bar{display:none}
+html:not(.pa-framed) body{padding-top:0!important}
+.pa-bar{width:100vw;margin-left:calc(50% - 50vw);background:#FFFFFF;font-family:"Google Sans","Product Sans",-apple-system,"Segoe UI",sans-serif;position:relative;z-index:5;margin-bottom:24px}
+.pa-bar .pa-stripe{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));height:3px}
+.pa-bar .pa-row{display:flex;align-items:center;gap:12px;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid #ECEDE8}
+.pa-bar a{color:#3B3B3D;text-decoration:none;font-size:14px;line-height:1.2}
+.pa-bar .pa-home{display:flex;align-items:center;gap:10px;font-weight:500}
+.pa-bar .pa-home img{height:24px;width:auto;display:block}
+.pa-bar .pa-home b{color:#5D8A25;font-weight:600}
+.pa-bar .pa-back{margin-left:auto;font-size:13px;color:#55574F;border:1px solid #E6E7E1;border-radius:20px;padding:6px 14px}
+.pa-bar .pa-back:hover{border-color:#A9C584;color:#3F6118}
+.pa-bar a:focus-visible{outline:2px solid #5D8A25;outline-offset:2px;border-radius:6px}
+</style>
+<script>if(window.self!==window.top)document.documentElement.classList.add('pa-framed');</script>
+<div class="pa-bar"><div class="pa-stripe" aria-hidden="true"><span style="background:#5D8A25"></span><span style="background:#CA4F2E"></span><span style="background:#3B3B3D"></span><span style="background:#D4B42B"></span></div>
+<div class="pa-row"><a class="pa-home" href="../index.html"><img src="../assets/pa-wordmark.png" alt="Productivity Advisors"></a><a class="pa-back" href="../index.html#resources">All resources</a></div></div>
+<main class="deck">
+<section class="slide dark title">
+<div class="eyebrow light">Productivity Advisors · CPQ Discovery</div>
+<h1>CPQ Foundations: Discovery to Build</h1>
+<p class="sub">A quote-to-cash framework for SaaS revenue teams · platform-neutral across Salesforce CPQ, Revenue Cloud, DealHub and Nue</p>
+<div class="tchips">
+<div class="tchip" style="background:#0f6e4c"><b>A</b>Commercial Model</div><div class="tchip" style="background:#1f4e8c"><b>B</b>Deal Governance</div><div class="tchip" style="background:#b5520e"><b>C</b>Quote-to-Cash Flow</div><div class="tchip" style="background:#6b21a8"><b>D</b>Revenue Data &amp; Platform</div>
+<div class="tchip build"><b>→</b>Build Blueprint</div>
+</div>
+<p class="note">Decide the commercial model first. Then configure it.</p>
+</section><section class="slide">
+<div class="eyebrow">Framing</div>
+<h2>Why CPQ Discovery Comes First</h2>
+<div class="cols framing">
+<ul class="pov big">
+<li>CPQ encodes your commercial model: price, package, discount, terms. When those decisions are unmade, the build makes them by accident.</li>
+<li>Most CPQ pain isn't the tool. It's undefined deal types, unwritten discount policy, and no agreed definition of ARR.</li>
+<li>Part 1 is a 12-topic discovery rubric. Part 2 is the build blueprint those answers unlock, across eight functional areas.</li>
+</ul>
+<div class="flow">
+<div class="fbox"><b>Decide</b><span>Pricing metric, packaging, deal types, discount policy, ARR definitions</span></div>
+<div class="farrow"></div>
+<div class="fbox"><b>Configure</b><span>Catalog, pricing waterfall, approval rules, quote templates</span></div>
+<div class="farrow"></div>
+<div class="fbox"><b>Flow</b><span>Orders, contracts, amendments, renewals, billing, ARR rollup</span></div>
+</div>
+</div>
+</section><section class="slide">
+<div class="eyebrow">The Rubric</div>
+<h2>The Rubric at a Glance</h2>
+<div class="rgrid"><div class="rcard" style="--c:#0f6e4c;--cb:#e8f3ee"><div class="dot">A</div><h3>Commercial Model</h3><ul><li>Pricing &amp; Packaging Strategy</li><li>Product Catalog &amp; Bundles</li><li>Deal Types &amp; Motions</li></ul></div><div class="rcard" style="--c:#1f4e8c;--cb:#e8eef7"><div class="dot">B</div><h3>Deal Governance</h3><ul><li>Discounting Policy</li><li>Approval Matrix</li><li>Quote Documents &amp; Terms</li></ul></div><div class="rcard" style="--c:#b5520e;--cb:#fbefe6"><div class="dot">C</div><h3>Quote-to-Cash Flow</h3><ul><li>Orders &amp; Contracts</li><li>Billing, ERP &amp; Provisioning</li><li>Amendments &amp; Renewals</li></ul></div><div class="rcard" style="--c:#6b21a8;--cb:#f2ebf9"><div class="dot">D</div><h3>Revenue Data &amp; Platform</h3><ul><li>ARR &amp; Revenue Metrics</li><li>Current State &amp; Pain</li><li>Platform Fit</li></ul></div></div>
+<p class="foot">12 topics · 36 discovery questions · then 8 build areas, each tied back to the answers it depends on</p>
+</section><section class="slide" style="--c:#0f6e4c">
+<div class="eyebrow sec">Section A · Commercial Model <span class="code">A1</span></div>
+<h2>Pricing &amp; Packaging Strategy</h2>
+<div class="cols">
+<div><div class="lbl">Point of view</div><ul class="pov"><li>CPQ encodes a pricing strategy; it can&#x27;t invent one. If packaging changes every quarter, you&#x27;re building a configurator for a moving target.</li><li>Decide the value metric (seat, usage, tier, platform fee) before the catalog. The metric drives every rule downstream.</li></ul></div>
+<div><div class="lbl">Discovery questions</div><ol class="qs"><li><span class="qn">1</span><span>What&#x27;s your value metric, and would customers agree it tracks the value they get?</span></li><li><span class="qn">2</span><span>How many price changes or new SKUs shipped in the last 12 months, and who approved them?</span></li><li><span class="qn">3</span><span>Is pricing published list, or negotiated down from a ceiling? Do reps know which?</span></li></ol></div>
+</div>
+<div class="learn"><b>Learning:</b> <i>Pricing rules are cheap to change. A catalog built around the wrong metric is a re-implementation.</i></div>
+</section><section class="slide" style="--c:#0f6e4c">
+<div class="eyebrow sec">Section A · Commercial Model <span class="code">A2</span></div>
+<h2>Product Catalog &amp; Bundles</h2>
+<div class="cols">
+<div><div class="lbl">Point of view</div><ul class="pov"><li>The catalog is the contract between Product, Sales and Finance: every SKU needs a charge type, a revenue treatment and an owner.</li><li>Fewer, cleaner SKUs beat a SKU per deal. Bundles should mirror how customers buy, not how the org chart is drawn.</li></ul></div>
+<div><div class="lbl">Discovery questions</div><ol class="qs"><li><span class="qn">1</span><span>How many active SKUs do you have, and how many actually sold in the last 12 months?</span></li><li><span class="qn">2</span><span>For each SKU: one-time, recurring or usage? Who decides, and where is it written?</span></li><li><span class="qn">3</span><span>Which products require, exclude, or re-price other products when sold together?</span></li></ol></div>
+</div>
+<div class="learn"><b>Learning:</b> <i>If Finance keeps its own SKU map in a spreadsheet, the catalog isn&#x27;t done. It&#x27;s duplicated.</i></div>
+</section><section class="slide" style="--c:#0f6e4c">
+<div class="eyebrow sec">Section A · Commercial Model <span class="code">A3</span></div>
+<h2>Deal Types &amp; Motions</h2>
+<div class="cols">
+<div><div class="lbl">Point of view</div><ul class="pov"><li>New, add-on, upgrade, ramp, trial, co-term, renewal: each deal type is a distinct CPQ path with its own pricing, approvals and downstream records.</li><li>Name the motions you actually run. Every unnamed one becomes a workaround inside the quote.</li></ul></div>
+<div><div class="lbl">Discovery questions</div><ol class="qs"><li><span class="qn">1</span><span>List every deal shape sold last quarter: ramps, multi-year, trials, partner, mid-term add-ons. Which ones broke the quote?</span></li><li><span class="qn">2</span><span>How do trials and pilots convert: a new quote, or an amendment of the same contract?</span></li><li><span class="qn">3</span><span>What share of bookings flows through partners or resellers, and at what margin?</span></li></ol></div>
+</div>
+<div class="learn"><b>Learning:</b> <i>The 10% of deals that don&#x27;t fit the standard path eat most of Deal Desk&#x27;s week. Name them before you build.</i></div>
+</section><section class="slide" style="--c:#1f4e8c">
+<div class="eyebrow sec">Section B · Deal Governance <span class="code">B1</span></div>
+<h2>Discounting Policy</h2>
+<div class="cols">
+<div><div class="lbl">Point of view</div><ul class="pov"><li>A discount is a pricing decision delegated to a rep. Delegation needs limits by %, deal size, term and product line.</li><li>Separate system discounts (volume, term, partner) from discretionary ones. You can only govern what you can see.</li></ul></div>
+<div><div class="lbl">Discovery questions</div><ol class="qs"><li><span class="qn">1</span><span>What&#x27;s the average discretionary discount by segment, and has it drifted up over four quarters?</span></li><li><span class="qn">2</span><span>Do you discount at the line, the quote or the total, and does the order form show it the same way?</span></li><li><span class="qn">3</span><span>Which discount reasons are allowed, and are they captured on the quote?</span></li></ol></div>
+</div>
+<div class="learn"><b>Learning:</b> <i>An unwritten discount policy isn&#x27;t flexibility. It&#x27;s a price list nobody wrote down.</i></div>
+</section><section class="slide" style="--c:#1f4e8c">
+<div class="eyebrow sec">Section B · Deal Governance <span class="code">B2</span></div>
+<h2>Approval Matrix</h2>
+<div class="cols">
+<div><div class="lbl">Point of view</div><ul class="pov"><li>An approval matrix is policy you can query: every threshold maps to an approver, a reason and a turnaround time.</li><li>Design for approval avoidance first. Most deals should need no approval; approvals exist to flag exceptions.</li></ul></div>
+<div><div class="lbl">Discovery questions</div><ol class="qs"><li><span class="qn">1</span><span>What share of quotes route for approval today, and what share are ever rejected?</span></li><li><span class="qn">2</span><span>How long does the median approval take, and where does it stall?</span></li><li><span class="qn">3</span><span>Which non-price terms need sign-off: payment terms, term length, free months, opt-outs?</span></li></ol></div>
+</div>
+<div class="learn"><b>Learning:</b> <i>If 80% of quotes need approval and 1% get rejected, you&#x27;ve built a delay, not a control.</i></div>
+</section><section class="slide" style="--c:#1f4e8c">
+<div class="eyebrow sec">Section B · Deal Governance <span class="code">B3</span></div>
+<h2>Quote Documents &amp; Terms</h2>
+<div class="cols">
+<div><div class="lbl">Point of view</div><ul class="pov"><li>The quote document is the customer&#x27;s contract. Merge fields, clause logic and e-signature status are part of the build, not cosmetics.</li><li>Standard terms should be defaults. Non-standard terms should be data on the quote so Legal and Finance can report on them.</li></ul></div>
+<div><div class="lbl">Discovery questions</div><ol class="qs"><li><span class="qn">1</span><span>How many quote templates exist, and how many are still in use?</span></li><li><span class="qn">2</span><span>When Legal edits terms on a deal, where does that language live afterward?</span></li><li><span class="qn">3</span><span>After signature, what locks: the quote, the opportunity, both or neither?</span></li></ol></div>
+</div>
+<div class="learn"><b>Learning:</b> <i>Special terms trapped in a PDF are invisible at renewal. Put them in a field.</i></div>
+</section><section class="slide" style="--c:#b5520e">
+<div class="eyebrow sec">Section C · Quote-to-Cash Flow <span class="code">C1</span></div>
+<h2>Orders &amp; Contracts</h2>
+<div class="cols">
+<div><div class="lbl">Point of view</div><ul class="pov"><li>Closed-won isn&#x27;t the finish line; the order and contract are. They carry effective dates, subscriptions and the data billing depends on.</li><li>One quote may become several orders, split by entity, billing schedule or start date. Decide the split rules before you build.</li></ul></div>
+<div><div class="lbl">Discovery questions</div><ol class="qs"><li><span class="qn">1</span><span>What&#x27;s the system of record for an active subscription: CRM, billing or a spreadsheet?</span></li><li><span class="qn">2</span><span>When a deal closes, what happens in the next 24 hours, and who does it by hand?</span></li><li><span class="qn">3</span><span>Do you ever split one deal into multiple orders or invoices? Why?</span></li></ol></div>
+</div>
+<div class="learn"><b>Learning:</b> <i>Every manual step between signature and invoice becomes a revenue-recognition question at audit time.</i></div>
+</section><section class="slide" style="--c:#b5520e">
+<div class="eyebrow sec">Section C · Quote-to-Cash Flow <span class="code">C2</span></div>
+<h2>Billing, ERP &amp; Provisioning</h2>
+<div class="cols">
+<div><div class="lbl">Point of view</div><ul class="pov"><li>CPQ is upstream of revenue. Billing, ERP and provisioning all consume what the quote produces, so define the handoff field by field.</li><li>Choose the integration pattern (native billing, iPaaS, direct API) by who owns the fix when it breaks.</li></ul></div>
+<div><div class="lbl">Discovery questions</div><ol class="qs"><li><span class="qn">1</span><span>Which systems consume a closed deal: billing, ERP, provisioning, CS platform?</span></li><li><span class="qn">2</span><span>When the invoice doesn&#x27;t match the order form, who notices first: Finance or the customer?</span></li><li><span class="qn">3</span><span>Who owns the integration when it fails at 11pm on the last day of the quarter?</span></li></ol></div>
+</div>
+<div class="learn"><b>Learning:</b> <i>Integrations rarely fail loudly. They fail by quietly booking the wrong amount, so build reconciliation in from day one.</i></div>
+</section><section class="slide" style="--c:#b5520e">
+<div class="eyebrow sec">Section C · Quote-to-Cash Flow <span class="code">C3</span></div>
+<h2>Amendments &amp; Renewals</h2>
+<div class="cols">
+<div><div class="lbl">Point of view</div><ul class="pov"><li>The subscription lifecycle (upsell, downgrade, co-term, cancel, renew) is where most CPQ projects go wrong. Design it first, not last.</li><li>Renewals should generate themselves from contract data, with uplift set by policy rather than rep memory.</li></ul></div>
+<div><div class="lbl">Discovery questions</div><ol class="qs"><li><span class="qn">1</span><span>How do you handle a mid-term add-on today: co-termed, a separate contract, or case by case?</span></li><li><span class="qn">2</span><span>What&#x27;s your renewal uplift policy, and what share of renewals actually carry it?</span></li><li><span class="qn">3</span><span>How far ahead of end date is the renewal opportunity created, and who owns it?</span></li></ol></div>
+</div>
+<div class="learn"><b>Learning:</b> <i>New-business quoting is the demo. Amendments and renewals are the real product.</i></div>
+</section><section class="slide" style="--c:#6b21a8">
+<div class="eyebrow sec">Section D · Revenue Data &amp; Platform <span class="code">D1</span></div>
+<h2>ARR &amp; Revenue Metrics</h2>
+<div class="cols">
+<div><div class="lbl">Point of view</div><ul class="pov"><li>Calculate ARR at the quote line and roll it up through subscription, contract and account. Never re-derive it in a spreadsheet.</li><li>Agree definitions first: Current, Prior and Delta ARR, and how ramps, trials, one-time fees and credits count.</li></ul></div>
+<div><div class="lbl">Discovery questions</div><ol class="qs"><li><span class="qn">1</span><span>Do Sales, Finance and the board report the same ARR number? What reconciles them?</span></li><li><span class="qn">2</span><span>How does a ramp deal count in ARR: year-one value, final-year value or average?</span></li><li><span class="qn">3</span><span>Can you see Account ARR on the account record today without running a report?</span></li></ol></div>
+</div>
+<div class="learn"><b>Learning:</b> <i>If ARR lives in Finance&#x27;s model and not on the Account, Sales is forecasting a number it can&#x27;t see.</i></div>
+</section><section class="slide" style="--c:#6b21a8">
+<div class="eyebrow sec">Section D · Revenue Data &amp; Platform <span class="code">D2</span></div>
+<h2>Current State &amp; Pain</h2>
+<div class="cols">
+<div><div class="lbl">Point of view</div><ul class="pov"><li>Most CPQ projects are re-implementations. Understand what broke, and why, before you redesign it.</li><li>Separate process pain (unclear policy) from tool pain (wrong config) from data pain (dirty history). Each needs a different fix.</li></ul></div>
+<div><div class="lbl">Discovery questions</div><ol class="qs"><li><span class="qn">1</span><span>What are the three quote problems Deal Desk fixes by hand every week?</span></li><li><span class="qn">2</span><span>How many custom fields, price rules and code-based triggers live on the quote today, and who built them?</span></li><li><span class="qn">3</span><span>If you could fix one thing in quoting tomorrow, what would it be?</span></li></ol></div>
+</div>
+<div class="learn"><b>Learning:</b> <i>A CPQ rebuild that copies today&#x27;s workarounds just automates the mess.</i></div>
+</section><section class="slide" style="--c:#6b21a8">
+<div class="eyebrow sec">Section D · Revenue Data &amp; Platform <span class="code">D3</span></div>
+<h2>Platform Fit</h2>
+<div class="cols">
+<div><div class="lbl">Point of view</div><ul class="pov"><li>The commercial model picks the platform. Seat-and-term SaaS, usage and credits, and PLG-plus-sales hybrids each point to different tools.</li><li>Legacy Salesforce CPQ still runs many orgs but is end-of-sale for new customers. Weigh migration timing against how much you&#x27;re about to change anyway.</li></ul></div>
+<div><div class="lbl">Discovery questions</div><ol class="qs"><li><span class="qn">1</span><span>Is your CRM Salesforce, HubSpot or both, and is that likely to change within two years?</span></li><li><span class="qn">2</span><span>How much revenue is usage- or credit-based today, and how much will be in two years?</span></li><li><span class="qn">3</span><span>Is billing in scope for the same platform, or staying in the ERP?</span></li></ol></div>
+</div>
+<div class="learn"><b>Learning:</b> <i>Pick the platform for the pricing model you&#x27;ll have in two years, not the one you had at your last renewal.</i></div>
+</section><section class="slide" style="--c:#6b21a8">
+<div class="eyebrow sec">Section D · Revenue Data &amp; Platform <span class="code">D3</span></div>
+<h2>The Platform Landscape</h2>
+<div class="tblwrap"><table class="ptable"><thead><tr><th></th><th><b>Salesforce CPQ</b><span>SBQQ · legacy</span></th><th><b>Revenue Cloud Advanced</b><span>Salesforce · strategic</span></th><th><b>DealHub</b><span>Independent · multi-CRM</span></th><th><b>Nue</b><span>Independent · Salesforce-native</span></th></tr></thead><tbody><tr><td class="rh">Position</td><td>Mature managed package; end-of-sale to new customers, existing orgs supported</td><td>Salesforce&#x27;s go-forward quote-to-cash product</td><td>No-code CPQ with CLM, subscription management and buyer DealRoom</td><td>Quote-to-revenue platform: CPQ, billing and revenue together</td></tr><tr><td class="rh">Architecture</td><td>Quote, Quote Line, Subscription objects inside Salesforce</td><td>Core platform, API-first; asset-based lifecycle</td><td>External platform integrated with Salesforce, HubSpot, Dynamics</td><td>Runs natively on Salesforce</td></tr><tr><td class="rh">Pricing engine</td><td>Price waterfall, price rules, discount schedules</td><td>Pricing procedures, Product Catalog Management, configurator</td><td>No-code playbooks and pricing tables</td><td>Subscription, usage, credit and hybrid pricing models</td></tr><tr><td class="rh">Best fit</td><td>Existing orgs with stable seat-and-term SaaS</td><td>Salesforce-committed teams with complex catalogs and a usage or billing roadmap</td><td>Mid-market and HubSpot shops that need fast time-to-value</td><td>SaaS teams mixing product-led usage with sales-led deals</td></tr><tr class="watch"><td class="rh">Watch out</td><td>Large-quote limits and customization debt; moving to RCA is a re-implementation, not an upgrade</td><td>Different data model from SBQQ; experienced implementers are still scarce</td><td>Deal data lives outside the CRM, so sync design decides ARR and reporting quality</td><td>Smaller ecosystem; confirm fit for complex ERP and multi-entity needs</td></tr></tbody></table></div>
+<p class="foot left">Discovery stays platform-neutral. The build areas that follow name the equivalent mechanism on each platform. Positioning reflects the market as of 2026; confirm current packaging with each vendor.</p>
+</section><section class="slide" style="--c:#1d3557">
+<div class="eyebrow sec">Part 2 · Build Blueprint</div>
+<h2>From Discovery to Build</h2>
+<p class="lede">Eight areas, each unblocked by specific discovery answers. Quoting flow and catalog first, lifecycle last.</p>
+<div class="bgrid"><div class="bcard"><div class="bnum">1</div><h3>Quoting Process Flow</h3><div class="chips sm"><span class="chip" style="--c:#0f6e4c;--cb:#e8f3ee"><b>A3</b> Deal Types &amp; Motions</span><span class="chip" style="--c:#6b21a8;--cb:#f2ebf9"><b>D1</b> ARR &amp; Revenue Metrics</span><span class="chip" style="--c:#1f4e8c;--cb:#e8eef7"><b>B3</b> Quote Documents &amp; Terms</span></div></div><div class="bcard"><div class="bnum">2</div><h3>Products &amp; Configuration</h3><div class="chips sm"><span class="chip" style="--c:#0f6e4c;--cb:#e8f3ee"><b>A2</b> Product Catalog &amp; Bundles</span><span class="chip" style="--c:#0f6e4c;--cb:#e8f3ee"><b>A3</b> Deal Types &amp; Motions</span><span class="chip" style="--c:#0f6e4c;--cb:#e8f3ee"><b>A1</b> Pricing &amp; Packaging Strategy</span></div></div><div class="bcard"><div class="bnum">3</div><h3>Pricing &amp; Discounting</h3><div class="chips sm"><span class="chip" style="--c:#0f6e4c;--cb:#e8f3ee"><b>A1</b> Pricing &amp; Packaging Strategy</span><span class="chip" style="--c:#1f4e8c;--cb:#e8eef7"><b>B1</b> Discounting Policy</span><span class="chip" style="--c:#6b21a8;--cb:#f2ebf9"><b>D1</b> ARR &amp; Revenue Metrics</span></div></div><div class="bcard"><div class="bnum">4</div><h3>Quote Approvals</h3><div class="chips sm"><span class="chip" style="--c:#1f4e8c;--cb:#e8eef7"><b>B1</b> Discounting Policy</span><span class="chip" style="--c:#1f4e8c;--cb:#e8eef7"><b>B2</b> Approval Matrix</span></div></div><div class="bcard"><div class="bnum">5</div><h3>Quote Templates &amp; E-signature</h3><div class="chips sm"><span class="chip" style="--c:#1f4e8c;--cb:#e8eef7"><b>B3</b> Quote Documents &amp; Terms</span><span class="chip" style="--c:#b5520e;--cb:#fbefe6"><b>C1</b> Orders &amp; Contracts</span></div></div><div class="bcard"><div class="bnum">6</div><h3>Order &amp; Contract Management</h3><div class="chips sm"><span class="chip" style="--c:#b5520e;--cb:#fbefe6"><b>C1</b> Orders &amp; Contracts</span><span class="chip" style="--c:#b5520e;--cb:#fbefe6"><b>C2</b> Billing, ERP &amp; Provisioning</span></div></div><div class="bcard"><div class="bnum">7</div><h3>Amendments</h3><div class="chips sm"><span class="chip" style="--c:#b5520e;--cb:#fbefe6"><b>C3</b> Amendments &amp; Renewals</span><span class="chip" style="--c:#0f6e4c;--cb:#e8f3ee"><b>A3</b> Deal Types &amp; Motions</span><span class="chip" style="--c:#6b21a8;--cb:#f2ebf9"><b>D1</b> ARR &amp; Revenue Metrics</span></div></div><div class="bcard"><div class="bnum">8</div><h3>Renewals</h3><div class="chips sm"><span class="chip" style="--c:#b5520e;--cb:#fbefe6"><b>C3</b> Amendments &amp; Renewals</span><span class="chip" style="--c:#6b21a8;--cb:#f2ebf9"><b>D1</b> ARR &amp; Revenue Metrics</span><span class="chip" style="--c:#1f4e8c;--cb:#e8eef7"><b>B2</b> Approval Matrix</span></div></div></div>
+</section><section class="slide" style="--c:#1d3557">
+<div class="eyebrow sec">Build 1 · Quoting Process Flow</div>
+<h2>Quoting Process Flow</h2>
+<div class="cols build">
+<div><div class="lbl">Build requirements</div><ul class="reqs"><li>Guided opportunity creation that sets stage, type and subtype up front</li><li>Billing and shipping addresses sourced from the primary contact or account</li><li>Staggered and ramp deals via quote-line start and end dates</li><li>Account ARR on the Account; Opportunity ARR on the Opportunity</li><li>Partner / reseller flag on the quote that drives pricing and paper</li><li>Revenue metrics (Current, Prior, Delta ARR, TCV) on quote and opportunity</li><li>Layouts built around approval status and the e-signature flow</li></ul></div>
+<div class="rside"><div class="lbl">Discovery inputs</div><div class="chips"><span class="chip" style="--c:#0f6e4c;--cb:#e8f3ee"><b>A3</b> Deal Types &amp; Motions</span><span class="chip" style="--c:#6b21a8;--cb:#f2ebf9"><b>D1</b> ARR &amp; Revenue Metrics</span><span class="chip" style="--c:#1f4e8c;--cb:#e8eef7"><b>B3</b> Quote Documents &amp; Terms</span></div>
+<div class="lbl">Platform notes</div><p class="side">SBQQ / RCA: Screen Flows and record types set deal type at creation. DealHub / Nue: guided playbooks on the quote. Confirm deal type writes back to the CRM opportunity.</p></div>
+</div>
+<div class="learn"><b>Learning:</b> <i>Ask what kind of deal it is once, at creation. Every downstream rule depends on that answer.</i></div>
+</section><section class="slide" style="--c:#1d3557">
+<div class="eyebrow sec">Build 2 · Products &amp; Configuration</div>
+<h2>Products &amp; Configuration</h2>
+<div class="cols build">
+<div><div class="lbl">Build requirements</div><ul class="reqs"><li>Rationalized catalog: every SKU tagged with charge type, revenue treatment and owner</li><li>Bundles, options and product rules (requires / excludes / recommends)</li><li>Trials configured as products, with a defined conversion path</li><li>Quote line experience tailored by deal type: new, amend, renew</li><li>Line groups for ramps, phases and multi-entity deals</li></ul></div>
+<div class="rside"><div class="lbl">Discovery inputs</div><div class="chips"><span class="chip" style="--c:#0f6e4c;--cb:#e8f3ee"><b>A2</b> Product Catalog &amp; Bundles</span><span class="chip" style="--c:#0f6e4c;--cb:#e8f3ee"><b>A3</b> Deal Types &amp; Motions</span><span class="chip" style="--c:#0f6e4c;--cb:#e8f3ee"><b>A1</b> Pricing &amp; Packaging Strategy</span></div>
+<div class="lbl">Platform notes</div><p class="side">SBQQ: bundles, features, product rules. RCA: Product Catalog Management plus configurator rules. DealHub: no-code playbook questions. Nue: bundles with subscription, usage and credit charge models.</p></div>
+</div>
+<div class="learn"><b>Learning:</b> <i>Every SKU without a charge type and revenue treatment becomes a Finance ticket later.</i></div>
+</section><section class="slide" style="--c:#1d3557">
+<div class="eyebrow sec">Build 3 · Pricing &amp; Discounting</div>
+<h2>Pricing &amp; Discounting</h2>
+<div class="cols build">
+<div><div class="lbl">Build requirements</div><ul class="reqs"><li>Pricing aligned to the platform&#x27;s standard waterfall; no custom math where a standard step exists</li><li>Line-level discounting standardized: %, amount, target total, unit override</li><li>Pricing rules and constraints built on platform best practice</li><li>Partner pricing: revenue share and automatic partner discounts</li><li>Discount reason required on every discretionary discount</li><li>Quote pricing summary: Current, Prior, Delta ARR and TCV</li><li>Trial pricing, rounding regression tests, price-management governance</li></ul></div>
+<div class="rside"><div class="lbl">Discovery inputs</div><div class="chips"><span class="chip" style="--c:#0f6e4c;--cb:#e8f3ee"><b>A1</b> Pricing &amp; Packaging Strategy</span><span class="chip" style="--c:#1f4e8c;--cb:#e8eef7"><b>B1</b> Discounting Policy</span><span class="chip" style="--c:#6b21a8;--cb:#f2ebf9"><b>D1</b> ARR &amp; Revenue Metrics</span></div>
+<div class="lbl">Platform notes</div><p class="side">SBQQ: price waterfall, price rules, discount schedules. RCA: pricing procedures. DealHub / Nue: native price books and tables. Map each waterfall step to a named field on every platform.</p><div class="lbl">Later / dependencies</div><p class="side">Multi-currency: settle scope in discovery before configuring price books.</p></div>
+</div>
+<div class="learn"><b>Learning:</b> <i>If a price can&#x27;t be explained step by step on the waterfall, the rep can&#x27;t defend it and Finance can&#x27;t audit it.</i></div>
+</section><section class="slide" style="--c:#1d3557">
+<div class="eyebrow sec">Build 3 · Pricing &amp; Discounting</div>
+<h2>The Pricing Waterfall</h2>
+
+<div class="cols vis">
+<div class="notes">
+<div class="lbl">How the price is built</div>
+<p class="side"><b>Standard item</b><br>Extended price = unit × quantity</p>
+<p class="side"><b>Subscription item</b><br>Extended price = unit × quantity × prorated term</p>
+<p class="side">Each step is a named, reportable field. System discounts come from schedules; the rep controls one step only.</p>
+<p class="side"><b>Net price</b> flows to pipeline and forecast amount.</p>
+</div>
+<div class="chart"><svg viewBox="0 0 1100 430" class="wf" role="img" aria-label="Pricing waterfall from $100 list price to $58.32 net price"><line x1="50" y1="360" x2="1085" y2="360" stroke="#9aa3ae" stroke-width="1.5"/><rect x="70" y="40" width="80" height="320" rx="3" fill="#9fb3cc"/><text x="110" y="30.0" text-anchor="middle" class="v">$100.00</text><text x="110" y="384" text-anchor="middle" class="l">List price</text><line x1="150" y1="40.00" x2="185" y2="40.00" stroke="#9aa3ae" stroke-dasharray="4 4"/><rect x="185" y="40" width="80" height="32" rx="3" fill="#d9534f"/><text x="225" y="30.0" text-anchor="middle" class="v neg">−10%</text><text x="225" y="384" text-anchor="middle" class="l">System disc.</text><text x="225" y="404" text-anchor="middle" class="l">(schedules)</text><line x1="265" y1="72.00" x2="300" y2="72.00" stroke="#9aa3ae" stroke-dasharray="4 4"/><rect x="300" y="72" width="80" height="288" rx="3" fill="#9fb3cc"/><text x="340" y="62.0" text-anchor="middle" class="v">$90.00</text><text x="340" y="384" text-anchor="middle" class="l">Regular price</text><line x1="380" y1="72.00" x2="415" y2="72.00" stroke="#9aa3ae" stroke-dasharray="4 4"/><rect x="415" y="72" width="80" height="57.6" rx="3" fill="#d9534f"/><text x="455" y="62.0" text-anchor="middle" class="v neg">−20%</text><text x="455" y="384" text-anchor="middle" class="l">Rep discount</text><text x="455" y="404" text-anchor="middle" class="l">(manual)</text><line x1="495" y1="129.60" x2="530" y2="129.60" stroke="#9aa3ae" stroke-dasharray="4 4"/><rect x="530" y="129.6" width="80" height="230.4" rx="3" fill="#9fb3cc"/><text x="570" y="119.6" text-anchor="middle" class="v">$72.00</text><text x="570" y="384" text-anchor="middle" class="l">Customer price</text><line x1="610" y1="129.60" x2="645" y2="129.60" stroke="#9aa3ae" stroke-dasharray="4 4"/><rect x="645" y="129.6" width="80" height="23.04" rx="3" fill="#d9534f"/><text x="685" y="119.6" text-anchor="middle" class="v neg">−10%</text><text x="685" y="384" text-anchor="middle" class="l">Partner disc.</text><line x1="725" y1="152.64" x2="760" y2="152.64" stroke="#9aa3ae" stroke-dasharray="4 4"/><rect x="760" y="152.64" width="80" height="207.36" rx="3" fill="#9fb3cc"/><text x="800" y="142.6" text-anchor="middle" class="v">$64.80</text><text x="800" y="384" text-anchor="middle" class="l">Partner price</text><line x1="840" y1="152.64" x2="875" y2="152.64" stroke="#9aa3ae" stroke-dasharray="4 4"/><rect x="875" y="152.64" width="80" height="20.74" rx="3" fill="#d9534f"/><text x="915" y="142.6" text-anchor="middle" class="v neg">−10%</text><text x="915" y="384" text-anchor="middle" class="l">Distributor</text><text x="915" y="404" text-anchor="middle" class="l">disc.</text><line x1="955" y1="173.38" x2="990" y2="173.38" stroke="#9aa3ae" stroke-dasharray="4 4"/><rect x="990" y="173.38" width="80" height="186.62" rx="3" fill="#1d3557"/><text x="1030" y="163.4" text-anchor="middle" class="v">$58.32</text><text x="1030" y="384" text-anchor="middle" class="l">Net price</text></svg></div>
+</div>
+</section><section class="slide" style="--c:#1d3557">
+<div class="eyebrow sec">Build 3 · Pricing &amp; Discounting</div>
+<h2>Quote Line Anatomy</h2>
+
+<div class="cols vis2">
+<div>
+<div class="lbl">Scenario A · standard discount</div>
+<div class="qle"><table><thead><tr><th>Product</th><th>Qty</th><th>Annual unit</th><th>Disc.</th><th>Net unit</th><th>Net total</th></tr></thead>
+<tbody><tr><td>Enterprise Plan</td><td>250</td><td>$144.00</td><td class="hot">10%</td><td>$129.60</td><td>$32,400.00</td></tr></tbody></table>
+<div class="qmeta">Term 12 mo · Discretionary 10% · Non-profit: no</div></div>
+<div class="lbl">Scenario B · stacked discounts</div>
+<div class="qle"><table><thead><tr><th>Product</th><th>Qty</th><th>Annual unit</th><th>Disc.</th><th>Net unit</th><th>Net total</th></tr></thead>
+<tbody><tr><td>Enterprise Plan</td><td>250</td><td>$144.00</td><td class="hot">40%</td><td>$86.40</td><td>$21,600.00</td></tr></tbody></table>
+<div class="qmeta">Term 12 mo · Discretionary 15% · Non-profit 25% · stacked additively</div></div>
+</div>
+<div>
+<div class="lbl">Volume tier schedule (system discount)</div>
+<div class="qle"><table><thead><tr><th>Tier</th><th>Seats</th><th>Unit price</th><th>Off list</th></tr></thead>
+<tbody><tr><td>1</td><td>1–99</td><td>$144.00</td><td>—</td></tr><tr><td>2</td><td>100–249</td><td>$136.80</td><td>5%</td></tr><tr><td>3</td><td>250–499</td><td>$129.60</td><td>10%</td></tr><tr><td>4</td><td>500+</td><td>$122.40</td><td>15%</td></tr></tbody></table>
+<div class="qmeta">Range pricing: all units priced at the tier reached</div></div>
+<div class="callout"><b>Decide in discovery (B1):</b> do discounts add or compound? Scenario B is 40% additive, but 36.25% compounded (1 − 0.75 × 0.85). That 3.75-point gap is policy, not configuration.</div>
+</div>
+</div>
+</section><section class="slide" style="--c:#1d3557">
+<div class="eyebrow sec">Build 4 · Quote Approvals</div>
+<h2>Quote Approvals</h2>
+<div class="cols build">
+<div><div class="lbl">Build requirements</div><ul class="reqs"><li>Discount approvals by threshold and tier</li><li>Free-seat and free-month approvals</li><li>Term, payment and legal approvals (e.g. term over 36 months, non-standard payment terms)</li><li>Approval rules on amendments, renewals and trials</li><li>Notifications for request, rejection, recall and approval</li><li>Pricing engine calculates the metrics that approval rules evaluate</li><li>Smart approvals (no re-approval when nothing material changed); approver notes and change tracking</li></ul></div>
+<div class="rside"><div class="lbl">Discovery inputs</div><div class="chips"><span class="chip" style="--c:#1f4e8c;--cb:#e8eef7"><b>B1</b> Discounting Policy</span><span class="chip" style="--c:#1f4e8c;--cb:#e8eef7"><b>B2</b> Approval Matrix</span></div>
+<div class="lbl">Platform notes</div><p class="side">SBQQ: Advanced Approvals package with smart approvals. RCA: Flow-based approval orchestration. DealHub / Nue: built-in approval workflows; confirm the audit trail lands in the CRM.</p></div>
+</div>
+<div class="learn"><b>Learning:</b> <i>Approvals should evaluate calculated fields, never rep-typed ones. Otherwise the matrix is a suggestion.</i></div>
+</section><section class="slide" style="--c:#1d3557">
+<div class="eyebrow sec">Build 4 · Quote Approvals</div>
+<h2>Deal Desk Approval Matrix</h2>
+
+<div class="tblwrap"><table class="mtable"><thead><tr><th>Approver</th><th>Rep &amp; Manager</th><th>VP Sales</th><th>Services Leader</th><th>CFO / Legal</th></tr></thead><tbody><tr class="grp"><td colspan="5">Pricing</td></tr><tr><td class="rh">Edition / license discount</td><td class="ok">Up to 30%</td><td class="ok">Over 30%</td><td class="na">—</td><td class="na">—</td></tr><tr><td class="rh">Rate card exceptions</td><td class="na">—</td><td class="ok">Required</td><td class="na">—</td><td class="na">—</td></tr><tr><td class="rh">Free months of subscription</td><td class="na">—</td><td class="ok">Required</td><td class="na">—</td><td class="na">—</td></tr><tr><td class="rh">6+ free / comped seats</td><td class="na">—</td><td class="ok">Required</td><td class="na">—</td><td class="na">—</td></tr><tr><td class="rh">Free / comped services</td><td class="na">—</td><td class="na">—</td><td class="ok">Required</td><td class="na">—</td></tr><tr><td class="rh">Recurring services (success plans)</td><td class="na">—</td><td class="na">—</td><td class="ok">Max 10%</td><td class="na">—</td></tr><tr><td class="rh">One-time services (implementation, training)</td><td class="ok">Up to 30%</td><td class="na">—</td><td class="ok">Over 30%</td><td class="na">—</td></tr><tr class="grp"><td colspan="5">Billing</td></tr><tr><td class="rh">Payment terms</td><td class="ok">Net 30 / 45 / 60</td><td class="na">—</td><td class="na">—</td><td class="ok">Anything else</td></tr><tr><td class="rh">Invoicing schedule</td><td class="ok">Upfront, annual</td><td class="na">—</td><td class="na">—</td><td class="ok">Anything else</td></tr><tr class="grp"><td colspan="5">Contract terms</td></tr><tr><td class="rh">Opt-out / termination for convenience</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="ok">Any</td></tr><tr><td class="rh">Minimum new-logo term</td><td class="ok">12 months</td><td class="na">—</td><td class="na">—</td><td class="ok">Shorter</td></tr><tr><td class="rh">Minimum renewal term</td><td class="ok">12 months</td><td class="na">—</td><td class="na">—</td><td class="ok">Shorter (CFO)</td></tr></tbody></table></div>
+<p class="foot left">Template adapted from a real SaaS deal desk. Every cell becomes an approval rule keyed off a calculated field.</p>
+</section><section class="slide" style="--c:#1d3557">
+<div class="eyebrow sec">Build 4 · Quote Approvals</div>
+<h2>Discount Thresholds by Size &amp; Term</h2>
+
+<div class="cols vis3">
+<div class="tblwrap"><table class="ttable"><thead><tr><th>Discretionary discount</th><th>Term under 24 mo</th><th>24–35 mo</th><th>36+ mo</th></tr></thead><tbody><tr><td class="rh">Under 5,000 seats</td><td><div class="band"><span class="b0">Auto ≤5%</span><span class="b1">Mgr ≤10%</span><span class="b2">Head >10%</span></div></td><td><div class="band"><span class="b0">Auto ≤5%</span><span class="b1">Mgr ≤12.5%</span><span class="b2">Head >12.5%</span></div></td><td><div class="band"><span class="b0">Auto ≤5%</span><span class="b1">Mgr ≤15%</span><span class="b2">Head >15%</span></div></td></tr><tr><td class="rh">5,000+ seats</td><td><div class="band"><span class="b0">Auto ≤2.5%</span><span class="b1">Mgr ≤5%</span><span class="b2">Head >5%</span></div></td><td><div class="band"><span class="b0">Auto ≤5%</span><span class="b1">Mgr ≤7.5%</span><span class="b2">Head >7.5%</span></div></td><td><div class="band"><span class="b0">Auto ≤5%</span><span class="b1">Mgr ≤10%</span><span class="b2">Head >10%</span></div></td></tr></tbody></table>
+<div class="legend"><span class="b0">Auto-approved</span><span class="b1">Sales Manager</span><span class="b2">Head of Sales</span></div></div>
+<div class="notes">
+<div class="lbl">Design principles</div>
+<p class="side"><b>Approval avoidance first.</b> Small discounts on standard terms should never wait on a person.</p>
+<p class="side"><b>Longer term earns more room.</b> Commitment is worth paying for; thresholds rise with term.</p>
+<p class="side"><b>Bigger deals get tighter %.</b> A point of discount on 5,000 seats costs more than on 500.</p>
+<p class="side">Illustrative thresholds. Calibrate against last year's discount distribution before go-live.</p>
+</div>
+</div>
+</section><section class="slide" style="--c:#1d3557">
+<div class="eyebrow sec">Build 5 · Quote Templates &amp; E-signature</div>
+<h2>Quote Templates &amp; E-signature</h2>
+<div class="cols build">
+<div><div class="lbl">Build requirements</div><ul class="reqs"><li>Deal-specific quote terms that Legal can add or edit</li><li>Conditional T&amp;Cs and special clauses driven by quote data</li><li>Template refresh: new columns and merge fields</li><li>Send for e-signature directly from the quote</li><li>Quote status synced to e-signature envelope status</li><li>Quote and opportunity locked once the primary quote is out for signature</li></ul></div>
+<div class="rside"><div class="lbl">Discovery inputs</div><div class="chips"><span class="chip" style="--c:#1f4e8c;--cb:#e8eef7"><b>B3</b> Quote Documents &amp; Terms</span><span class="chip" style="--c:#b5520e;--cb:#fbefe6"><b>C1</b> Orders &amp; Contracts</span></div>
+<div class="lbl">Platform notes</div><p class="side">SBQQ: quote templates and template content. RCA: native document generation. DealHub: DealRoom plus built-in CLM. E-signature via DocuSign, Adobe Acrobat Sign or the platform&#x27;s own.</p></div>
+</div>
+<div class="learn"><b>Learning:</b> <i>Lock what&#x27;s been sent. A signed PDF that doesn&#x27;t match the quote record is a billing dispute waiting to happen.</i></div>
+</section><section class="slide" style="--c:#1d3557">
+<div class="eyebrow sec">Build 5 · Quote Templates &amp; E-signature</div>
+<h2>Quote Header: Contract Information</h2>
+
+<div class="tblwrap"><table class="htable"><thead><tr><th>Field</th><th>Default / source</th><th>Why it matters</th></tr></thead><tbody><tr><td class="rh">Primary contact</td><td>Pulled from opportunity contact roles</td><td>Who signs, and who gets the renewal notice</td></tr><tr><td class="rh">Billing contact &amp; address</td><td>Account bill-to, billing contact, or custom</td><td>Invoices reach the right person first time</td></tr><tr><td class="rh">Company name on invoice</td><td>Defaults to account name; editable</td><td>Legal entity can differ from the CRM account</td></tr><tr><td class="rh">Payment terms</td><td>Default Net 30</td><td>Non-default value triggers CFO approval</td></tr><tr><td class="rh">Billing frequency · method</td><td>Default annual · EFT/ACH</td><td>Drives invoicing schedule and cash forecast</td></tr><tr><td class="rh">Auto-renew</td><td>Default yes</td><td>Sets renewal notice windows</td></tr><tr><td class="rh">Form type</td><td>Order form or short form</td><td>Selects the template and clause set</td></tr><tr><td class="rh">Requires PO · PO number</td><td>Checkbox + text</td><td>Billing blocks until PO is captured</td></tr><tr><td class="rh">Previous MSA date</td><td>Date</td><td>Tells Legal which paper governs</td></tr><tr><td class="rh">Special terms clause</td><td>Long text, Legal-edited</td><td>Non-standard terms stay reportable</td></tr><tr><td class="rh">Logo rights</td><td>Yes / no</td><td>Marketing can query it, not hunt PDFs</td></tr><tr><td class="rh">Renewal uplift % · Rollup ARR</td><td>Policy default · calculated</td><td>Feeds the renewal quote and Account ARR</td></tr></tbody></table></div>
+</section><section class="slide" style="--c:#1d3557">
+<div class="eyebrow sec">Build 6 · Order &amp; Contract Management</div>
+<h2>Order &amp; Contract Management</h2>
+<div class="cols build">
+<div><div class="lbl">Build requirements</div><ul class="reqs"><li>Automated order creation from the closed-won opportunity</li><li>Order splitting: one quote to multiple orders</li><li>True effective dates captured on orders</li><li>Amendments carry only line-item deltas</li><li>Quote and quote-line data staged onto orders for ERP and billing</li><li>Contract created from the order, aligned to standard quote-to-cash</li><li>Renewal uplift and renewal data tracked on the contract</li><li>Integration staging for iPaaS; framework for provisioning from order data</li></ul></div>
+<div class="rside"><div class="lbl">Discovery inputs</div><div class="chips"><span class="chip" style="--c:#b5520e;--cb:#fbefe6"><b>C1</b> Orders &amp; Contracts</span><span class="chip" style="--c:#b5520e;--cb:#fbefe6"><b>C2</b> Billing, ERP &amp; Provisioning</span></div>
+<div class="lbl">Platform notes</div><p class="side">SBQQ: Order, Contract, Subscriptions. RCA: Dynamic Revenue Orchestrator for fulfillment. DealHub / Nue: subscription records sync to CRM and billing; decide which is the system of record.</p><div class="lbl">Later / dependencies</div><p class="side">Later: uplift control at subscription level; a co-terming process for accounts with multiple contracts.</p></div>
+</div>
+<div class="learn"><b>Learning:</b> <i>Stage the ERP payload on the order now, even if the integration comes later. Backfilling history is the expensive part.</i></div>
+</section><section class="slide" style="--c:#1d3557">
+<div class="eyebrow sec">Build 7 · Amendments</div>
+<h2>Amendments</h2>
+<div class="cols build">
+<div><div class="lbl">Build requirements</div><ul class="reqs"><li>Use the platform&#x27;s standard amendment framework</li><li>Upgrades, upsells and price-reduction scenarios</li><li>Accurate pricing when crediting existing lines and adding new ones</li><li>Amendments never create duplicate contracts</li><li>Effective quantity and amendment start-date management</li><li>Clawbacks: cancellation, finance cancel, refunds, re-booking in a new currency, expired-contract fixes</li><li>Amend-and-extend; amendment data visible for forecasting and reporting</li></ul></div>
+<div class="rside"><div class="lbl">Discovery inputs</div><div class="chips"><span class="chip" style="--c:#b5520e;--cb:#fbefe6"><b>C3</b> Amendments &amp; Renewals</span><span class="chip" style="--c:#0f6e4c;--cb:#e8f3ee"><b>A3</b> Deal Types &amp; Motions</span><span class="chip" style="--c:#6b21a8;--cb:#f2ebf9"><b>D1</b> ARR &amp; Revenue Metrics</span></div>
+<div class="lbl">Platform notes</div><p class="side">SBQQ: amend from contract; watch large-quote limits. RCA: asset-based lifecycle, where assets replace subscriptions. DealHub / Nue: native change orders; test co-term math on real contracts.</p><div class="lbl">Later / dependencies</div><p class="side">Later: ERP return-and-rebill process. Non-standard cases may need code.</p></div>
+</div>
+<div class="learn"><b>Learning:</b> <i>Test amendments on your five ugliest real contracts before go-live, not on clean demo data.</i></div>
+</section><section class="slide" style="--c:#1d3557">
+<div class="eyebrow sec">Build 8 · Renewals</div>
+<h2>Renewals</h2>
+<div class="cols build">
+<div><div class="lbl">Build requirements</div><ul class="reqs"><li>Renewals generated with a default uplift %, overridable per subscription</li><li>Contract and subscription data carried to the renewal opportunity and quote</li><li>Renewal opportunity and quote auto-created 90 days before contract end</li><li>Renewals in a different currency than the original contract</li><li>ARR calculated on renewal price points</li><li>Renewals use the standard pricing waterfall and discount flow</li><li>Known renewal pricing defects fixed and regression-tested</li></ul></div>
+<div class="rside"><div class="lbl">Discovery inputs</div><div class="chips"><span class="chip" style="--c:#b5520e;--cb:#fbefe6"><b>C3</b> Amendments &amp; Renewals</span><span class="chip" style="--c:#6b21a8;--cb:#f2ebf9"><b>D1</b> ARR &amp; Revenue Metrics</span><span class="chip" style="--c:#1f4e8c;--cb:#e8eef7"><b>B2</b> Approval Matrix</span></div>
+<div class="lbl">Platform notes</div><p class="side">SBQQ: renewal forecast and renewal quoted flags on the contract. RCA: asset-based renewals. DealHub / Nue: auto-renewal jobs; align uplift and notice windows to contract terms.</p></div>
+</div>
+<div class="learn"><b>Learning:</b> <i>A renewal created 90 days out with the right uplift is a forecast. One created at expiry is a scramble.</i></div>
+</section><section class="slide" style="--c:#1d3557">
+<div class="eyebrow sec">Build 6–8 · Lifecycle &amp; ARR</div>
+<h2>ARR Logic Across the Lifecycle</h2>
+<p class="lede">One calculation at the quote line, rolled up through subscriptions. New, amend and renew quotes all compute Current, Prior and Delta ARR the same way.</p>
+<div class="chart full"><svg viewBox="0 0 1200 500" class="arr" role="img" aria-label="ARR flow from quote lines through subscriptions to account and company ARR"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5b6472"/></marker></defs><text x="200" y="22" text-anchor="middle" class="lane" fill="#0f6e4c">NEW BUSINESS</text><rect x="70" y="36" width="260" height="56" rx="10" fill="#ffffff" stroke="#0f6e4c" stroke-width="1.6"/><text x="200.0" y="70.0" text-anchor="middle" class="bt" fill="#0f6e4c">Opportunity</text><rect x="70" y="140" width="260" height="110" rx="10" fill="#e8f3ee" stroke="#0f6e4c" stroke-width="1.6"/><text x="200.0" y="166" text-anchor="middle" class="bt" fill="#0f6e4c">Quote &amp; quote lines</text><text x="200.0" y="188" text-anchor="middle" class="bs">Current · Prior · Delta ARR</text><text x="200.0" y="208" text-anchor="middle" class="bs">calculated per line</text><rect x="70" y="300" width="260" height="56" rx="10" fill="#ffffff" stroke="#0f6e4c" stroke-width="1.6"/><text x="200.0" y="334.0" text-anchor="middle" class="bt" fill="#0f6e4c">Contract · subscriptions</text><line x1="200" y1="140" x2="200" y2="96" stroke="#5b6472" stroke-width="1.6" marker-end="url(#ah)"/><text x="208" y="124" class="al">push ARR</text><line x1="200" y1="250" x2="200" y2="296" stroke="#5b6472" stroke-width="1.6" marker-end="url(#ah)"/><text x="208" y="279" class="al">on activation</text><text x="600" y="22" text-anchor="middle" class="lane" fill="#b5520e">AMENDMENT</text><rect x="470" y="36" width="260" height="56" rx="10" fill="#ffffff" stroke="#b5520e" stroke-width="1.6"/><text x="600.0" y="70.0" text-anchor="middle" class="bt" fill="#b5520e">Opportunity</text><rect x="470" y="140" width="260" height="110" rx="10" fill="#fbefe6" stroke="#b5520e" stroke-width="1.6"/><text x="600.0" y="166" text-anchor="middle" class="bt" fill="#b5520e">Quote &amp; quote lines</text><text x="600.0" y="188" text-anchor="middle" class="bs">Current · Prior · Delta ARR</text><text x="600.0" y="208" text-anchor="middle" class="bs">calculated per line</text><rect x="470" y="300" width="260" height="56" rx="10" fill="#ffffff" stroke="#b5520e" stroke-width="1.6"/><text x="600.0" y="334.0" text-anchor="middle" class="bt" fill="#b5520e">Amended subscriptions</text><line x1="600" y1="140" x2="600" y2="96" stroke="#5b6472" stroke-width="1.6" marker-end="url(#ah)"/><text x="608" y="124" class="al">push ARR</text><line x1="600" y1="250" x2="600" y2="296" stroke="#5b6472" stroke-width="1.6" marker-end="url(#ah)"/><text x="608" y="279" class="al">on activation</text><text x="1000" y="22" text-anchor="middle" class="lane" fill="#6b21a8">RENEWAL</text><rect x="870" y="36" width="260" height="56" rx="10" fill="#ffffff" stroke="#6b21a8" stroke-width="1.6"/><text x="1000.0" y="70.0" text-anchor="middle" class="bt" fill="#6b21a8">Opportunity</text><rect x="870" y="140" width="260" height="110" rx="10" fill="#f2ebf9" stroke="#6b21a8" stroke-width="1.6"/><text x="1000.0" y="166" text-anchor="middle" class="bt" fill="#6b21a8">Quote &amp; quote lines</text><text x="1000.0" y="188" text-anchor="middle" class="bs">Current · Prior · Delta ARR</text><text x="1000.0" y="208" text-anchor="middle" class="bs">calculated per line</text><rect x="870" y="300" width="260" height="56" rx="10" fill="#ffffff" stroke="#6b21a8" stroke-width="1.6"/><text x="1000.0" y="334.0" text-anchor="middle" class="bt" fill="#6b21a8">Renewal contract · subs</text><line x1="1000" y1="140" x2="1000" y2="96" stroke="#5b6472" stroke-width="1.6" marker-end="url(#ah)"/><text x="1008" y="124" class="al">push ARR</text><line x1="1000" y1="250" x2="1000" y2="296" stroke="#5b6472" stroke-width="1.6" marker-end="url(#ah)"/><text x="1008" y="279" class="al">on activation</text><path d="M330,328 L470,200" stroke="#5b6472" stroke-width="1.4" stroke-dasharray="5 5" fill="none" marker-end="url(#ah)"/><text x="458" y="300" text-anchor="end" class="al">amend from contract</text><path d="M730,328 L870,200" stroke="#5b6472" stroke-width="1.4" stroke-dasharray="5 5" fill="none" marker-end="url(#ah)"/><text x="858" y="300" text-anchor="end" class="al">renew from contract</text><rect x="470" y="420" width="260" height="62" rx="10" fill="#e7ecf3" stroke="#1d3557" stroke-width="1.6"/><text x="600.0" y="457.0" text-anchor="middle" class="bt" fill="#1d3557">Account ARR</text><rect x="860" y="420" width="240" height="62" rx="10" fill="#1d3557" stroke="#ffffff" stroke-width="1.6"/><text x="980.0" y="457.0" text-anchor="middle" class="bt" fill="#ffffff">Company ARR</text><path d="M200,356 L520,418" stroke="#5b6472" stroke-width="1.4" fill="none" marker-end="url(#ah)"/><path d="M600,356 L600,416" stroke="#5b6472" stroke-width="1.4" fill="none" marker-end="url(#ah)"/><path d="M1000,356 L680,418" stroke="#5b6472" stroke-width="1.4" fill="none" marker-end="url(#ah)"/><line x1="730" y1="451" x2="856" y2="451" stroke="#5b6472" stroke-width="1.6" marker-end="url(#ah)"/><text x="60" y="440" class="al">Active subscriptions roll up;</text><text x="60" y="458" class="al">Account ARR seeds Prior ARR</text><text x="60" y="476" class="al">on the next quote.</text></svg></div>
+</section><section class="slide dark">
+<div class="eyebrow light">Working with me</div>
+<h2 class="lt">How I'd Engage</h2>
+<div class="egrid"><div class="ecard"><div class="enum">1</div><h3>Discovery Workshops</h3><p>Work the 12 topics with Sales, Finance, Legal and Product. Where answers disagree is where the design work is.</p></div><div class="ecard"><div class="enum">2</div><h3>Commercial Design</h3><p>Pricing waterfall, approval matrix and ARR definitions signed off before anyone opens setup.</p></div><div class="ecard"><div class="enum">3</div><h3>Platform &amp; Blueprint</h3><p>Confirm the platform, then turn the eight build areas into a phased, sized backlog.</p></div><div class="ecard"><div class="enum">4</div><h3>Build &amp; Hypercare</h3><p>Sprint delivery, UAT on real deal shapes, and reconciliation against billing after go-live.</p></div></div>
+<p class="contact">Productivity Advisors · productivityadvisors.com</p>
+</section>
+</main>

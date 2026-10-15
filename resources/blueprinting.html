@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Blueprinting Process · Productivity Advisors</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<meta name="author" content="Productivity Advisors">
+
+<style>
+  :root {
+    --navy: #1E2761;
+    --navy-light: #3A4487;
+    --accent-bg: #F4F5FA;
+    --border: #E0E2EE;
+    --text: #21242E;
+    --muted: #5B6070;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Google Sans", "Helvetica Neue", Arial, sans-serif;
+    color: var(--text); margin: 0; background: #fff;
+    font-size: 16px; line-height: 1.55;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 28px 24px 64px; }
+  .kicker { text-transform: uppercase; letter-spacing: 0.14em; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  h2 { color: var(--navy); font-size: 20px; margin: 36px 0 12px; padding-bottom: 6px; border-bottom: 2px solid var(--border); }
+  p { margin: 10px 0; }
+  .hero {
+    background: var(--navy); color: #fff; border-radius: 6px;
+    padding: 26px 30px; margin: 0 0 28px; font-size: 19px; line-height: 1.5;
+  }
+  .hero strong { color: #fff; }
+  .callout { background: var(--accent-bg); border-left: 4px solid var(--navy); padding: 14px 18px; margin: 16px 0; font-size: 15px; }
+  .callout strong { color: var(--navy); }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 15px; }
+  th { background: var(--navy); color: #fff; text-align: left; padding: 10px 14px; font-weight: 600; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--accent-bg); }
+  td.stage { white-space: nowrap; color: var(--navy); font-weight: 600; width: 1%; }
+  .ladder { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0; }
+  .rung { border: 1px solid var(--border); border-top: 4px solid var(--navy); border-radius: 4px; padding: 16px 18px; }
+  .rung h3 { margin: 0 0 6px; color: var(--navy-light); font-size: 15px; }
+  .rung .step { display: inline-block; background: var(--navy); color: #fff; font-size: 11px; padding: 2px 9px; border-radius: 999px; margin-bottom: 8px; }
+  .rung p { font-size: 14px; margin: 6px 0; }
+  ul.compact { padding-left: 20px; }
+  ul.compact li { margin-bottom: 7px; }
+  .proof { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .proof-box { background: var(--accent-bg); border-radius: 4px; padding: 14px 16px; font-size: 14px; }
+  .proof-box strong { color: var(--navy); display: block; margin-bottom: 4px; }
+  .footnote { font-size: 13px; color: var(--muted); font-style: italic; margin-top: 32px; border-top: 1px solid var(--border); padding-top: 12px; }
+  @media (max-width: 640px) { .ladder, .proof { grid-template-columns: 1fr; } }
+  @media print { .container { padding: 0; } body { font-size: 13px; } table { page-break-inside: avoid; } }
+</style>
+</head>
+<body>
+<!-- Productivity Advisors brand bar (hidden when the page is shown inside the site's viewer) -->
+<style>
+html.pa-framed .pa-bar{display:none}
+html:not(.pa-framed) body{padding-top:0!important}
+.pa-bar{width:100vw;margin-left:calc(50% - 50vw);background:#FFFFFF;font-family:"Google Sans","Product Sans",-apple-system,"Segoe UI",sans-serif;position:relative;z-index:5;margin-bottom:24px}
+.pa-bar .pa-stripe{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));height:3px}
+.pa-bar .pa-row{display:flex;align-items:center;gap:12px;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid #ECEDE8}
+.pa-bar a{color:#3B3B3D;text-decoration:none;font-size:14px;line-height:1.2}
+.pa-bar .pa-home{display:flex;align-items:center;gap:10px;font-weight:500}
+.pa-bar .pa-home img{height:24px;width:auto;display:block}
+.pa-bar .pa-home b{color:#5D8A25;font-weight:600}
+.pa-bar .pa-back{margin-left:auto;font-size:13px;color:#55574F;border:1px solid #E6E7E1;border-radius:20px;padding:6px 14px}
+.pa-bar .pa-back:hover{border-color:#A9C584;color:#3F6118}
+.pa-bar a:focus-visible{outline:2px solid #5D8A25;outline-offset:2px;border-radius:6px}
+</style>
+<script>if(window.self!==window.top)document.documentElement.classList.add('pa-framed');</script>
+<div class="pa-bar"><div class="pa-stripe" aria-hidden="true"><span style="background:#5D8A25"></span><span style="background:#CA4F2E"></span><span style="background:#3B3B3D"></span><span style="background:#D4B42B"></span></div>
+<div class="pa-row"><a class="pa-home" href="../index.html"><img src="../assets/pa-wordmark.png" alt="Productivity Advisors"></a><a class="pa-back" href="../index.html#resources">All resources</a></div></div>
+
+<div class="container">
+
+  <div class="hero">
+    A blueprint is the document that creates a roadmap between problem definition and a plan toward a solution. <strong>It names the objects, record types and fields, writes every validation rule and formula out in full</strong>, lays out each page, list view and report, and sequences all of it into phases that get built and tested one layer at a time.
+  </div>
+
+  <h2>What a Blueprint Is</h2>
+  <p>It is written for two readers at once: a VP should be able to read the scope section and tell me what to cut, and an admin should be able to build from it without asking me a question.</p>
+  <div class="callout">
+    <strong>Format.</strong> Typically 15 to 25 pages, ending in a punchlist in build order.
+  </div>
+
+  <h2>The Five Stages</h2>
+  <table>
+    <thead>
+      <tr><th>Stage</th><th>What Happens</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="stage">1 &middot; Frame</td>
+        <td>Start from what exists &mdash; a requirements doc, an overgrown spreadsheet, or the report a leader can never get. I work backward from that report.</td>
+      </tr>
+      <tr>
+        <td class="stage">2 &middot; Shape</td>
+        <td>Decide what the idea <em>is</em> before deciding how to build it: fields on something that exists, functionality added to it, or a new child object (see the tier test below).</td>
+      </tr>
+      <tr>
+        <td class="stage">3 &middot; Scope</td>
+        <td>Write down what is in, deferred and dropped &mdash; by name, with the reason. My open questions are flagged in the document rather than resolved quietly.</td>
+      </tr>
+      <tr>
+        <td class="stage">4 &middot; Specify</td>
+        <td>Field by field: API name, type, picklist values, help text. Validation rules with their conditions and exact error messages. Formulas written out. Layouts per record type, plus related lists and reports.</td>
+      </tr>
+      <tr>
+        <td class="stage">5 &middot; Sequence</td>
+        <td>Data model, then layouts, then validation rules, then formula fields &mdash; with sandbox UAT between phases. Formulas go last on purpose: if the manual data flow does not work, calculated fields only hide it.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Example Blueprinting Scenarios</h2>
+  <ul class="compact">
+    <li><strong>Replacing activity sprawl.</strong> Meeting notes, site visits and calls buried in unreportable Activities, moved onto one object a manager can report on.</li>
+    <li><strong>Encoding a post-sales methodology.</strong> The QBR and annual planning cycle as structured records &mdash; MEDDICC gaps, champion testing and forecast confidence on the review; goals, KPI targets and attainment on the plan.</li>
+    <li><strong>Project and lifecycle tracking.</strong> Customer and partner onboarding on one project object with phases, health and go-live slippage.</li>
+    <li><strong>Escalations and save plays.</strong> Escalations with severity, owner and resolution; at-risk plays as trigger, action taken and outcome.</li>
+    <li><strong>Delivery, compliance and channel artifacts.</strong> Recurring data loads, covered populations, agreements with version and expiry, partner payouts and co-marketing.</li>
+  </ul>
+
+  <h2>How We Work Together</h2>
+  <div class="proof">
+    <div class="proof-box"><strong>You react to something concrete</strong>The first thing you see is a full draft &mdash; real field names, real validation logic, real layouts. Comments on a draft get us further in one pass than three discovery calls.</div>
+    <div class="proof-box"><strong>Trade-offs are written down</strong>Not just the decisions. Where three constructs became one object, the document says why and what we gave up.</div>
+    <div class="proof-box"><strong>&ldquo;Not building this&rdquo; is a deliverable</strong>The deferred list is what keeps a v1 small enough to ship &mdash; and it becomes the backlog for the next round, tiered the same way.</div>
+  </div>
+
+  <h2>The Test That Settles Scope</h2>
+  <p>Most &ldquo;can we also track&hellip;?&rdquo; debates end once the idea is placed in a tier. Each tier is a larger commitment than the one above it, and only the third adds a new object to the org.</p>
+  <table>
+    <thead>
+      <tr><th>Tier</th><th>What Gets Built</th><th>Example</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="stage">Attribute</td>
+        <td>Fields added to a standard or custom object that already exists.</td>
+        <td>A close plan or discount approval captured on the Opportunity.</td>
+      </tr>
+      <tr>
+        <td class="stage">Add-on</td>
+        <td>Record types, layouts, validation rules and automation on an existing object.</td>
+        <td>An executive business review beside the rep-level QBR.</td>
+      </tr>
+      <tr>
+        <td class="stage">Standalone</td>
+        <td>A new child object for records that recur over time against a parent.</td>
+        <td>Eligibility-file loads logged per account, one record per load.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="footnote">Productivity Advisors &middot; August 2026</p>
+
+</div>
+</body>
+</html>
