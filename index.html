@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Productivity Advisors</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Productivity Advisors helps B2B revenue teams build Salesforce orgs that match how they actually sell. Collaborate | Align | Build.">
+<meta name="author" content="Productivity Advisors">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" href="assets/favicon-96.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: centered cloud masthead, sticky oval tabs, one long page of full-width bands (one per tab), logo-color hairlines top and bottom.
+   Single light theme by design: the brand palette is the logo's green, orange, charcoal and gold on a warm off-white. */
+:root{
+  --ground:#F7F7F4;      /* stage between panels */
+  --paper:#FFFFFF;       /* masthead, panels, footer */
+  --ink:#2A2A2C;         /* body text */
+  --ink-2:#55574F;       /* secondary text */
+  --ink-3:#6B6E66;       /* captions */
+  --line:#E6E7E1;        /* hairlines */
+  --line-2:#ECEDE8;
+  --green:#5D8A25; --green-ink:#3F6118; --green-tint:#EFF4E8; --green-line:#A9C584;
+  --orange:#CA4F2E; --orange-tint:#FBEEE9; --orange-ink:#9A3A1F;
+  --charcoal:#3B3B3D; --charcoal-tint:#EFEFED;
+  --gold:#D4B42B; --gold-tint:#FAF4DD; --gold-ink:#6B5809;
+  --font:"Google Sans","Product Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --wrap:1040px;
+  --gutter-l:max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r:max(16px, env(safe-area-inset-right, 0px));
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--green-ink)}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px;border-radius:6px}
+h1,h2,h3{margin:0;text-wrap:balance;color:var(--charcoal);line-height:1.2}
+p{margin:0}
+
+/* logo-color hairline */
+.stripe{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));height:3px}
+.stripe span:nth-child(1){background:var(--green)}
+.stripe span:nth-child(2){background:var(--orange)}
+.stripe span:nth-child(3){background:var(--charcoal)}
+.stripe span:nth-child(4){background:var(--gold)}
+
+/* masthead */
+.mast{background:var(--paper);display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding-block:24px 6px;padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
+.mast img{height:42px;width:auto;display:block}
+.mast .name{font-size:27px;font-weight:500;letter-spacing:-0.01em;color:var(--charcoal);margin-top:4px}
+.mast .name b{color:var(--green);font-weight:600}
+.mast .tag{font-size:13.5px;letter-spacing:0.06em;color:var(--ink-3)}
+
+/* sticky tabs */
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);border-bottom:1px solid var(--line-2);padding-block:12px 14px;padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
+.tabs-row{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap}
+/* each tab is outlined in its section's square color; the current tab fills with that color's tint */
+.tab{--c:var(--green);--tint:var(--green-tint);--c-ink:var(--green-ink);display:inline-flex;align-items:center;min-height:36px;padding:0 16px;border:1px solid var(--c);border-radius:20px;background:var(--paper);color:var(--ink-2);font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap;transition:background .15s,color .15s}
+.tab.c-orange{--c:var(--orange);--tint:var(--orange-tint);--c-ink:var(--orange-ink)}
+.tab.c-charcoal{--c:var(--charcoal);--tint:var(--charcoal-tint);--c-ink:var(--charcoal)}
+.tab.c-gold{--c:var(--gold);--tint:var(--gold-tint);--c-ink:var(--gold-ink)}
+.tab:hover{background:var(--tint);color:var(--c-ink)}
+.tab[aria-current="true"]{background:var(--tint);color:var(--c-ink);font-weight:600;box-shadow:inset 0 0 0 1px var(--c)}
+.contact{display:inline-flex;align-items:center;min-height:36px;padding:0 16px;border:1px solid var(--green);border-radius:20px;color:var(--green-ink);font-size:14px;font-weight:600;text-decoration:none;white-space:nowrap;margin-left:8px}
+.contact:hover{background:var(--green-tint)}
+@media (max-width:760px){
+  .tabs-row{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .tabs-row::-webkit-scrollbar{display:none}
+  .mast{padding-block:18px 4px}
+  .mast .name{font-size:23px}
+}
+
+/* panels */
+.panel{padding-block:64px;padding-left:var(--gutter-l);padding-right:var(--gutter-r);scroll-margin-top:72px;border-bottom:1px solid var(--line-2)}
+.panel:nth-of-type(even){background:var(--paper)}
+.wrap{max-width:var(--wrap);margin:0 auto;display:flex;flex-direction:column;gap:32px}
+.head{display:flex;flex-direction:column;gap:10px;max-width:720px}
+.kicker{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-3)}
+.kicker::before{content:"";width:9px;height:9px;border-radius:2px;background:var(--k,var(--green))}
+h1{font-size:clamp(30px,4.4vw,44px);font-weight:600;letter-spacing:-0.015em}
+h2{font-size:clamp(24px,3vw,32px);font-weight:600;letter-spacing:-0.01em}
+h3{font-size:17px;font-weight:600}
+.lead{font-size:19px;line-height:1.55;color:var(--ink-2);max-width:680px}
+.prose{display:flex;flex-direction:column;gap:14px;max-width:660px;color:var(--ink-2)}
+.sub{font-size:13px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-3)}
+
+.grid{display:grid;gap:16px}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:900px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:760px){.g3,.g2,.g4{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.panel:nth-of-type(even) .card{background:var(--ground);border-color:var(--line-2)}
+.card p{color:var(--ink-2);font-size:15px}
+
+/* about */
+.split{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:48px;align-items:start}
+@media (max-width:860px){.split{grid-template-columns:minmax(0,1fr);gap:32px}}
+.bring{display:flex;flex-direction:column;gap:14px}
+.why{display:flex;flex-direction:column;gap:14px}
+.why-list{list-style:none;margin:0;padding:22px;display:flex;flex-direction:column;gap:20px;background:var(--green-tint);border:1px solid var(--green-line);border-radius:12px}
+.why-list li{display:grid;grid-template-columns:14px minmax(0,1fr);column-gap:12px;row-gap:4px}
+.why-list li::before{content:"";grid-row:1 / span 2;width:10px;height:10px;border-radius:2px;background:var(--k);margin-top:7px}
+.why-list h3{font-size:17px}
+.why-list p{color:var(--ink-2);font-size:15px}
+
+/* approach callouts */
+.callout{background:var(--t);border:1px solid var(--k);border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.callout p{color:var(--ink);font-size:16px;line-height:1.6}
+
+/* fit */
+.moment h3{display:flex;align-items:center;gap:8px}
+.moment h3::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--k)}
+.checks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.checks li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;color:var(--ink-2);font-size:15px}
+.checks svg{width:18px;height:18px;margin-top:3px}
+.yes svg{color:var(--green)}
+.no svg{color:var(--orange)}
+.note{font-size:15px;color:var(--ink-2);max-width:660px;border-top:1px solid var(--line);padding-top:16px}
+
+/* approach */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;counter-reset:step}
+@media (max-width:760px){.steps{grid-template-columns:minmax(0,1fr)}}
+.step{counter-increment:step}
+.step .num{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--ink-3);letter-spacing:0.08em;text-transform:uppercase}
+.step .num::before{content:counter(step);display:grid;place-items:center;width:28px;height:28px;border-radius:50%;border:1px solid var(--green-line);color:var(--green-ink);background:var(--green-tint);font-size:13px;letter-spacing:0}
+.step h3{font-size:22px}
+blockquote{margin:0;padding:4px 0 4px 20px;border-left:2px solid var(--gold);font-size:21px;line-height:1.45;color:var(--charcoal);max-width:760px}
+.story h3{font-size:16px}
+
+/* services */
+.svc .meta{display:inline-flex;align-self:flex-start;font-size:12px;font-weight:600;letter-spacing:0.04em;color:var(--green-ink);background:var(--green-tint);border-radius:20px;padding:3px 10px}
+.svc h3{font-size:18px}
+.cta{display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px;justify-content:space-between;border:1px solid var(--green-line);background:var(--green-tint);border-radius:12px;padding:22px 24px}
+.cta p{max-width:640px;color:var(--ink)}
+.cta strong{color:var(--green-ink)}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 20px;border-radius:22px;background:var(--green-ink);color:#FFFFFF;font-weight:600;font-size:15px;text-decoration:none;white-space:nowrap}
+.btn:hover{background:var(--charcoal)}
+
+/* customers */
+.names{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:12px}
+.names li{font-size:18px;font-weight:500;color:var(--charcoal);border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:12px 20px}
+.panel:nth-of-type(even) .names li{background:var(--ground)}
+
+/* team */
+.people{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px}
+@media (max-width:860px){.people{grid-template-columns:minmax(0,1fr)}}
+.person{display:grid;grid-template-columns:88px minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:480px){.person{grid-template-columns:minmax(0,1fr)}}
+.avatar{width:88px;height:88px;border-radius:50%;display:grid;place-items:center;background:var(--green-tint);border:1px solid var(--green-line);color:var(--green-ink);font-size:28px;font-weight:600;letter-spacing:0.02em}
+.avatar.alt{background:var(--orange-tint);border-color:var(--orange);color:var(--orange-ink)}
+.person .role{color:var(--ink-3);font-size:15px;margin-top:2px}
+.person .bio{display:flex;flex-direction:column;gap:12px;margin-top:14px;color:var(--ink-2);max-width:660px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chips span{font-size:13px;color:var(--ink-2);border:1px solid var(--line);border-radius:20px;padding:4px 12px}
+
+/* resources */
+.res{gap:10px}
+.res .type{font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-3)}
+.res h3{font-size:19px}
+.res .acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto;padding-top:10px}
+.open{font-family:inherit;display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border-radius:20px;border:1px solid var(--green-line);background:var(--green-tint);color:var(--green-ink);font-size:14px;font-weight:600;cursor:pointer}
+.open:hover{background:var(--paper)}
+.newtab{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 4px;font-size:14px;color:var(--ink-2);text-decoration:none}
+.newtab:hover{color:var(--green-ink)}
+.newtab svg{width:14px;height:14px}
+
+/* footer */
+footer .foot{background:var(--paper);border-top:1px solid var(--line-2);text-align:center;font-size:13px;color:var(--ink-3);padding-block:20px;padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
+
+/* resource viewer (pop-out) */
+dialog.viewer{width:min(1180px,calc(100vw - 32px));height:calc(100vh - 48px);max-height:none;max-width:none;padding:0;border:1px solid var(--line);border-radius:14px;background:var(--paper);color:var(--ink);overflow:hidden;box-shadow:0 20px 60px rgba(40,42,36,0.25)}
+dialog.viewer[open]{display:flex;flex-direction:column}
+dialog.viewer::backdrop{background:rgba(42,42,44,0.55)}
+.vbar{display:flex;align-items:center;gap:12px;padding:10px 12px 10px 18px;border-bottom:1px solid var(--line-2);flex:none}
+.vbar .vt{flex:1;min-width:0;display:flex;flex-direction:column}
+.vbar .vt b{font-size:15px;color:var(--charcoal);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vbar .vt span{font-size:12.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vclose{font-family:inherit;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink-2);display:grid;place-items:center;cursor:pointer}
+.vclose:hover{border-color:var(--charcoal);color:var(--charcoal)}
+.vclose svg{width:16px;height:16px}
+.viewer iframe{flex:1;width:100%;border:0;background:#FFFFFF}
+@media (max-width:600px){dialog.viewer{width:100vw;height:100%;border-radius:0}.vbar .newtab span{display:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="stripe" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+  <div class="mast">
+    <img src="assets/pa-cloud.png" alt="">
+    <div class="name">Productivity<b>Advisors</b></div>
+    <div class="tag">Collaborate | Align | Build</div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Sections">
+  <div class="tabs-row">
+    <a class="tab" href="#about">About Us</a>
+    <a class="tab c-orange" href="#fit">Are We a Fit?</a>
+    <a class="tab c-charcoal" href="#approach">Approach</a>
+    <a class="tab c-gold" href="#services">Services</a>
+    <a class="tab" href="#customers">Customers</a>
+    <a class="tab c-orange" href="#team">Team</a>
+    <a class="tab c-charcoal" href="#resources">Resources</a>
+    <a class="contact" href="https://www.linkedin.com/in/gnrobin" target="_blank" rel="noopener">Get in touch</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ABOUT US -->
+<section class="panel" id="about" aria-labelledby="about-h">
+  <div class="wrap">
+    <div class="head">
+      <div class="kicker" style="--k:var(--green)">About Us</div>
+      <h1 id="about-h">Good systems are co-authored. The rest just report well.</h1>
+      <p class="lead">We help B2B revenue teams build Salesforce orgs that match how they actually sell. We start by listening to your people, then work with them until everyone agrees on what we're building and in what order. The build comes last.</p>
+    </div>
+    <div class="split">
+      <div class="why">
+        <div class="sub">Why we do this</div>
+        <ul class="why-list">
+          <li style="--k:var(--green)"><h3>We've been on both sides</h3><p>Our founder has spent two decades inside revenue teams. Sometimes building the system. Sometimes stuck working around one nobody had asked him about. That second feeling is what we're trying to spare your team.</p></li>
+          <li style="--k:var(--orange)"><h3>Alignment comes before Setup</h3><p>The best systems we've built started with interviews, a few honest arguments, and a written agreement about how the team really runs. Skip that, and you get an org that looks great in a board deck and that nobody actually uses.</p></li>
+          <li style="--k:var(--gold)"><h3>We take work where judgment matters</h3><p>We take engagements where our judgment changes the outcome, and where the outcome is worth reaching. It's why we'll tell you plainly if we're not the right fit.</p></li>
+        </ul>
+      </div>
+      <div class="bring">
+        <div class="sub">What we bring</div>
+        <div class="card">
+          <h3>We've run the function, not just advised on it</h3>
+          <p>Our founder owned the GTM stack at Udemy from $5M to $150M+ ARR, growing from 10 reps to 350. We know what breaks at $10M, $30M and $100M because we've had to fix it at each stage, usually while the quarter was still open.</p>
+        </div>
+        <div class="card">
+          <h3>We build with AI, and we're clear about where it helps</h3>
+          <p>We've connected Salesforce to Claude for conversational read and write, built prompt libraries so sellers run their own prospect research, and use AI to draft requirements and enablement material. It speeds up creation. Your team still owns what gets kept.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ARE WE A FIT -->
+<section class="panel" id="fit" aria-labelledby="fit-h">
+  <div class="wrap">
+    <div class="head">
+      <div class="kicker" style="--k:var(--orange)">Are We a Fit?</div>
+      <h2 id="fit-h">Teams at one of three moments with Salesforce</h2>
+    </div>
+    <div class="grid g3">
+      <div class="card moment" style="--k:var(--green)">
+        <h3>Implement</h3>
+        <p>You've outgrown spreadsheets, or a starter org that was stood up fast and never designed. The sales motion is real now, and the system should reflect it.</p>
+      </div>
+      <div class="card moment" style="--k:var(--orange)">
+        <h3>Re-implement</h3>
+        <p>Years of config built for a motion you no longer run. Every change touches three things nobody documented, and your reps have quietly routed around it.</p>
+      </div>
+      <div class="card moment" style="--k:var(--gold)">
+        <h3>Expand</h3>
+        <p>Sales lives in Salesforce, but renewals, CS, quoting, partners or marketing still run in tools and spreadsheets that don't connect back.</p>
+      </div>
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <h3>We'll probably work well together if</h3>
+        <ul class="checks yes">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>You'll put the right people in the room, including the skeptics</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Leadership wants to agree on priorities before the build starts</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>You want your team to own the system after we're gone</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>You'd rather hear the honest answer than the convenient one</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>We're probably not your team if</h3>
+        <ul class="checks no">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg>You need someone to work through a ticket queue without asking why</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg>The goal is a dashboard for the board, not a system the team uses</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg>Decisions are already made and the stakeholders won't be part of it</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">Most of our work is with growth-stage teams, by choice. Making twelve people's work better is not a smaller thing than shipping to a thousand strangers. It's just less visible.</p>
+  </div>
+</section>
+
+<!-- APPROACH -->
+<section class="panel" id="approach" aria-labelledby="approach-h">
+  <div class="wrap">
+    <div class="head">
+      <div class="kicker" style="--k:var(--charcoal)">Approach</div>
+      <h2 id="approach-h">Every engagement runs the same three beats</h2>
+      <p class="lead">At whatever scale the work requires.</p>
+    </div>
+    <ol class="steps" style="list-style:none;margin:0;padding:0">
+      <li class="card step">
+        <div class="num">Step</div>
+        <h3>Collaborate</h3>
+        <p>A listening tour first: stakeholder interviews, reverse demos, sitting in on pipeline reviews. We learn your motion before we have an opinion about it.</p>
+      </li>
+      <li class="card step">
+        <div class="num">Step</div>
+        <h3>Align</h3>
+        <p>Current state written down, problems separated from symptoms, priorities ranked against your team's real capacity. Leadership signs off on the order of operations.</p>
+      </li>
+      <li class="card step">
+        <div class="num">Step</div>
+        <h3>Build</h3>
+        <p>We build with your team, not for them. We pair on the hard configuration, document as we go, and coach your people to own and extend it.</p>
+      </li>
+    </ol>
+    <blockquote>“Organizations that want the artifact without doing the alignment are asking for a lie that reports well.”</blockquote>
+    <div class="grid g2">
+      <div class="callout" style="--k:var(--orange);--t:var(--orange-tint)">
+        <div class="kicker" style="--k:var(--orange)">The gap</div>
+        <p>Leadership will call Salesforce strategic, then run the Monday sales meeting off a spreadsheet someone rebuilt Sunday night. That gap isn't a training problem or a data problem. It's a system that was configured before anyone agreed on how the team actually runs.</p>
+      </div>
+      <div class="callout" style="--k:var(--green);--t:var(--green-tint)">
+        <div class="kicker" style="--k:var(--green)">The change mindset</div>
+        <p>Whether you're putting in a new system or revamping an existing one, the goal is to be purposeful about getting somewhere better. Collaborate, Align, Build gets stakeholders bought in early, so when the system rolls out, the change is directed and owned by the people who have to live with it.</p>
+      </div>
+    </div>
+    <div class="sub">How we know it worked</div>
+    <div class="grid g2">
+      <div class="card story">
+        <h3>Pivoting at the eleventh hour</h3>
+        <p>A fast-growing AI company asked for a minimalist build because their business was still evolving. As requirements came together, it became clear they needed lightweight quoting. Late in the project we pivoted to a CPQ-lite: limited, guardrailed functionality that met the need for where they were, without locking them into a system they'd outgrow.</p>
+      </div>
+      <div class="card story">
+        <h3>Both sides felt they won</h3>
+        <p>Sales wants speed, finance wants control, and both are right. We hear each side out and design around what each team actually needs: fast paths for reps, real guardrails for finance. On our best projects, both sides walked away feeling they got what they wanted without giving up too much.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="panel" id="services" aria-labelledby="services-h">
+  <div class="wrap">
+    <div class="head">
+      <div class="kicker" style="--k:var(--gold)">Services</div>
+      <h2 id="services-h">Ways to work together</h2>
+    </div>
+    <div class="grid g2">
+      <div class="card svc">
+        <span class="meta">2 weeks · fixed fee</span>
+        <h3>RevOps Diagnostic</h3>
+        <p>Salesforce org audit, lead-to-cash process review, stakeholder interviews and a data quality read. You get a written current-state assessment, a prioritized roadmap, and a readout with your leadership team.</p>
+      </div>
+      <div class="card svc">
+        <span class="meta">3–6 months</span>
+        <h3>Strategic Implementation</h3>
+        <p>One high-impact build: a new org or re-architecture, quoting workflow, comp and territory design, pipeline and forecast redesign, or the full lead-to-customer journey. Built with your team and documented for handoff.</p>
+      </div>
+      <div class="card svc">
+        <span class="meta">Monthly</span>
+        <h3>Advisory Retainer</h3>
+        <p>A thinking partner for your RevOps or Sales Ops leader: roadmap planning, prioritization, pressure-testing decisions and coaching. Your team does the work. We help make the calls easier to get right.</p>
+      </div>
+      <div class="card svc">
+        <span class="meta">Part-time, ongoing</span>
+        <h3>Fractional RevOps</h3>
+        <p>For teams without the function yet. We own revenue operations part-time (cadence, system roadmap, administration, reporting and enablement) and build toward the day you hire someone full-time.</p>
+      </div>
+    </div>
+    <div class="cta">
+      <p><strong>Start with a conversation.</strong> Thirty minutes. Tell us what's breaking. We'll share two or three things you can act on right away, and tell you plainly whether we're the right team to help with the rest.</p>
+      <a class="btn" href="https://www.linkedin.com/in/gnrobin" target="_blank" rel="noopener">Get in touch</a>
+    </div>
+  </div>
+</section>
+
+<!-- CUSTOMERS -->
+<section class="panel" id="customers" aria-labelledby="customers-h">
+  <div class="wrap">
+    <div class="head">
+      <div class="kicker" style="--k:var(--green)">Customers</div>
+      <h2 id="customers-h">Teams we've worked with</h2>
+      <p class="lead">From early-stage startups to global enterprises, across software, logistics, media, financial services and health.</p>
+    </div>
+    <ul class="names">
+      <li>Udemy</li><li>Visa</li><li>Warner Bros.</li><li>Mitsubishi</li><li>Flexport</li><li>Seismic</li><li>AtScale</li><li>Celonis</li><li>project44</li><li>Forward Networks</li><li>BetterHelp</li><li>Crescendo</li><li>Cargomatic</li><li>Modal Learning</li><li>Bellwether Coffee</li>
+    </ul>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="panel" id="team" aria-labelledby="team-h">
+  <div class="wrap">
+    <div class="head">
+      <div class="kicker" style="--k:var(--orange)">Team</div>
+      <h2 id="team-h">Who you'll work with</h2>
+    </div>
+    <div class="people">
+      <div class="person">
+        <div class="avatar" aria-hidden="true">GR</div>
+        <div>
+          <h3 style="font-size:22px">Greg Robin</h3>
+          <p class="role">Founder · San Francisco, California</p>
+          <div class="bio">
+            <p>Greg started the firm in 2001 and has spent much of the past two decades focused on building, expanding, and rebuilding the GTM systems revenue teams run on.</p>
+            <p>Greg has alternated between fractional engagements and embedded leadership seats, taking the in-house role when a build needed a full-time owner (Udemy, Flexport, Cargomatic) and returning to the practice once it was stable. Udemy is the proof point: he owned the GTM stack from $5M to $150M+ ARR as the sales org grew from 10 to 350 reps.</p>
+            <p>Greg graduated from the Wharton School at the University of Pennsylvania.</p>
+          </div>
+          <div class="chips" aria-label="Areas of expertise">
+            <span>Salesforce architecture</span><span>Revenue operations</span><span>GTM systems</span><span>Sales comp design</span><span>AI enablement</span>
+          </div>
+          <p style="margin-top:18px"><a href="https://www.linkedin.com/in/gnrobin" target="_blank" rel="noopener">Greg on LinkedIn</a></p>
+        </div>
+      </div>
+      <div class="person">
+        <div class="avatar alt" aria-hidden="true">MG</div>
+        <div>
+          <h3 style="font-size:22px">Mike Gerrity</h3>
+          <p class="role">Managing Partner · San Francisco, California</p>
+          <div class="bio">
+            <p>Mike has been developing SaaS-based apps since 2003, when he became an early adopter of Quickbase. As a serial entrepreneur with broad operational and management experience, Mike helps customers identify opportunities for streamlining information flows and delivering new levels of efficiency and insight for their business. He leads our Quickbase practice.</p>
+            <p>Mike has domain expertise in commercial real estate, distribution businesses, ed-tech and mobile.</p>
+            <p>Mike graduated from the Wharton School at the University of Pennsylvania.</p>
+          </div>
+          <div class="chips" aria-label="Areas of expertise">
+            <span>Quickbase</span><span>Commercial real estate</span><span>Distribution</span><span>Ed-tech</span><span>Mobile</span>
+          </div>
+          <p style="margin-top:18px"><a href="https://www.linkedin.com/in/mike-gerrity/" target="_blank" rel="noopener">Mike on LinkedIn</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESOURCES -->
+<section class="panel" id="resources" aria-labelledby="resources-h">
+  <div class="wrap">
+    <div class="head">
+      <div class="kicker" style="--k:var(--charcoal)">Resources</div>
+      <h2 id="resources-h">How we think, before we talk</h2>
+      <p class="lead">Working documents from our practice. Open one here, or in its own tab to share.</p>
+    </div>
+    <div class="grid g2" id="resource-grid"></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="foot">San Francisco, California</div>
+  <div class="stripe" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+</footer>
+
+<dialog class="viewer" id="viewer" aria-labelledby="viewer-title">
+  <div class="vbar">
+    <div class="vt"><b id="viewer-title"></b><span id="viewer-note"></span></div>
+    <a class="newtab" id="viewer-newtab" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg><span>Open in new tab</span></a>
+    <button class="vclose" id="viewer-close" type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <iframe id="viewer-frame" title="Resource"></iframe>
+</dialog>
+
+<script>
+/* ==========================================================================
+   RESOURCES — one row per page in /resources. To add one: drop the HTML file
+   into /resources (run tools/brand_resources.py to add the brand bar), then
+   add a row here. Cards and the pop-out viewer are built from this list.
+   slug also deep-links: productivityadvisors.com/#r-blueprinting opens it.
+   ========================================================================== */
+const RESOURCES = [
+  { slug: "blueprinting", type: "Guide", title: "The Blueprinting Process",
+    note: "From business problems to a build-ready specification.", src: "resources/blueprinting.html" },
+  { slug: "playbook", type: "Playbook", title: "GTM Systems Playbook",
+    note: "How we design pipeline, stages, handoffs and operating cadence.", src: "resources/playbook.html" },
+  { slug: "revops-foundations", type: "Framework", title: "RevOps Foundations for Emerging Teams",
+    note: "A discovery framework for Series A/B revenue leaders.", src: "resources/revops-foundations.html" },
+  { slug: "cpq", type: "Deck", title: "CPQ Discovery to Build",
+    note: "From quoting discovery to a guardrailed CPQ build.", src: "resources/cpq-discovery.html" }
+];
+
+(function () {
+  const grid = document.getElementById("resource-grid");
+  const ext = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  grid.innerHTML = RESOURCES.map((r) => `
+    <article class="card res">
+      <div class="type">${esc(r.type)}</div>
+      <h3>${esc(r.title)}</h3>
+      <p>${esc(r.note)}</p>
+      <div class="acts">
+        <button class="open" type="button" data-slug="${esc(r.slug)}">Preview</button>
+        <a class="newtab" href="${esc(r.src)}" target="_blank" rel="noopener">${ext}<span>Open in new tab</span></a>
+      </div>
+    </article>`).join("");
+
+  /* pop-out viewer */
+  const dlg = document.getElementById("viewer");
+  const frame = document.getElementById("viewer-frame");
+  let lastFocus = null;
+  function openResource(slug) {
+    const r = RESOURCES.find((x) => x.slug === slug);
+    if (!r) return;
+    lastFocus = document.activeElement;
+    document.getElementById("viewer-title").textContent = r.title;
+    document.getElementById("viewer-note").textContent = r.note;
+    document.getElementById("viewer-newtab").href = r.src;
+    frame.title = r.title;
+    frame.src = r.src;
+    if (typeof dlg.showModal === "function") dlg.showModal(); else window.open(r.src, "_blank");
+  }
+  function closeViewer() { if (dlg.open) dlg.close(); }
+  dlg.addEventListener("close", () => {
+    frame.src = "about:blank";
+    if (location.hash.startsWith("#r-")) history.replaceState(null, "", "#resources");
+    if (lastFocus) lastFocus.focus();
+  });
+  dlg.addEventListener("click", (e) => { if (e.target === dlg) closeViewer(); });
+  document.getElementById("viewer-close").addEventListener("click", closeViewer);
+  grid.addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-slug]");
+    if (b) openResource(b.dataset.slug);
+  });
+  if (location.hash.startsWith("#r-")) openResource(location.hash.slice(3));
+
+  /* highlight the tab for the section in view */
+  const tabs = [...document.querySelectorAll(".tab")];
+  const byId = Object.fromEntries(tabs.map((t) => [t.getAttribute("href").slice(1), t]));
+  function setActive(id) {
+    tabs.forEach((t) => t.removeAttribute("aria-current"));
+    const t = byId[id];
+    if (!t) return;
+    t.setAttribute("aria-current", "true");
+    const row = t.parentElement;
+    if (row.scrollWidth > row.clientWidth) {
+      const left = t.offsetLeft - row.clientWidth / 2 + t.offsetWidth / 2;
+      row.scrollTo({ left, behavior: "smooth" });
+    }
+  }
+  const sections = Object.keys(byId).map((id) => document.getElementById(id)).filter(Boolean);
+  function onScroll() {
+    const y = window.scrollY + 120;
+    let current = sections[0].id;
+    for (const s of sections) if (s.offsetTop <= y) current = s.id;
+    if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 4) current = sections[sections.length - 1].id;
+    setActive(current);
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  onScroll();
+})();
+</script>
+</body>
+</html>
