@@ -3,10 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Blueprinting Process · Productivity Advisors</title>
-<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
-<meta name="author" content="Productivity Advisors">
-
+<title>The Blueprinting Process — Productivity Advisors</title>
+<meta name="description" content="How Productivity Advisors turns a recurring RevOps problem into a build-ready Salesforce specification: one custom object, two to five record types, one motion.">
 <style>
   :root {
     --navy: #1E2761;
@@ -15,6 +13,7 @@
     --border: #E0E2EE;
     --text: #21242E;
     --muted: #5B6070;
+    --mono: "Google Sans Code", "SF Mono", Menlo, Consolas, monospace;
   }
   * { box-sizing: border-box; }
   body {
@@ -33,129 +32,202 @@
   .hero strong { color: #fff; }
   .callout { background: var(--accent-bg); border-left: 4px solid var(--navy); padding: 14px 18px; margin: 16px 0; font-size: 15px; }
   .callout strong { color: var(--navy); }
+  .tw { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 15px; }
   th { background: var(--navy); color: #fff; text-align: left; padding: 10px 14px; font-weight: 600; }
   td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
   tr:nth-child(even) td { background: var(--accent-bg); }
   td.stage { white-space: nowrap; color: var(--navy); font-weight: 600; width: 1%; }
+
+  /* anatomy layers */
+  .layers { display: grid; gap: 10px; margin: 16px 0; }
+  .layer { display: grid; grid-template-columns: 170px 1fr; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+  .layer > div { padding: 14px 16px; font-size: 15px; }
+  .layer .name { background: var(--navy); color: #fff; font-weight: 600; }
+  .layer .name small { display: block; font-weight: 400; opacity: .8; font-size: 12px; margin-top: 2px; }
+  .layer.l2 .name { background: var(--navy-light); }
+  .layer.l3 .name { background: var(--accent-bg); color: var(--navy); border-right: 1px solid var(--border); }
+
+  /* object cards */
+  .objects { display: grid; gap: 16px; margin: 16px 0; }
+  .obj { border: 1px solid var(--border); border-top: 4px solid var(--navy); border-radius: 4px; padding: 16px 18px 6px; }
+  .obj-h { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+  .obj h3 { margin: 0; color: var(--navy); font-size: 18px; }
+  .api { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+  .obj .tag { margin-left: auto; font-size: 12px; color: var(--muted); }
+  .obj p { font-size: 15px; margin: 8px 0 4px; }
+  .obj table { font-size: 14px; margin: 10px 0 12px; }
+  .obj td:first-child { white-space: nowrap; color: var(--navy); font-weight: 600; width: 1%; }
+  .obj td small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; white-space: normal; }
+
   .ladder { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0; }
   .rung { border: 1px solid var(--border); border-top: 4px solid var(--navy); border-radius: 4px; padding: 16px 18px; }
   .rung h3 { margin: 0 0 6px; color: var(--navy-light); font-size: 15px; }
-  .rung .step { display: inline-block; background: var(--navy); color: #fff; font-size: 11px; padding: 2px 9px; border-radius: 999px; margin-bottom: 8px; }
   .rung p { font-size: 14px; margin: 6px 0; }
-  ul.compact { padding-left: 20px; }
-  ul.compact li { margin-bottom: 7px; }
   .proof { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 16px 0; }
   .proof-box { background: var(--accent-bg); border-radius: 4px; padding: 14px 16px; font-size: 14px; }
   .proof-box strong { color: var(--navy); display: block; margin-bottom: 4px; }
   .footnote { font-size: 13px; color: var(--muted); font-style: italic; margin-top: 32px; border-top: 1px solid var(--border); padding-top: 12px; }
-  @media (max-width: 640px) { .ladder, .proof { grid-template-columns: 1fr; } }
-  @media print { .container { padding: 0; } body { font-size: 13px; } table { page-break-inside: avoid; } }
+  @media (max-width: 640px) {
+    .ladder, .proof { grid-template-columns: 1fr; }
+    .layer { grid-template-columns: 1fr; }
+    .layer.l3 .name { border-right: 0; border-bottom: 1px solid var(--border); }
+    .obj .tag { margin-left: 0; width: 100%; }
+    .obj td:first-child { white-space: normal; }
+    .hero { padding: 20px 20px; font-size: 17px; }
+  }
+  @media print {
+    .container { padding: 0; } body { font-size: 13px; }
+    table, .obj, .layer { page-break-inside: avoid; }
+  }
 </style>
 </head>
 <body>
-<!-- Productivity Advisors brand bar (hidden when the page is shown inside the site's viewer) -->
-<style>
-html.pa-framed .pa-bar{display:none}
-html:not(.pa-framed) body{padding-top:0!important}
-.pa-bar{width:100vw;margin-left:calc(50% - 50vw);background:#FFFFFF;font-family:"Google Sans","Product Sans",-apple-system,"Segoe UI",sans-serif;position:relative;z-index:5;margin-bottom:24px}
-.pa-bar .pa-stripe{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));height:3px}
-.pa-bar .pa-row{display:flex;align-items:center;gap:12px;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid #ECEDE8}
-.pa-bar a{color:#3B3B3D;text-decoration:none;font-size:14px;line-height:1.2}
-.pa-bar .pa-home{display:flex;align-items:center;gap:10px;font-weight:500}
-.pa-bar .pa-home img{height:24px;width:auto;display:block}
-.pa-bar .pa-home b{color:#5D8A25;font-weight:600}
-.pa-bar .pa-back{margin-left:auto;font-size:13px;color:#55574F;border:1px solid #E6E7E1;border-radius:20px;padding:6px 14px}
-.pa-bar .pa-back:hover{border-color:#A9C584;color:#3F6118}
-.pa-bar a:focus-visible{outline:2px solid #5D8A25;outline-offset:2px;border-radius:6px}
-</style>
-<script>if(window.self!==window.top)document.documentElement.classList.add('pa-framed');</script>
-<div class="pa-bar"><div class="pa-stripe" aria-hidden="true"><span style="background:#5D8A25"></span><span style="background:#CA4F2E"></span><span style="background:#3B3B3D"></span><span style="background:#D4B42B"></span></div>
-<div class="pa-row"><a class="pa-home" href="../index.html"><img src="../assets/pa-wordmark.png" alt="Productivity Advisors"></a><a class="pa-back" href="../index.html#resources">All resources</a></div></div>
-
 <div class="container">
 
   <div class="hero">
-    A blueprint is the document that creates a roadmap between problem definition and a plan toward a solution. <strong>It names the objects, record types and fields, writes every validation rule and formula out in full</strong>, lays out each page, list view and report, and sequences all of it into phases that get built and tested one layer at a time.
+    A blueprint closes one recurring RevOps gap with <strong>one custom object, a shared core of fields, and two to five record types</strong>, one for each variation of the motion. The blueprint document names every field, writes every validation rule and formula out in full, lays out each page and report, and sequences the build into phases that get built and tested one layer at a time.
   </div>
 
   <h2>What a Blueprint Is</h2>
-  <p>It is written for two readers at once: a VP should be able to read the scope section and tell me what to cut, and an admin should be able to build from it without asking me a question.</p>
+  <p>Most RevOps pain lives in the gaps between standard objects. Meeting notes pile up in Activities, deal help is requested over Slack, ownership changes happen without an audit trail, and go-lives slip in a spreadsheet. Each of those is a motion that repeats every week, and each deserves a structured home that leadership can report on.</p>
+  <p>A blueprint is written for two readers at once: a VP should be able to read the scope section and tell me what to cut, and an admin should be able to build from it without asking me a question.</p>
   <div class="callout">
-    <strong>Format.</strong> Typically 15 to 25 pages, ending in a punchlist in build order.
+    <strong>Format.</strong> A two-page executive summary for leadership, and a 15 to 25 page build plan that ends in a punchlist in build order.
+  </div>
+
+  <h2>Anatomy of a Blueprint Object</h2>
+  <div class="layers">
+    <div class="layer"><div class="name">Shared core<small>every record type</small></div><div>Parent Account, optional Opportunity, owner, status, health or priority, key dates and a resolution. These fields live once and report once, so &ldquo;everything happening on Acme this quarter&rdquo; is a single related list.</div></div>
+    <div class="layer l2"><div class="name">Record types<small>two to five per object</small></div><div>Each adds its own fields, page layout, picklist values and validation profile. A QBR asks for MEDDICC gaps; a Key Interaction never sees them. Users get a short, specific form while the org keeps one tab and one sharing model.</div></div>
+    <div class="layer l3"><div class="name">Calculated layer<small>built last</small></div><div>Formula fields, roll-ups, list views, reports and a dashboard. They go in after the hand-entered flow is proven, because if the manual data flow does not work, calculated fields only hide it.</div></div>
+  </div>
+  <div class="ladder">
+    <div class="rung"><h3>Why record types instead of more objects</h3><p>One report type covers every variation, so managers compare them side by side. One sharing model, one permission set and one tab to maintain, however many variations the business adds.</p></div>
+    <div class="rung"><h3>A place for the next idea</h3><p>A new need becomes a new record type on an existing object before anyone proposes another object. Most rules fire only when a record is marked done, so users can still save a draft mid-meeting.</p></div>
+  </div>
+
+  <h2>Four Blueprints, Sixteen Record Types</h2>
+  <p>The objects below cover the motions I see in almost every revenue org. Each one is delivered as its own blueprint and can be built on its own.</p>
+
+  <div class="objects">
+
+    <div class="obj">
+      <div class="obj-h"><h3>Customer Interaction</h3><span class="api">Customer_Interaction__c</span><span class="tag">Child of Account &middot; 5 record types</span></div>
+      <p>The customer moments that matter, captured as data leadership can report on instead of being buried in Activity sprawl.</p>
+      <div class="tw"><table>
+        <tbody>
+          <tr><td>Key Interaction</td><td>Meeting notes worth surfacing, flagged for a weekly highlight report with a direct link to each record.</td></tr>
+          <tr><td>QBR</td><td>Deal coaching on a rep&rsquo;s top deals: Economic Buyer and Champion status, MEDDICC gaps, red flags and the manager&rsquo;s forecast call.</td></tr>
+          <tr><td>Account Plan</td><td>A quarterly plan for a strategic account with target and actual revenue, turned into a KPI Attainment %.</td></tr>
+          <tr><td>Escalation<small>includes save plays</small></td><td>Severity, owner, trigger, action taken and outcome, so churn interventions are measured rather than recalled.</td></tr>
+          <tr><td>Win/Loss Review</td><td>Post-decision buyer interviews tied to the closed deal: competitor, decision criteria, deciding factor and verbatims.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="obj">
+      <div class="obj-h"><h3>Deal Support</h3><span class="api">Deal_Support_Ticket__c</span><span class="tag">Child of Account, tied to the Opportunity &middot; 4 record types</span></div>
+      <p>One intake for everything a live deal needs from the teams behind the rep, each closed with a recorded output.</p>
+      <div class="tw"><table>
+        <tbody>
+          <tr><td>Deal Desk Request</td><td>Non-standard pricing, discounts and terms, worked from request to approved price to Sales Order number.</td></tr>
+          <tr><td>Sales Engineering Request<small>pre-sales and post-sales</small></td><td>Demo, POC scoping and technical-validation requests, so SE capacity and its effect on win rate are reportable.</td></tr>
+          <tr><td>Legal Request</td><td>NDA, MSA, DPA and order-form review with document type, paper, redline rounds and turnaround.</td></tr>
+          <tr><td>RFP</td><td>Due dates, a written go/no-go decision, SME assignments and outcome, so RFP win rate is a number.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="obj">
+      <div class="obj-h"><h3>Rev Ops Request</h3><span class="api">RevOps_Request__c</span><span class="tag">Internal queue &middot; 3 record types</span></div>
+      <p>A governed front door for changes RevOps makes to the system, the territory map and the comp plan. Every request has an approver, a defined output and a measured turnaround.</p>
+      <div class="tw"><table>
+        <tbody>
+          <tr><td>System Change Request<small>includes report and data requests</small></td><td>New fields, automation, integrations, reports and data pulls, with business reason, approval and release date. Lightweight change control for the org.</td></tr>
+          <tr><td>Territory &amp; Account Change</td><td>Ownership transfers and territory moves with reason, approver and effective date before any owner field changes.</td></tr>
+          <tr><td>Comp &amp; Crediting Request<small>disputes, splits, quota relief, partner payout</small></td><td>Tied to the deal and pay period, with amount in question, root cause and dollars adjusted. Visible only to the requester and the comp team.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="obj">
+      <div class="obj-h"><h3>Implementation Project</h3><span class="api">Implementation_Project__c</span><span class="tag">Child of Account, tied to the won deal &middot; 4 record types</span></div>
+      <p>Every rollout with a phase, a health color, a target date and an actual date, so go-live slippage is measured instead of discovered.</p>
+      <div class="tw"><table>
+        <tbody>
+          <tr><td>Customer Onboarding</td><td>Kickoff, configuration, data, training and go-live. A project can&rsquo;t be marked live until its prerequisites are met.</td></tr>
+          <tr><td>Partner Onboarding</td><td>Agreement, integration and enablement. A partner can&rsquo;t be marked live until the agreement is signed.</td></tr>
+          <tr><td>Pilot / POC</td><td>A time-boxed evaluation with success criteria, end date and a convert decision, so pilot-to-paid conversion is reportable.</td></tr>
+          <tr><td>Migration</td><td>Moving customers off a legacy product, version, plan or vendor, with cutover dates and blockers, so leadership sees how many remain and which are stuck.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
   </div>
 
   <h2>The Five Stages</h2>
-  <table>
+  <div class="tw"><table>
     <thead>
       <tr><th>Stage</th><th>What Happens</th></tr>
     </thead>
     <tbody>
       <tr>
         <td class="stage">1 &middot; Frame</td>
-        <td>Start from what exists &mdash; a requirements doc, an overgrown spreadsheet, or the report a leader can never get. I work backward from that report.</td>
+        <td>Start from what exists: a requirements doc, an overgrown spreadsheet, or the report a leader can never get. I work backward from that report.</td>
       </tr>
       <tr>
-        <td class="stage">2 &middot; Shape</td>
-        <td>Decide what the idea <em>is</em> before deciding how to build it: fields on something that exists, functionality added to it, or a new child object (see the tier test below).</td>
+        <td class="stage">2 &middot; Place</td>
+        <td>Decide where the idea lives before deciding how to build it. Usually that is a record type on one of the four objects (see the placement test below).</td>
       </tr>
       <tr>
         <td class="stage">3 &middot; Scope</td>
-        <td>Write down what is in, deferred and dropped &mdash; by name, with the reason. My open questions are flagged in the document rather than resolved quietly.</td>
+        <td>Write down what is in, deferred and dropped, by name and with the reason. My open questions are flagged in the document rather than resolved quietly.</td>
       </tr>
       <tr>
         <td class="stage">4 &middot; Specify</td>
-        <td>Field by field: API name, type, picklist values, help text. Validation rules with their conditions and exact error messages. Formulas written out. Layouts per record type, plus related lists and reports.</td>
+        <td>Field by field: API name, type, picklist values, help text. Validation rules with their conditions and exact error messages. Formulas written out. A layout per record type, plus related lists and reports.</td>
       </tr>
       <tr>
         <td class="stage">5 &middot; Sequence</td>
-        <td>Data model, then layouts, then validation rules, then formula fields &mdash; with sandbox UAT between phases. Formulas go last on purpose: if the manual data flow does not work, calculated fields only hide it.</td>
+        <td>Data model, then layouts, then validation rules, then formulas and reports, with sandbox UAT between phases. Automation follows once the manual flow works.</td>
       </tr>
     </tbody>
-  </table>
-
-  <h2>Example Blueprinting Scenarios</h2>
-  <ul class="compact">
-    <li><strong>Replacing activity sprawl.</strong> Meeting notes, site visits and calls buried in unreportable Activities, moved onto one object a manager can report on.</li>
-    <li><strong>Encoding a post-sales methodology.</strong> The QBR and annual planning cycle as structured records &mdash; MEDDICC gaps, champion testing and forecast confidence on the review; goals, KPI targets and attainment on the plan.</li>
-    <li><strong>Project and lifecycle tracking.</strong> Customer and partner onboarding on one project object with phases, health and go-live slippage.</li>
-    <li><strong>Escalations and save plays.</strong> Escalations with severity, owner and resolution; at-risk plays as trigger, action taken and outcome.</li>
-    <li><strong>Delivery, compliance and channel artifacts.</strong> Recurring data loads, covered populations, agreements with version and expiry, partner payouts and co-marketing.</li>
-  </ul>
-
-  <h2>How We Work Together</h2>
-  <div class="proof">
-    <div class="proof-box"><strong>You react to something concrete</strong>The first thing you see is a full draft &mdash; real field names, real validation logic, real layouts. Comments on a draft get us further in one pass than three discovery calls.</div>
-    <div class="proof-box"><strong>Trade-offs are written down</strong>Not just the decisions. Where three constructs became one object, the document says why and what we gave up.</div>
-    <div class="proof-box"><strong>&ldquo;Not building this&rdquo; is a deliverable</strong>The deferred list is what keeps a v1 small enough to ship &mdash; and it becomes the backlog for the next round, tiered the same way.</div>
-  </div>
+  </table></div>
 
   <h2>The Test That Settles Scope</h2>
-  <p>Most &ldquo;can we also track&hellip;?&rdquo; debates end once the idea is placed in a tier. Each tier is a larger commitment than the one above it, and only the third adds a new object to the org.</p>
-  <table>
+  <p>Most &ldquo;can we also track&hellip;?&rdquo; debates end once the idea is placed. Each answer is a larger commitment than the one above it, and only the last adds a new object to the org.</p>
+  <div class="tw"><table>
     <thead>
-      <tr><th>Tier</th><th>What Gets Built</th><th>Example</th></tr>
+      <tr><th>If the idea is&hellip;</th><th>It becomes</th><th>Example</th></tr>
     </thead>
     <tbody>
       <tr>
-        <td class="stage">Attribute</td>
-        <td>Fields added to a standard or custom object that already exists.</td>
-        <td>A close plan or discount approval captured on the Opportunity.</td>
+        <td class="stage">One-to-one with a record</td>
+        <td>Fields on the object that already exists.</td>
+        <td>A close plan or competitor captured on the Opportunity.</td>
       </tr>
       <tr>
-        <td class="stage">Add-on</td>
-        <td>Record types, layouts, validation rules and automation on an existing object.</td>
-        <td>An executive business review beside the rep-level QBR.</td>
+        <td class="stage">A variation of a motion</td>
+        <td>A new record type on an existing blueprint object.</td>
+        <td>Win/Loss Review added to Customer Interaction.</td>
       </tr>
       <tr>
-        <td class="stage">Standalone</td>
-        <td>A new child object for records that recur over time against a parent.</td>
-        <td>Eligibility-file loads logged per account, one record per load.</td>
+        <td class="stage">A new recurring motion</td>
+        <td>A new blueprint object, launched with its first record types.</td>
+        <td>Rev Ops Request, launched with three record types.</td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
-  <p class="footnote">Productivity Advisors &middot; August 2026</p>
+  <h2>How We Work Together</h2>
+  <div class="proof">
+    <div class="proof-box"><strong>You react to something concrete</strong>The first thing you see is a full draft, with real field names, real validation logic and real layouts. Comments on a draft get us further in one pass than three discovery calls.</div>
+    <div class="proof-box"><strong>Trade-offs are written down</strong>Not just the decisions. Where several ideas became one object, the document says why and what we gave up.</div>
+    <div class="proof-box"><strong>&ldquo;Not building this&rdquo; is a deliverable</strong>The deferred list keeps a v1 small enough to ship, and it becomes the backlog for the next round, placed with the same test.</div>
+  </div>
+
+  <p class="footnote">Productivity Advisors &middot; October 2026</p>
 
 </div>
 </body>
