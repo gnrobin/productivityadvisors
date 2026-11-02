@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Building the RevOps Loop · Productivity Advisors</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<meta name="author" content="Productivity Advisors">
+
+<meta name="description" content="A build guide for an AI-ready GTM org: governance, the context layer, systems and rhythm, closed by a quarterly loop retro and stood up in 90 days.">
+<style>
+  :root {
+    --navy: #1E2761;
+    --navy-light: #3A4487;
+    --accent-bg: #F4F5FA;
+    --border: #E0E2EE;
+    --text: #21242E;
+    --muted: #5B6070;
+    --accent: #2F6FD6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Google Sans", "Helvetica Neue", Arial, sans-serif;
+    color: var(--text); margin: 0; background: #fff;
+    font-size: 16px; line-height: 1.55;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 28px 24px 64px; }
+  .kicker { text-transform: uppercase; letter-spacing: 0.14em; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  h1 { color: var(--navy); font-size: 32px; line-height: 1.2; margin: 0 0 18px; }
+  h2 { color: var(--navy); font-size: 22px; margin: 44px 0 12px; padding-bottom: 6px; border-bottom: 2px solid var(--border); }
+  h3 { color: var(--navy); font-size: 16px; margin: 22px 0 8px; }
+  p { margin: 10px 0; }
+  ul, ol { margin: 8px 0; padding-left: 22px; }
+  li { margin: 5px 0; }
+  .hero {
+    background: var(--navy); color: #fff; border-radius: 6px;
+    padding: 26px 30px; margin: 0 0 28px; font-size: 19px; line-height: 1.5;
+  }
+  .hero strong { color: #fff; }
+  .callout { background: var(--accent-bg); border-left: 4px solid var(--navy); padding: 14px 18px; margin: 16px 0; font-size: 15px; }
+  .callout strong { color: var(--navy); }
+  .credit { font-size: 14px; color: var(--muted); font-style: italic; }
+  .tw { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 15px; }
+  th { background: var(--navy); color: #fff; text-align: left; padding: 10px 14px; font-weight: 600; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--accent-bg); }
+  td.stage { white-space: nowrap; color: var(--navy); font-weight: 600; width: 1%; }
+  figure { margin: 20px 0; }
+  figure svg { display: block; width: 100%; height: auto; }
+  figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+  /* stage jump nav */
+  .jump { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin: 18px 0 8px; }
+  .jump a { display: block; text-decoration: none; border: 1px solid var(--border); border-top: 4px solid var(--navy); border-radius: 4px; padding: 10px 12px; color: var(--navy); font-weight: 600; font-size: 14px; }
+  .jump a small { display: block; color: var(--muted); font-weight: 400; font-size: 12px; }
+  .jump a:hover { background: var(--accent-bg); }
+
+  /* stage blocks */
+  .stage-h { display: flex; align-items: center; gap: 12px; margin: 48px 0 12px; padding-bottom: 6px; border-bottom: 2px solid var(--border); }
+  .stage-h h2 { margin: 0; padding: 0; border: 0; }
+  .stage-h .num { flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--navy); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 15px; }
+  .purpose { font-size: 17px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 8px 0; }
+  .box { border: 1px solid var(--border); border-radius: 4px; padding: 4px 16px 10px; }
+  .box h3 { margin-top: 12px; }
+  .box ul { font-size: 15px; }
+  .box.warn { border-left: 4px solid #C9822B; }
+  .meta { font-size: 15px; color: var(--muted); }
+  .meta strong { color: var(--text); }
+  .footnote { margin-top: 40px; font-size: 13px; color: var(--muted); }
+  a { color: var(--navy-light); }
+
+  @media (max-width: 640px) {
+    .container { padding: 20px 16px 48px; }
+    h1 { font-size: 26px; }
+    .hero { padding: 20px; font-size: 17px; }
+    .two { grid-template-columns: 1fr; }
+    .jump { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media print {
+    .jump { display: none; }
+    h2 { break-after: avoid; }
+    table, figure, .box, li { break-inside: avoid; }
+    .stage-sec { break-before: page; }
+  }
+</style>
+</head>
+<body>
+<!-- Productivity Advisors brand bar (hidden when the page is shown inside the site's viewer) -->
+<style>
+html.pa-framed .pa-bar{display:none}
+html:not(.pa-framed) body{padding-top:0!important}
+.pa-bar{width:100vw;margin-left:calc(50% - 50vw);background:#FFFFFF;font-family:"Google Sans","Product Sans",-apple-system,"Segoe UI",sans-serif;position:relative;z-index:5;margin-bottom:24px}
+.pa-bar .pa-stripe{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));height:3px}
+.pa-bar .pa-row{display:flex;align-items:center;gap:12px;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid #ECEDE8}
+.pa-bar a{color:#3B3B3D;text-decoration:none;font-size:14px;line-height:1.2}
+.pa-bar .pa-home{display:flex;align-items:center;gap:10px;font-weight:500}
+.pa-bar .pa-home img{height:24px;width:auto;display:block}
+.pa-bar .pa-home b{color:#5D8A25;font-weight:600}
+.pa-bar .pa-back{margin-left:auto;font-size:13px;color:#55574F;border:1px solid #E6E7E1;border-radius:20px;padding:6px 14px}
+.pa-bar .pa-back:hover{border-color:#A9C584;color:#3F6118}
+.pa-bar a:focus-visible{outline:2px solid #5D8A25;outline-offset:2px;border-radius:6px}
+</style>
+<script>if(window.self!==window.top)document.documentElement.classList.add('pa-framed');</script>
+<div class="pa-bar"><div class="pa-stripe" aria-hidden="true"><span style="background:#5D8A25"></span><span style="background:#CA4F2E"></span><span style="background:#3B3B3D"></span><span style="background:#D4B42B"></span></div>
+<div class="pa-row"><a class="pa-home" href="../index.html"><img src="../assets/pa-wordmark.png" alt="Productivity Advisors"></a><a class="pa-back" href="../index.html#resources">All resources</a></div></div>
+
+<div class="container">
+
+  <div class="kicker">Blueprint · AI-ready GTM</div>
+  <h1>Building the RevOps Loop</h1>
+
+  <div class="hero">
+    AI agents will speed up whatever operating model you already have. The RevOps Loop builds one they can strengthen: <strong>governance</strong> gives you numbers people trust, <strong>the context layer</strong> makes them useful, <strong>systems</strong> get them to the right people at the right moment, and <strong>rhythm</strong> turns them into decisions. A quarterly retro sends what broke back to the start.
+  </div>
+
+  <p class="credit">The RevOps Loop framework comes from Lonny Sternberg, VP RevOps at Veriforce, as he walked through it with Janis on the Weflow podcast. The build steps, deliverables and Salesforce guidance are from Productivity Advisors.</p>
+
+  <nav class="jump" aria-label="Stages">
+    <a href="#governance">1. Governance<small>Trusted numbers</small></a>
+    <a href="#context">2. Context layer<small>Usable context</small></a>
+    <a href="#systems">3. Systems<small>Info in hand</small></a>
+    <a href="#rhythm">4. Rhythm<small>Decisions</small></a>
+    <a href="#retro">Loop retro<small>Close the loop</small></a>
+  </nav>
+
+  <h2>Why Build the Loop</h2>
+  <p>AI agents will soon pull pipeline, calculate forecasts and brief reps on their own. If your definitions are loose, your data is split across tools, and your weekly meetings run on side spreadsheets, agents will make those problems bigger and faster.</p>
+  <p>This blueprint is a build guide for each part of the loop. Every stage uses the same template: its purpose, the design questions to answer, the build steps in order, the deliverables, how to build it in Salesforce, who owns it, and the signs that it is breaking.</p>
+
+  <h2>How the Loop Works</h2>
+  <p>Each stage produces what the next one depends on. Build them in order the first time, then run the quarterly retro to keep the loop closed.</p>
+  <figure>
+    <svg viewBox="0 0 760 340" role="img" aria-label="The RevOps Loop: governance, context layer, systems and rhythm, with a quarterly retro returning to governance" font-family="Google Sans, Helvetica Neue, Arial, sans-serif" font-size="13">
+      <defs>
+        <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#8A8FA8"/></marker>
+        <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2F6FD6"/></marker>
+      </defs>
+      <g fill="none" stroke="#8A8FA8" stroke-width="1.25">
+        <path d="M300 66H460" marker-end="url(#a)"/>
+        <path d="M590 102V240" marker-end="url(#a)"/>
+        <path d="M460 276H300" marker-end="url(#a)"/>
+      </g>
+      <path d="M170 240V102" fill="none" stroke="#2F6FD6" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#b)"/>
+      <text x="380" y="56" text-anchor="middle" font-size="12" fill="#5B6070">trusted numbers</text>
+      <text x="602" y="176" font-size="12" fill="#5B6070">usable context</text>
+      <text x="380" y="266" text-anchor="middle" font-size="12" fill="#5B6070">info in hand</text>
+      <text x="158" y="166" text-anchor="end" font-size="12" font-weight="600" fill="#21242E">Quarterly loop retro</text>
+      <text x="158" y="182" text-anchor="end" font-size="12" fill="#5B6070">what broke goes back</text>
+      <g>
+        <rect x="40" y="30" width="260" height="72" rx="6" fill="#1E2761"/>
+        <text x="56" y="54" font-size="15" font-weight="600" fill="#fff">1. Governance</text>
+        <text x="56" y="74" font-size="12" fill="#D5D9EE">Metric dictionary, owners,</text>
+        <text x="56" y="90" font-size="12" fill="#D5D9EE">data capture rules</text>
+      </g>
+      <g>
+        <rect x="460" y="30" width="260" height="72" rx="6" fill="#1E2761"/>
+        <text x="476" y="54" font-size="15" font-weight="600" fill="#fff">2. Context layer</text>
+        <text x="476" y="74" font-size="12" fill="#D5D9EE">Clean CRM, activity capture,</text>
+        <text x="476" y="90" font-size="12" fill="#D5D9EE">first- and third-party data</text>
+      </g>
+      <g>
+        <rect x="460" y="240" width="260" height="72" rx="6" fill="#1E2761"/>
+        <text x="476" y="264" font-size="15" font-weight="600" fill="#fff">3. Systems</text>
+        <text x="476" y="284" font-size="12" fill="#D5D9EE">Right info, right person,</text>
+        <text x="476" y="300" font-size="12" fill="#D5D9EE">right moment, plus write-back</text>
+      </g>
+      <g>
+        <rect x="40" y="240" width="260" height="72" rx="6" fill="#1E2761"/>
+        <text x="56" y="264" font-size="15" font-weight="600" fill="#fff">4. Rhythm</text>
+        <text x="56" y="284" font-size="12" fill="#D5D9EE">Deal reviews, forecasts, board,</text>
+        <text x="56" y="300" font-size="12" fill="#D5D9EE">signals that shift the week</text>
+      </g>
+    </svg>
+    <figcaption>Each stage hands the next what it needs. Whatever broke goes back into governance at the next retro.</figcaption>
+  </figure>
+
+  <div class="tw"><table>
+    <thead><tr><th>Stage</th><th>What you build</th><th>What it hands to the next stage</th></tr></thead>
+    <tbody>
+      <tr><td class="stage">1. Governance</td><td>Metric dictionary, ownership, data capture rules</td><td>Trusted definitions</td></tr>
+      <tr><td class="stage">2. Context layer</td><td>Clean CRM, activity capture, joined first- and third-party data</td><td>Usable, unified context</td></tr>
+      <tr><td class="stage">3. Systems</td><td>Role × moment map, delivery in the flow of work, write-back paths</td><td>Information in the right hands</td></tr>
+      <tr><td class="stage">4. Rhythm</td><td>Operating calendar, leading signals, signal playbook</td><td>Decisions, and evidence of what broke</td></tr>
+      <tr><td class="stage">Quarterly retro</td><td>One fix per stage</td><td>Updated governance for the next quarter</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- STAGE 1 -->
+  <section class="stage-sec" id="governance">
+  <div class="stage-h"><div class="num">1</div><h2>Governance</h2></div>
+  <p class="purpose"><strong>Purpose:</strong> create one shared language for the whole GTM org, people and agents alike, so every number means the same thing wherever it shows up.</p>
+
+  <h3>Design questions</h3>
+  <ul>
+    <li>Which 10–15 metrics run the business, and what is the exact formula for each?</li>
+    <li>What data has to be captured, at which stage, for those formulas to work?</li>
+    <li>Who is accountable for each metric and for the fields behind it?</li>
+    <li>Where is the one place leadership looks for the official number?</li>
+    <li>Which department owns each definition, and who settles disputes?</li>
+  </ul>
+
+  <h3>Build steps</h3>
+  <ol>
+    <li><strong>Pick the core metrics.</strong> Start with the ones in the forecast and board deck: pipeline created, pipeline coverage, bookings, ARR, win rate, cycle time, net retention.</li>
+    <li><strong>Write the formulas.</strong> For each one, record the formula, the inclusions and exclusions (for example, whether renewals count as pipeline), the source fields and how often it refreshes.</li>
+    <li><strong>Define data capture by stage.</strong> For each opportunity stage, list the fields that must be filled before a deal can move forward. Do the same for leads, accounts and renewals.</li>
+    <li><strong>Assign owners.</strong> Each metric gets a business owner who signs off on the definition and a data owner who answers for accuracy. Marketing owns pipeline sourcing, Sales owns stage criteria, CS owns retention, Finance owns bookings and ARR.</li>
+    <li><strong>Centralize the official number.</strong> Name one certified report or dashboard per metric as the source of truth, and retire the competing versions.</li>
+    <li><strong>Make it apply to agents too.</strong> Any agent that reports or calculates a metric must use the certified definition and source, not its own query.</li>
+    <li><strong>Set a change process.</strong> Definition changes get versioned, approved by the owner and announced before they take effect.</li>
+  </ol>
+
+  <h3>Deliverables</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Deliverable</th><th>What it contains</th></tr></thead>
+    <tbody>
+      <tr><td class="stage">Metric dictionary</td><td>Name, formula, inclusions and exclusions, source fields, refresh cadence, business owner, data owner</td></tr>
+      <tr><td class="stage">Stage-exit criteria</td><td>Required fields and evidence for each opportunity stage</td></tr>
+      <tr><td class="stage">Ownership matrix</td><td>Department and named owner for every metric and key field</td></tr>
+      <tr><td class="stage">Certified report list</td><td>The one official report or dashboard for each metric</td></tr>
+      <tr><td class="stage">Change log</td><td>Dated record of definition changes and who approved them</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="two">
+    <div class="box"><h3>In Salesforce</h3><ul>
+      <li><strong>Validation rules and required fields</strong> enforce stage-exit criteria at the point of entry.</li>
+      <li><strong>Path with guidance for success</strong> shows reps what each stage requires.</li>
+      <li><strong>Field descriptions and help text</strong> carry the dictionary definition into the record page.</li>
+      <li><strong>A certified dashboards folder</strong> with restricted edit access holds the official numbers.</li>
+      <li><strong>Formula fields</strong> calculate shared metrics once in the org rather than in each report.</li>
+    </ul></div>
+    <div class="box warn"><h3>Signs it's breaking</h3><ul>
+      <li>Two leaders bring different numbers for the same metric.</li>
+      <li>Reps fill required fields with placeholder values.</li>
+      <li>An agent's answer doesn't match the dashboard.</li>
+    </ul></div>
+  </div>
+  <p class="meta"><strong>Owner and cadence:</strong> RevOps runs it, and each department head signs off on their own definitions. Review the dictionary every quarter, and approve changes as they come up.</p>
+  </section>
+
+  <!-- STAGE 2 -->
+  <section class="stage-sec" id="context">
+  <div class="stage-h"><div class="num">2</div><h2>The Context Layer</h2></div>
+  <p class="purpose"><strong>Purpose:</strong> give people and AI the right information at the right time. Lonny describes a good context layer as three parts working together: governance, which makes it usable; first- and third-party data combined into a knowledge layer; and clean, unified data in the CRM.</p>
+
+  <h3>Design questions</h3>
+  <ul>
+    <li>Is the CRM data clean enough to trust: few duplicates, few stale records, required fields filled in?</li>
+    <li>Is engagement (emails, meetings, calls) captured automatically, or only when reps remember to log it?</li>
+    <li>Which first-party data (product usage, billing, support) should sit next to each account and deal?</li>
+    <li>Which third-party data (enrichment, intent, firmographics) do you actually use, and which source wins when they conflict?</li>
+    <li>Can an agent read your definitions, or do they live only in people's heads?</li>
+  </ul>
+
+  <h3>Build steps</h3>
+  <ol>
+    <li><strong>Clean the core.</strong> Dedupe accounts and contacts, merge records, archive dead ones, and retire fields with low fill rates or no owner.</li>
+    <li><strong>Automate activity capture.</strong> Sync email, calendar and call data to the right records automatically, so the CRM reflects real engagement rather than rep diligence. This is the layer Weflow customers focus on.</li>
+    <li><strong>Join first-party data.</strong> Bring product usage, billing status and open support cases onto the Account, keyed on a reliable shared ID.</li>
+    <li><strong>Choose third-party sources.</strong> Pick one source of truth per data type, such as firmographics or intent, set rules for which one wins, and cut overlapping vendors.</li>
+    <li><strong>Publish definitions in a form machines can read.</strong> Put the metric dictionary from Stage 1 somewhere agents can query, such as a semantic layer, a documented data model, or an MCP server that exposes certified definitions.</li>
+    <li><strong>Measure freshness.</strong> Track how old the data is when someone or something uses it, and set a target for each source.</li>
+  </ol>
+
+  <h3>Deliverables</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Deliverable</th><th>What it contains</th></tr></thead>
+    <tbody>
+      <tr><td class="stage">Data quality baseline</td><td>Duplicate rate, fill rates on key fields, stale-record count, measured before and after cleanup</td></tr>
+      <tr><td class="stage">Activity capture map</td><td>Which engagement data flows to which objects, and from which tools</td></tr>
+      <tr><td class="stage">Account 360 data model</td><td>First- and third-party fields joined to Account and Opportunity, with the source for each</td></tr>
+      <tr><td class="stage">Source-of-truth rules</td><td>Which system wins for each data type</td></tr>
+      <tr><td class="stage">Machine-readable dictionary</td><td>Stage 1 definitions exposed where agents can use them</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="two">
+    <div class="box"><h3>In Salesforce</h3><ul>
+      <li><strong>Duplicate and matching rules</strong> prevent new duplicates; a one-time merge clears the existing ones.</li>
+      <li><strong>Einstein Activity Capture</strong> or a dedicated capture tool logs email and calendar activity.</li>
+      <li><strong>Data Cloud</strong>, a warehouse sync, or a lighter connector brings product and billing data onto the Account.</li>
+      <li><strong>The Salesforce MCP server</strong> or Agentforce data access gives agents governed access to records and definitions.</li>
+      <li><strong>Field usage reports</strong> (fill rate by field) find fields to retire.</li>
+    </ul></div>
+    <div class="box warn"><h3>Signs it's breaking</h3><ul>
+      <li>Reps keep their own account notes outside the CRM.</li>
+      <li>An agent answers confidently from a stale or duplicate record.</li>
+      <li>Product usage comes up in renewals but isn't on the account.</li>
+    </ul></div>
+  </div>
+  <p class="meta"><strong>Owner and cadence:</strong> RevOps and systems admins own it, with data engineering if you have a warehouse. Run data-quality checks monthly and refresh the baseline quarterly.</p>
+  </section>
+
+  <!-- STAGE 3 -->
+  <section class="stage-sec" id="systems">
+  <div class="stage-h"><div class="num">3</div><h2>Systems</h2></div>
+  <p class="purpose"><strong>Purpose:</strong> design the processes that let each person get their own context when they need it, without waiting on RevOps to pull a report.</p>
+
+  <h3>Design questions</h3>
+  <p>Lonny designs systems around four questions. Answer them for each role:</p>
+  <ol>
+    <li><strong>How does someone get the information?</strong> A dashboard, an alert, an agent's answer, or a person.</li>
+    <li><strong>Who needs it, and at what moment?</strong> A rep before a call, a manager before a deal review, a CSM 120 days before renewal.</li>
+    <li><strong>Where will they look for it?</strong> The record page, Slack, their inbox, or the meeting itself.</li>
+    <li><strong>How do they share information back so the collective picture improves?</strong> Updating a field, a call note an agent captures, flagging a correction.</li>
+  </ol>
+
+  <h3>Build steps</h3>
+  <ol>
+    <li><strong>List roles and their recurring questions.</strong> For each role (SDR, AE, manager, CSM, leader), write down the five questions they ask most often and where they get the answer today.</li>
+    <li><strong>Map questions to moments.</strong> Place each question on the deal or customer timeline: prospecting, discovery, deal review, close, onboarding, renewal.</li>
+    <li><strong>Choose a delivery channel for each moment.</strong> Put the answer where the person already is. Prefer push (an alert or a brief) over pull (go find the report) for anything time-sensitive.</li>
+    <li><strong>Build the delivery.</strong> Record-page components, Slack alerts, scheduled briefs, agent prompts. Keep each one tied to a certified source from Stage 1.</li>
+    <li><strong>Design write-back paths.</strong> Make it a single step to correct a field, add context or flag an error, so what people know flows back into the context layer.</li>
+    <li><strong>Retire what nobody uses.</strong> Cut reports and dashboards with no regular viewers. Every one you keep is something to maintain.</li>
+    <li><strong>Measure adoption by role.</strong> Treat low use as a design problem, not a training problem.</li>
+  </ol>
+
+  <h3>Deliverables</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Deliverable</th><th>What it contains</th></tr></thead>
+    <tbody>
+      <tr><td class="stage">Role × moment map</td><td>Each role's key questions, the moment they arise, and where the answer is delivered</td></tr>
+      <tr><td class="stage">Delivery inventory</td><td>Every dashboard, alert, brief and agent, with its owner, audience and source</td></tr>
+      <tr><td class="stage">Write-back paths</td><td>How each role corrects or adds to the shared picture</td></tr>
+      <tr><td class="stage">Adoption report</td><td>Use by role and by asset, reviewed quarterly</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="two">
+    <div class="box"><h3>In Salesforce</h3><ul>
+      <li><strong>Dynamic Forms and Lightning record pages</strong> surface the right fields and components for each role and stage.</li>
+      <li><strong>Slack integration and Flow</strong> push alerts for stage changes, risk signals and renewal windows.</li>
+      <li><strong>Agentforce or MCP-connected agents</strong> answer role-specific questions from governed data and draft pre-call or deal briefs.</li>
+      <li><strong>Quick actions and screen flows</strong> make write-back a one-click update.</li>
+      <li><strong>Report and dashboard usage data</strong> shows what to retire.</li>
+    </ul></div>
+    <div class="box warn"><h3>Signs it's breaking</h3><ul>
+      <li>People still ask RevOps for numbers they could get themselves.</li>
+      <li>Alerts get muted because there are too many or they aren't relevant.</li>
+      <li>Corrections happen in Slack threads and never reach the record.</li>
+      <li>Dashboards keep multiplying while use stays flat.</li>
+    </ul></div>
+  </div>
+  <p class="meta"><strong>Owner and cadence:</strong> RevOps designs it with each team's manager. Review the role × moment map at every planning cycle and whenever a role or process changes.</p>
+  </section>
+
+  <!-- STAGE 4 -->
+  <section class="stage-sec" id="rhythm">
+  <div class="stage-h"><div class="num">4</div><h2>Rhythm</h2></div>
+  <p class="purpose"><strong>Purpose:</strong> use what the context shows to decide where to spend time each week, and catch problems early enough to still do something about them. Rhythm covers deal reviews, forecast calls, board meetings and annual planning.</p>
+
+  <h3>Design questions</h3>
+  <ul>
+    <li>Which meetings make up the operating cadence, and what decision does each one exist to make?</li>
+    <li>Which signals should change how leaders spend their week?</li>
+    <li>At what level does each signal trigger action?</li>
+    <li>Do board reporting and annual planning use the same metrics as the weekly meetings?</li>
+  </ul>
+
+  <h3>Build steps</h3>
+  <ol>
+    <li><strong>Define the cadence and the decision behind each meeting.</strong> A weekly pipeline review decides where to add pipeline effort, a weekly forecast call commits a number and names the risks, a monthly business review adjusts resources, and the quarterly board meeting and annual plan set targets.</li>
+    <li><strong>Pick three to five leading signals with thresholds.</strong> For example: pipeline coverage below 3× for next quarter, more than 40% of the quarter riding on five deals, deals slipping two stages without activity, or a drop in usage on renewal accounts. Set your own thresholds from history.</li>
+    <li><strong>Write the playbook for each signal.</strong> Pipeline is short, so shift SDR and marketing effort there. A few big deals will decide the quarter, so get executives in front of those buyers, on a plane if needed. A renewal looks at risk, so start the save plan now.</li>
+    <li><strong>Run meetings from live context.</strong> Run the deal review and forecast call from CRM views and dashboards, not from side spreadsheets prepared the night before.</li>
+    <li><strong>Send a weekly signal brief.</strong> A short written summary, before the week starts, of which signals crossed their thresholds and what is being done about each.</li>
+    <li><strong>Tie the top of the house to the same numbers.</strong> Board metrics and annual plan inputs come from the same certified definitions as the weekly meetings.</li>
+  </ol>
+
+  <h3>Deliverables</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Deliverable</th><th>What it contains</th></tr></thead>
+    <tbody>
+      <tr><td class="stage">Operating calendar</td><td>Each meeting, its decision, attendees, inputs and owner</td></tr>
+      <tr><td class="stage">Signal definitions</td><td>Each leading signal, its threshold and its source</td></tr>
+      <tr><td class="stage">Signal playbook</td><td>The action each signal triggers, and who owns it</td></tr>
+      <tr><td class="stage">Weekly signal brief</td><td>The template, plus who drafts it and who reviews it</td></tr>
+      <tr><td class="stage">Board metric bridge</td><td>How each board metric maps to the operating dashboards</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="two">
+    <div class="box"><h3>In Salesforce</h3><ul>
+      <li><strong>Collaborative Forecasts and pipeline inspection</strong> run the forecast call from live data.</li>
+      <li><strong>Opportunity history and field history</strong> power slippage and stage-change signals.</li>
+      <li><strong>Dashboard subscriptions and Slack digests</strong> deliver the signal view before each meeting.</li>
+      <li><strong>An agent can draft the weekly signal brief</strong> from certified reports; a person reviews it and owns the decisions.</li>
+      <li><strong>Board and plan dashboards</strong> sit in the certified folder and use the same formula fields.</li>
+    </ul></div>
+    <div class="box warn"><h3>Signs it's breaking</h3><ul>
+      <li>The forecast call spends its time arguing about numbers instead of deciding.</li>
+      <li>Problems come up in week 10 of a 13-week quarter.</li>
+      <li>Board numbers are rebuilt by hand every quarter.</li>
+      <li>Leaders' calendars look the same whatever the signals say.</li>
+    </ul></div>
+  </div>
+  <p class="meta"><strong>Owner and cadence:</strong> the CRO or GTM leader owns the rhythm, and RevOps runs the machinery behind it. Signals are watched weekly, and thresholds are reviewed quarterly.</p>
+  </section>
+
+  <!-- RETRO -->
+  <section class="stage-sec" id="retro">
+  <div class="stage-h"><div class="num">↺</div><h2>Closing the Loop: The Quarterly Loop Retro</h2></div>
+  <p class="purpose"><strong>Purpose:</strong> each quarter, check every part of the loop, find what is breaking it, and fix one thing in each stage. This is what makes it a loop and not a one-time project.</p>
+  <div class="callout"><strong>Who and when.</strong> The RevOps lead runs it. The CRO or GTM leader, the heads of Marketing, Sales and CS, a Finance partner and the systems admin attend. Allow 90 minutes, in the first two weeks of the quarter.</div>
+
+  <h3>Agenda</h3>
+  <ol>
+    <li><strong>What the quarter taught us (15 min).</strong> Which calls were right, which surprised us, and how early each problem was visible.</li>
+    <li><strong>Governance check (15 min).</strong> Definition disputes, changes requested, fields gone stale, agent answers that didn't match the dashboard.</li>
+    <li><strong>Context check (15 min).</strong> The data-quality baseline compared with last quarter, freshness against target, gaps people worked around.</li>
+    <li><strong>Systems check (15 min).</strong> Adoption by role, alerts that were muted, questions still sent to RevOps by hand.</li>
+    <li><strong>Rhythm check (15 min).</strong> Signals that fired and what was done, signals that should have fired and didn't, thresholds to adjust.</li>
+    <li><strong>Pick the fixes (15 min).</strong> One fix per stage, each with an owner and a due date. Fix the weakest stage first: a strong rhythm can't make up for numbers nobody trusts.</li>
+  </ol>
+
+  <h3>How fixes feed back</h3>
+  <div class="tw"><table>
+    <thead><tr><th>What the retro finds</th><th>Where the fix goes</th></tr></thead>
+    <tbody>
+      <tr><td>A metric was disputed</td><td>Stage 1: update the dictionary</td></tr>
+      <tr><td>People worked around bad data</td><td>Stage 2: fix the source or join</td></tr>
+      <tr><td>Answers weren't there when needed</td><td>Stage 3: update the role × moment map</td></tr>
+      <tr><td>A problem surfaced too late</td><td>Stage 4: add or retune a signal</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>Output:</strong> a one-page retro note covering what the quarter taught you, the four fixes with owners and dates, and any definition changes to announce. Last quarter's fixes are the first item on the next retro's agenda.</p>
+  </section>
+
+  <!-- ROLLOUT -->
+  <section class="stage-sec" id="rollout">
+  <h2>Rollout: Standing Up the Loop in 90 Days</h2>
+  <p>Build in stage order and don't skip the gates. Each phase makes the next one worth doing, and the loop closes with the first retro at day 90.</p>
+  <figure>
+    <svg viewBox="0 0 760 240" role="img" aria-label="90-day rollout in three phases with gates" font-family="Google Sans, Helvetica Neue, Arial, sans-serif" font-size="12.5">
+      <defs><marker id="c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#8A8FA8"/></marker></defs>
+      <g fill="none" stroke="#8A8FA8" stroke-width="1.25"><path d="M250 42H264" marker-end="url(#c)"/><path d="M494 42H508" marker-end="url(#c)"/></g>
+      <g>
+        <rect x="24" y="14" width="224" height="160" rx="6" fill="#fff" stroke="#E0E2EE"/>
+        <rect x="24" y="14" width="224" height="56" rx="6" fill="#1E2761"/><rect x="24" y="56" width="224" height="14" fill="#1E2761"/>
+        <text x="40" y="34" font-size="11.5" fill="#D5D9EE">Days 1–30</text>
+        <text x="40" y="56" font-size="15" font-weight="600" fill="#fff">Governance</text>
+        <text x="40" y="94" fill="#21242E">Agree top 10 metrics, formulas</text>
+        <text x="40" y="114" fill="#21242E">Name business and data owners</text>
+        <text x="40" y="134" fill="#21242E">Set stage-exit criteria</text>
+        <text x="40" y="154" fill="#21242E">Measure data-quality baseline</text>
+        <path d="M46 194l8 8l-8 8l-8 -8z" fill="#2F6FD6"/>
+        <text x="62" y="206" font-weight="600" fill="#21242E">Gate: dictionary signed off</text>
+      </g>
+      <g>
+        <rect x="268" y="14" width="224" height="160" rx="6" fill="#fff" stroke="#E0E2EE"/>
+        <rect x="268" y="14" width="224" height="56" rx="6" fill="#1E2761"/><rect x="268" y="56" width="224" height="14" fill="#1E2761"/>
+        <text x="284" y="34" font-size="11.5" fill="#D5D9EE">Days 31–60</text>
+        <text x="284" y="56" font-size="15" font-weight="600" fill="#fff">Context and systems</text>
+        <text x="284" y="94" fill="#21242E">Dedupe, retire dead fields</text>
+        <text x="284" y="114" fill="#21242E">Turn on activity capture</text>
+        <text x="284" y="134" fill="#21242E">Join usage, billing to Account</text>
+        <text x="284" y="154" fill="#21242E">Build the role × moment map</text>
+        <path d="M290 194l8 8l-8 8l-8 -8z" fill="#2F6FD6"/>
+        <text x="306" y="206" font-weight="600" fill="#21242E">Gate: agents use certified data</text>
+      </g>
+      <g>
+        <rect x="512" y="14" width="224" height="160" rx="6" fill="#fff" stroke="#E0E2EE"/>
+        <rect x="512" y="14" width="224" height="56" rx="6" fill="#1E2761"/><rect x="512" y="56" width="224" height="14" fill="#1E2761"/>
+        <text x="528" y="34" font-size="11.5" fill="#D5D9EE">Days 61–90</text>
+        <text x="528" y="56" font-size="15" font-weight="600" fill="#fff">Rhythm and retro</text>
+        <text x="528" y="94" fill="#21242E">Set signals and thresholds</text>
+        <text x="528" y="114" fill="#21242E">Run calls from CRM views</text>
+        <text x="528" y="134" fill="#21242E">Launch the weekly signal brief</text>
+        <text x="528" y="154" fill="#21242E">Hold the first loop retro</text>
+        <path d="M534 194l8 8l-8 8l-8 -8z" fill="#2F6FD6"/>
+        <text x="550" y="206" font-weight="600" fill="#21242E">Gate: first retro held</text>
+      </g>
+    </svg>
+    <figcaption>Three 30-day phases, each ending in a gate.</figcaption>
+  </figure>
+  <div class="callout"><strong>The gates matter most for AI.</strong> Only put an agent on a GTM metric once its definition has been signed off and its data comes from a certified source.</div>
+
+  <h3>Where AI agents fit</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Stage</th><th>What agents can do</th><th>Prerequisite</th></tr></thead>
+    <tbody>
+      <tr><td class="stage">Governance</td><td>Flag fields drifting from the dictionary, draft definition change notes</td><td>Definitions written and owned</td></tr>
+      <tr><td class="stage">Context layer</td><td>Capture call notes, summarize accounts, spot duplicates</td><td>Clean data, certified sources</td></tr>
+      <tr><td class="stage">Systems</td><td>Answer role questions, draft pre-call and deal briefs</td><td>Role × moment map, governed access</td></tr>
+      <tr><td class="stage">Rhythm</td><td>Draft the weekly signal brief, flag crossed thresholds</td><td>Agreed thresholds, a person owns each decision</td></tr>
+    </tbody>
+  </table></div>
+  </section>
+
+  <h2>Want Help Standing It Up?</h2>
+  <p>Productivity Advisors builds the loop in Salesforce: the metric dictionary and stage-exit rules, the context layer agents can safely read, role-based delivery, and the operating rhythm that runs on it. Reach out at <strong>greg@productivityadvisors.com</strong>.</p>
+
+  <p class="footnote">Productivity Advisors &middot; November 2026 &middot; RevOps Loop framework by Lonny Sternberg (Veriforce), via the Weflow podcast</p>
+
+</div>
+</body>
+</html>
