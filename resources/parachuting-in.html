@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parachuting In · Productivity Advisors</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<meta name="author" content="Productivity Advisors">
+
+<meta name="description" content="A first-90-days playbook for GTM operators taking on a new role, client or project: data, then automation, then AI, with a gate between each.">
+<style>
+  :root {
+    --navy: #1E2761;
+    --navy-light: #3A4487;
+    --accent-bg: #F4F5FA;
+    --border: #E0E2EE;
+    --text: #21242E;
+    --muted: #5B6070;
+    --accent: #2F6FD6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Google Sans", "Helvetica Neue", Arial, sans-serif;
+    color: var(--text); margin: 0; background: #fff;
+    font-size: 16px; line-height: 1.55;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 28px 24px 64px; }
+  .kicker { text-transform: uppercase; letter-spacing: 0.14em; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  h1 { color: var(--navy); font-size: 32px; line-height: 1.2; margin: 0 0 18px; }
+  h2 { color: var(--navy); font-size: 22px; margin: 44px 0 12px; padding-bottom: 6px; border-bottom: 2px solid var(--border); }
+  h3 { color: var(--navy); font-size: 16px; margin: 22px 0 8px; }
+  p { margin: 10px 0; }
+  ul, ol { margin: 8px 0; padding-left: 22px; }
+  li { margin: 5px 0; }
+  .hero {
+    background: var(--navy); color: #fff; border-radius: 6px;
+    padding: 26px 30px; margin: 0 0 28px; font-size: 19px; line-height: 1.5;
+  }
+  .hero strong { color: #fff; }
+  .callout { background: var(--accent-bg); border-left: 4px solid var(--navy); padding: 14px 18px; margin: 16px 0; font-size: 15px; }
+  .callout strong { color: var(--navy); }
+  .tw { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 15px; }
+  th { background: var(--navy); color: #fff; text-align: left; padding: 10px 14px; font-weight: 600; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--accent-bg); }
+  td.stage { white-space: nowrap; color: var(--navy); font-weight: 600; width: 1%; }
+
+  /* phase jump nav */
+  .jump { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin: 18px 0 8px; }
+  .jump a { display: block; text-decoration: none; border: 1px solid var(--border); border-top: 4px solid var(--navy); border-radius: 4px; padding: 10px 12px; color: var(--navy); font-weight: 600; font-size: 14px; }
+  .jump a small { display: block; color: var(--muted); font-weight: 400; font-size: 12px; }
+  .jump a:hover { background: var(--accent-bg); }
+
+  /* phase blocks */
+  .stage-h { display: flex; align-items: center; gap: 12px; margin: 48px 0 12px; padding-bottom: 6px; border-bottom: 2px solid var(--border); }
+  .stage-h h2 { margin: 0; padding: 0; border: 0; }
+  .stage-h .num { flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--navy); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 15px; }
+  .stage-h .days { margin-left: auto; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .purpose { font-size: 17px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 8px 0; }
+  .box { border: 1px solid var(--border); border-radius: 4px; padding: 4px 16px 10px; min-width: 0; }
+  .box h3 { margin-top: 12px; }
+  .box ul { font-size: 15px; }
+  .box.warn { border-left: 4px solid #C9822B; }
+  .box .tw table { margin: 8px 0; font-size: 14px; }
+  .box .tw th, .box .tw td { padding: 8px 10px; }
+  .meta { font-size: 15px; color: var(--muted); }
+  .meta strong { color: var(--text); }
+  .footnote { margin-top: 40px; font-size: 13px; color: var(--muted); }
+  a { color: var(--navy-light); }
+
+  /* diagnostic checklist */
+  .checks { list-style: none; padding: 0; }
+  .checks li { position: relative; padding-left: 24px; }
+  .checks li::before { content: ""; position: absolute; left: 0; top: 0.3em; width: 12px; height: 12px; border: 1.5px solid var(--navy-light); border-radius: 2px; }
+
+  @media (max-width: 640px) {
+    .container { padding: 20px 16px 48px; }
+    h1 { font-size: 26px; }
+    .hero { padding: 20px; font-size: 17px; }
+    .two { grid-template-columns: 1fr; }
+    .jump { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .stage-h { flex-wrap: wrap; }
+    .stage-h .days { margin-left: 0; flex-basis: 100%; }
+  }
+  @media print {
+    .jump { display: none; }
+    h2 { break-after: avoid; }
+    table, .box, .callout, li { break-inside: avoid; }
+    .stage-sec { break-before: page; }
+  }
+</style>
+</head>
+<body>
+<!-- Productivity Advisors brand bar (hidden when the page is shown inside the site's viewer) -->
+<style>
+html.pa-framed .pa-bar{display:none}
+html:not(.pa-framed) body{padding-top:0!important}
+.pa-bar{width:100vw;margin-left:calc(50% - 50vw);background:#FFFFFF;font-family:"Google Sans","Product Sans",-apple-system,"Segoe UI",sans-serif;position:relative;z-index:5;margin-bottom:24px}
+.pa-bar .pa-stripe{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));height:3px}
+.pa-bar .pa-row{display:flex;align-items:center;gap:12px;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid #ECEDE8}
+.pa-bar a{color:#3B3B3D;text-decoration:none;font-size:14px;line-height:1.2}
+.pa-bar .pa-home{display:flex;align-items:center;gap:10px;font-weight:500}
+.pa-bar .pa-home img{height:24px;width:auto;display:block}
+.pa-bar .pa-home b{color:#5D8A25;font-weight:600}
+.pa-bar .pa-back{margin-left:auto;font-size:13px;color:#55574F;border:1px solid #E6E7E1;border-radius:20px;padding:6px 14px}
+.pa-bar .pa-back:hover{border-color:#A9C584;color:#3F6118}
+.pa-bar a:focus-visible{outline:2px solid #5D8A25;outline-offset:2px;border-radius:6px}
+</style>
+<script>if(window.self!==window.top)document.documentElement.classList.add('pa-framed');</script>
+<div class="pa-bar"><div class="pa-stripe" aria-hidden="true"><span style="background:#5D8A25"></span><span style="background:#CA4F2E"></span><span style="background:#3B3B3D"></span><span style="background:#D4B42B"></span></div>
+<div class="pa-row"><a class="pa-home" href="../index.html"><img src="../assets/pa-wordmark.png" alt="Productivity Advisors"></a><a class="pa-back" href="../index.html#resources">All resources</a></div></div>
+
+<div class="container">
+
+  <div class="kicker">Playbook · First 90 days</div>
+  <h1>Parachuting In</h1>
+
+  <div class="hero">
+    A first-90-days playbook for GTM operators taking on a new role, client or project. The thesis: <strong>data, then automation, then AI.</strong> In that order, with a gate between each.
+  </div>
+
+  <nav class="jump" aria-label="Sections">
+    <a href="#ladder">The ladder<small>Four gated steps</small></a>
+    <a href="#diagnose">1. Diagnose<small>Days 1–30</small></a>
+    <a href="#stabilize">2. Stabilize<small>Days 30–60</small></a>
+    <a href="#scale">3. Scale<small>Days 60–90</small></a>
+    <a href="#toolkit">Toolkit<small>Checklists and questions</small></a>
+  </nav>
+
+  <h2>Why the First 90 Days Matter</h2>
+  <p>Whether it is a full-time seat, a fractional engagement or a single project, your first 90 days decide how people see you for the next two years. Everyone will want to talk about AI. The operators who do well start somewhere less exciting: they find out which numbers can be trusted, fix the hand-offs, and only then build AI on a foundation that can hold it.</p>
+  <p>This is the sequence we use. Each 30-day phase has a goal, the work to do, and what you should have in hand when it ends.</p>
+
+  <h2 id="ladder">The Ladder: Four Steps, Each With a Gate</h2>
+  <p>Don't move up a step until you've passed the gate below it.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Step</th><th>What you build</th><th>Gate to pass</th></tr></thead>
+    <tbody>
+      <tr><td class="stage">1. Foundation</td><td>One data model. Shared definitions for stage, bookings and ARR. Field and object governance. A data quality score.</td><td>Pipeline and bookings reconcile to Finance</td></tr>
+      <tr><td class="stage">2. Automation</td><td>Map lead-to-cash, then automate the rule-based parts with flows, integrations and approvals.</td><td>Hand-offs between Sales, Delivery and Finance run without spreadsheets</td></tr>
+      <tr><td class="stage">3. AI-assisted</td><td>Copilots that draft, summarize, score and flag, with a person approving the output.</td><td>Each use case beats its baseline on an agreed metric</td></tr>
+      <tr><td class="stage">4. Agentic</td><td>Agents that act on their own inside guardrails: permissions, audit trail, rollback.</td><td>An eval set and an error budget for every agent</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- PHASE 1 -->
+  <section class="stage-sec" id="diagnose">
+  <div class="stage-h"><div class="num">1</div><h2>Diagnose</h2><span class="days">Days 1–30</span></div>
+  <p class="purpose"><strong>Goal:</strong> listen and measure before you change anything.</p>
+
+  <h3>Who to meet</h3>
+  <ul>
+    <li>Leaders in Sales, Marketing, CS, Delivery, Finance and Legal. Ask each for their top three system pains and the report they do not trust.</li>
+    <li>The admins and whoever built the CRM. They know why things are the way they are.</li>
+    <li>Three to five reps and managers. Watch them work a deal; do not just ask.</li>
+  </ul>
+
+  <h3>Which numbers to trust</h3>
+  <ul>
+    <li>Put pipeline, bookings, ARR and forecast next to Finance's numbers. Where they differ, find the definition that differs.</li>
+    <li>Score data quality on the fields the forecast depends on: amount, close date, stage, owner.</li>
+    <li>Treat any number nobody can trace back to records as a hypothesis.</li>
+  </ul>
+
+  <h3>Where lead-to-cash breaks</h3>
+  <ul>
+    <li>Walk one real deal from first touch to cash collected. List every system, hand-off and spreadsheet.</li>
+    <li>Mark where data is retyped, where approvals stall and where Finance redoes the work.</li>
+    <li>Those marks become your roadmap.</li>
+  </ul>
+
+  <div class="callout"><strong>By day 30:</strong> one intake channel with a weekly triage, plus a written readout: systems map, data quality scorecard, top ten issues ranked, and what you will not touch yet.</div>
+  </section>
+
+  <!-- PHASE 2 -->
+  <section class="stage-sec" id="stabilize">
+  <div class="stage-h"><div class="num">2</div><h2>Stabilize</h2><span class="days">Days 30–60</span></div>
+  <p class="purpose"><strong>Goal:</strong> fix the foundation and earn trust.</p>
+
+  <h3>Fix the data and the definitions</h3>
+  <ol>
+    <li><strong>Publish a one-page glossary</strong> (stage, bookings, recurring vs. one-time revenue, churn) signed off by Finance and Sales leadership.</li>
+    <li><strong>Enforce it in the system</strong> with validation rules, picklists and required fields, so the definitions hold after you leave the room.</li>
+    <li><strong>Clean the forecast fields first.</strong> Retire unused fields and automations in waves, with usage counts behind each removal.</li>
+    <li><strong>Fix the worst hand-off</strong> on your lead-to-cash map.</li>
+    <li><strong>Draft the systems roadmap</strong> and a vendor renewal calendar, with a build vs. buy view for each tool.</li>
+  </ol>
+
+  <h3>Pick two or three quick wins</h3>
+  <p>Visible, low risk, shipped in under two weeks. Good ones look like this:</p>
+  <div class="tw"><table>
+    <thead><tr><th>Quick win</th><th>Who notices</th></tr></thead>
+    <tbody>
+      <tr><td class="stage">Forecast view that matches Finance</td><td>CRO and CFO; ends the "whose number" debate</td></tr>
+      <tr><td class="stage">Quote, contract and billing check</td><td>Finance, before the first invoice; fewer credits and rebills</td></tr>
+      <tr><td class="stage">Next steps filled from call notes</td><td>Reps and managers; next steps and contacts kept current, time back for selling</td></tr>
+      <tr><td class="stage">Request intake with status updates</td><td>Every stakeholder; they feel heard</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout"><strong>By day 60:</strong> agreed definitions, a cleaner baseline with a quality score, two or three shipped wins, and a draft roadmap.</div>
+  </section>
+
+  <!-- PHASE 3 -->
+  <section class="stage-sec" id="scale">
+  <div class="stage-h"><div class="num">3</div><h2>Scale</h2><span class="days">Days 60–90</span></div>
+  <p class="purpose"><strong>Goal:</strong> automate first, then pilot AI and prove it.</p>
+
+  <h3>How to choose and run pilots</h3>
+  <ol>
+    <li><strong>Automate the rule-based work first.</strong> Use a flow when the rule is clear and an LLM when the input is messy. Most first-year wins are the first kind.</li>
+    <li><strong>Score every AI idea on two things:</strong> build effort and adoption effort. Many GTM AI projects are easy to build and hard to adopt. Start with ideas low on both.</li>
+    <li><strong>Check the AI already in your tools</strong> before building anything new.</li>
+    <li><strong>Set each pilot up to be measured:</strong> a baseline taken before launch, a small golden set of real examples, a rubric to grade the output, and a named owner who uses it every week.</li>
+    <li><strong>Report against the baseline.</strong> Scale the winner and stop the loser.</li>
+  </ol>
+
+  <h3>Pilots worth starting with</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Pilot</th><th>How you measure it</th></tr></thead>
+    <tbody>
+      <tr><td class="stage">CRM hygiene from calls and email</td><td>Share of open deals with a current next step and contact roles; admin time per rep</td></tr>
+      <tr><td class="stage">Deal risk and forecast narrative</td><td>Forecast accuracy against prior quarters; time spent in forecast calls</td></tr>
+      <tr><td class="stage">Contract term extraction</td><td>Fields filled without rework; non-standard clauses caught</td></tr>
+      <tr><td class="stage">Ops request triage</td><td>Time to first response; duplicate requests</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout"><strong>By day 90:</strong> an approved 12-month roadmap, a release cadence with notes for stakeholders and Enablement, and pilot results with numbers.</div>
+  </section>
+
+  <!-- TOOLKIT -->
+  <section class="stage-sec" id="toolkit">
+  <div class="stage-h"><div class="num">✓</div><h2>Toolkit</h2></div>
+
+  <h3>Diagnostic checklist</h3>
+  <div class="two">
+    <div class="box"><h3>Data</h3><ul class="checks">
+      <li>Pipeline, bookings and forecast reconcile to Finance</li>
+      <li>Stage definitions written down and enforced</li>
+      <li>Quality score on forecast-critical fields</li>
+      <li>Account and contact duplicate rate known</li>
+    </ul></div>
+    <div class="box"><h3>Systems</h3><ul class="checks">
+      <li>Systems map with an owner for every tool</li>
+      <li>Field and automation usage audited</li>
+      <li>Integration users on least privilege</li>
+      <li>Renewal date and cost for every vendor</li>
+    </ul></div>
+    <div class="box"><h3>Process</h3><ul class="checks">
+      <li>One real deal traced from lead to cash</li>
+      <li>Every manual hand-off and spreadsheet listed</li>
+      <li>One intake channel for requests</li>
+      <li>A release cadence with change notes</li>
+    </ul></div>
+    <div class="box"><h3>AI readiness</h3><ul class="checks">
+      <li>Rules for customer data in AI tools agreed with Legal and Security</li>
+      <li>Native AI in current tools reviewed</li>
+      <li>Baselines captured before any pilot</li>
+      <li>A business owner for each use case</li>
+    </ul></div>
+  </div>
+
+  <h3>Red flags and what they usually mean</h3>
+  <div class="tw"><table>
+    <thead><tr><th>What you see</th><th>What it usually means</th></tr></thead>
+    <tbody>
+      <tr><td class="stage">Three versions of the pipeline number</td><td>Definitions were never agreed, and Sales and Finance do not trust each other's data</td></tr>
+      <tr><td class="stage">"We tried AI and it didn't work"</td><td>It was built on dirty data or placed outside the daily workflow</td></tr>
+      <tr><td class="stage">Hundreds of custom fields, half empty</td><td>No governance; every request got a new field</td></tr>
+      <tr><td class="stage">The real reports live in spreadsheets</td><td>The CRM does not reflect how deals actually work</td></tr>
+      <tr><td class="stage">One admin who "knows how it all works"</td><td>A single point of failure and undocumented automation</td></tr>
+      <tr><td class="stage">New tools bought every quarter</td><td>Overlapping features and no one owning renewals</td></tr>
+      <tr><td class="stage">No six-month definition of success</td><td>The role or project is not scoped yet. Get that answered before anything else</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Questions to ask</h3>
+  <div class="two">
+    <div class="box"><h3>In the interview or kickoff</h3><ul>
+      <li>What would make this a success at six months?</li>
+      <li>How has the GTM motion changed in the last year, and which systems broke first?</li>
+      <li>How does a deal get scoped and priced today, and where do Delivery and Finance come in?</li>
+      <li>What has the team tried with AI, and what stuck?</li>
+      <li>Who built the CRM, and what state is it in?</li>
+    </ul></div>
+    <div class="box"><h3>In the first week</h3><ul>
+      <li>Which report do you not trust, and why?</li>
+      <li>Where do you retype data from one system into another?</li>
+      <li>What request have you given up asking for?</li>
+      <li>What are the rules for putting customer data, call recordings and contracts into AI tools?</li>
+      <li>Which vendors renew in the next two quarters?</li>
+    </ul></div>
+  </div>
+  </section>
+
+  <h2>The Takeaway</h2>
+  <div class="hero">
+    AI in GTM is a data problem first and an adoption problem second. The build is usually the easy part. Lead with AI and you will ship demos. Lead with the data and the hand-offs and you will ship things people use, and the AI work that follows will have numbers behind it. <strong>Earn the right to automate, then earn the right to use AI.</strong>
+  </div>
+
+  <h2>Want Help With Your First 90 Days?</h2>
+  <p>Productivity Advisors runs this playbook alongside new RevOps and GTM leaders: the diagnostic readout, the definitions and data cleanup, the quick wins, and AI pilots measured against a baseline. Reach out at <strong>greg@productivityadvisors.com</strong>.</p>
+
+  <p class="footnote">Productivity Advisors &middot; November 2026</p>
+
+</div>
+</body>
+</html>
