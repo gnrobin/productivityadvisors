@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LWC Productivity Components · Productivity Advisors</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<meta name="author" content="Productivity Advisors">
+<meta name="description" content="Thirteen Lightning Web Components that add in-place productivity to a standard Sales Cloud org: what each one does, where it sits, and what it takes to build.">
+<style>
+  /* Layout idea: the resources-page column, recolored in the Lightning palette of the components themselves */
+  :root {
+    color-scheme: light;
+    --deep: #014486;
+    --brand: #0176D3;
+    --link: #0B5CAB;
+    --accent-bg: #F3F3F3;
+    --tint: #EEF4FF;
+    --border: #E5E5E5;
+    --line: #C9C9C9;
+    --text: #181818;
+    --muted: #5C5C5C;
+    --ok-bg: #E6F6E2; --ok: #1D6A34;
+    --warn-bg: #FDEFD5; --warn: #8C4B02;
+    --risk-bg: #FDE4E1; --risk: #B0050F;
+    --info-bg: #D8E6FE;
+    --violet: #5A1BA9; --teal: #0B827C;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Google Sans", "Helvetica Neue", Arial, sans-serif;
+    color: var(--text); margin: 0; background: #fff;
+    font-size: 16px; line-height: 1.55;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 28px 24px 64px; }
+  .kicker { text-transform: uppercase; letter-spacing: 0.14em; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  h1 { color: var(--deep); font-size: 32px; line-height: 1.2; margin: 0 0 18px; text-wrap: balance; }
+  h2 { color: var(--deep); font-size: 22px; margin: 44px 0 12px; padding-bottom: 6px; border-bottom: 2px solid var(--border); }
+  h3 { color: var(--deep); font-size: 18px; margin: 0; }
+  p { margin: 10px 0; }
+  a { color: var(--link); }
+  .hero { background: var(--deep); color: #fff; border-radius: 6px; padding: 26px 30px; margin: 0 0 28px; font-size: 19px; line-height: 1.5; }
+  .callout { background: var(--tint); border-left: 4px solid var(--brand); padding: 14px 18px; margin: 16px 0; font-size: 15px; }
+  .callout strong { color: var(--deep); }
+  .tw { overflow-x: auto; }
+  table.idx { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 15px; }
+  table.idx th { background: var(--deep); color: #fff; text-align: left; padding: 9px 14px; font-weight: 600; }
+  table.idx td { padding: 8px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  table.idx tr:nth-child(even) td { background: var(--accent-bg); }
+  table.idx td.n { width: 1%; color: var(--muted); font-variant-numeric: tabular-nums; }
+  table.idx td.sz { white-space: nowrap; }
+  .jump { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 18px 0 8px; }
+  .jump a { display: block; text-decoration: none; border: 1px solid var(--border); border-top: 4px solid var(--brand); border-radius: 4px; padding: 10px 12px; color: var(--deep); font-weight: 600; font-size: 14px; }
+  .jump a small { display: block; color: var(--muted); font-weight: 400; font-size: 12px; }
+  .jump a:hover { background: var(--tint); }
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+  .footnote { margin-top: 40px; font-size: 13px; color: var(--muted); }
+
+  /* one component = one block that never splits across printed pages */
+  .comp { margin: 26px 0 0; padding-top: 22px; border-top: 1px solid var(--border); display: grid; gap: 16px; }
+  .group > .comp:first-of-type { border-top: 0; padding-top: 6px; }
+  .comp.side { grid-template-columns: minmax(0, 1fr) 380px; align-items: start; }
+  .comp-h { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .num { flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--deep); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 15px; font-variant-numeric: tabular-nums; }
+  .facts { margin: 12px 0 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 14px; font-size: 14px; }
+  .facts dt { color: var(--muted); }
+  .facts dd { margin: 0; }
+  .size { display: inline-block; padding: 1px 10px; border-radius: 999px; background: var(--info-bg); color: var(--deep); font-size: 12px; font-weight: 600; }
+
+  /* mockups, in the Lightning record-page look */
+  .mock { background: var(--accent-bg); border: 1px solid var(--border); border-radius: 6px; padding: 14px; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 13px; line-height: 1.4; color: var(--text); }
+  .mock.phone { background: #fff; border-color: var(--line); border-radius: 18px; padding: 18px 16px; display: grid; gap: 14px; font-size: 15px; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .ch { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  .ico { flex: none; width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; background: var(--brand); }
+  .ct { font-size: 15px; font-weight: 700; flex: 1 1 auto; }
+  .sub { color: var(--muted); font-size: 12px; }
+  .b { font-weight: 600; }
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .g { background: var(--ok-bg); color: var(--ok); }
+  .a { background: var(--warn-bg); color: var(--warn); }
+  .r { background: var(--risk-bg); color: var(--risk); }
+  .i { background: var(--info-bg); color: var(--deep); }
+  .n { background: #ECECEC; color: #444; }
+  .solid { background: var(--deep); color: #fff; }
+  .dash { background: #fff; color: #444; border: 1px dashed var(--muted); padding: 1px 10px; }
+  .btn { height: 32px; padding: 0 14px; border-radius: 6px; border: 1px solid var(--line); background: #fff; color: var(--link); font: inherit; font-weight: 600; cursor: pointer; }
+  .btn.pri { background: var(--brand); border-color: var(--brand); color: #fff; }
+  .btn.out { border-color: var(--brand); }
+  .btn[disabled] { background: var(--border); color: var(--muted); cursor: default; }
+  .row { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--border); }
+  .row > .grow { flex: 1 1 auto; min-width: 0; display: grid; gap: 2px; }
+  .row.flag { background: #FEF7EC; }
+  .row:last-child { border-bottom: 0; }
+  .score { display: flex; align-items: center; gap: 16px; padding: 16px; border-bottom: 1px solid var(--border); }
+  .score .big { font-size: 40px; font-weight: 700; line-height: 1; }
+  .bar { height: 8px; border-radius: 999px; background: var(--border); margin-top: 6px; }
+  .bar > span { display: block; height: 8px; border-radius: 999px; background: #A96404; }
+  .bar.ok > span { background: #2E844A; }
+  .foot { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 16px; border-top: 1px solid var(--border); background: #F8F8F8; }
+  .foot .sub { flex: 1 1 auto; }
+  .band { padding: 8px 16px; background: #F8F8F8; border-bottom: 1px solid var(--border); font-size: 12px; font-weight: 600; color: var(--muted); }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr)); border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; }
+  .tile { padding: 14px 16px; display: grid; gap: 4px; align-content: start; border-right: 1px solid var(--border); }
+  .tile:last-child { border-right: 0; }
+  .tile .v { font-size: 20px; font-weight: 700; }
+  .tile.mine { background: #F3EFFB; }
+  .scroll { overflow-x: auto; }
+  table.t { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  table.t th { background: #F8F8F8; color: var(--muted); font-size: 12px; font-weight: 600; text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  table.t td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  table.t tr:last-child td { border-bottom: 0; }
+  table.t th:first-child, table.t td:first-child { padding-left: 16px; }
+  table.t th:last-child, table.t td:last-child { padding-right: 16px; }
+  table.t .num-c { text-align: right; white-space: nowrap; }
+  table.t tr.flag td { background: #FEF7EC; }
+  table.t tr.late td { background: #FDF3F2; }
+  table.t tr.total td { background: #F8F8F8; font-weight: 700; }
+  .cell { width: 68px; height: 30px; border: 1px solid #747474; border-radius: 4px; padding: 0 8px; text-align: right; font: inherit; background: #fff; color: var(--text); }
+  .cell.on { border: 2px solid var(--brand); }
+  .cell.ovr { border-color: var(--violet); background: #F3EFFB; }
+  .fld { height: 32px; border: 1px solid #747474; border-radius: 4px; padding: 0 8px; font: inherit; background: #fff; color: var(--text); width: 100%; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  .chip { height: 28px; padding: 0 12px; border-radius: 999px; border: 1px solid #747474; background: #fff; color: var(--text); font: inherit; font-size: 12px; cursor: pointer; }
+  .chip.on { background: var(--deep); border-color: var(--deep); color: #fff; font-weight: 600; }
+  .roles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 12px; padding: 16px; }
+  .role { border: 1px solid var(--line); border-radius: 8px; padding: 12px; display: grid; gap: 8px; align-content: start; }
+  .role.gap { border: 1px dashed var(--warn); background: #FEF7EC; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+  .role.gap .eyebrow { color: var(--warn); }
+  .who { display: flex; align-items: center; gap: 10px; }
+  .av { flex: none; width: 36px; height: 36px; border-radius: 50%; background: var(--info-bg); color: var(--deep); font-weight: 700; display: grid; place-items: center; }
+  .between { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; }
+  .tl { padding: 8px 16px 12px; }
+  .ev { display: grid; grid-template-columns: 48px 12px minmax(0, 1fr); column-gap: 10px; padding: 7px 0; }
+  .ev .when { color: var(--muted); font-size: 12px; text-align: right; }
+  .ev .dot { width: 10px; height: 10px; border-radius: 50%; margin: 4px auto 0; background: var(--c); }
+  .ev .eyebrow { color: var(--c); }
+  .edit { display: grid; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  .edit-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px; }
+  .edit-row label { display: grid; gap: 4px; color: var(--muted); font-size: 12px; }
+  .seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .tap { min-height: 44px; border-radius: 8px; border: 1px solid #747474; background: #fff; color: var(--text); font: inherit; font-size: 14px; padding: 0 10px; cursor: pointer; }
+  .tap.on { border: 2px solid var(--deep); background: var(--info-bg); color: var(--deep); font-weight: 600; }
+  .tap.go { min-height: 48px; background: var(--brand); border-color: var(--brand); color: #fff; font-size: 16px; font-weight: 700; }
+  .phone .lbl { font-size: 13px; font-weight: 600; color: #444; display: grid; gap: 8px; }
+  .phone textarea, .phone input { border: 1px solid #747474; border-radius: 8px; padding: 10px 12px; font: inherit; width: 100%; color: var(--text); background: #fff; }
+  .caption { font-family: "Google Sans", "Helvetica Neue", Arial, sans-serif; font-size: 13px; color: var(--muted); margin: 8px 2px 0; }
+
+  @media (max-width: 760px) {
+    .container { padding: 20px 16px 48px; }
+    h1 { font-size: 26px; }
+    .hero { padding: 20px; font-size: 17px; }
+    .comp.side { grid-template-columns: minmax(0, 1fr); }
+    .jump { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .tile { border-right: 0; border-bottom: 1px solid var(--border); }
+  }
+  @page { size: letter portrait; margin: 0.6in; }
+  @media print {
+    .jump { display: none; }
+    .container { max-width: none; padding: 0; }
+    h2 { break-after: avoid; }
+    .comp, table.idx, .callout { break-inside: avoid; }
+    .group { break-before: page; }
+    .mock, .hero, .num, table.idx th, .pill, .tile.mine, .btn.pri { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<!-- Productivity Advisors brand bar (hidden when the page is shown inside the site's viewer) -->
+<style>
+html.pa-framed .pa-bar{display:none}
+html:not(.pa-framed) body{padding-top:0!important}
+.pa-bar{width:100vw;margin-left:calc(50% - 50vw);background:#FFFFFF;font-family:"Google Sans","Product Sans",-apple-system,"Segoe UI",sans-serif;position:relative;z-index:5;margin-bottom:24px}
+.pa-bar .pa-stripe{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));height:3px}
+.pa-bar .pa-row{display:flex;align-items:center;gap:12px;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid #ECEDE8}
+.pa-bar a{color:#3B3B3D;text-decoration:none;font-size:14px;line-height:1.2}
+.pa-bar .pa-home{display:flex;align-items:center;gap:10px;font-weight:500}
+.pa-bar .pa-home img{height:24px;width:auto;display:block}
+.pa-bar .pa-home b{color:#5D8A25;font-weight:600}
+.pa-bar .pa-back{margin-left:auto;font-size:13px;color:#55574F;border:1px solid #E6E7E1;border-radius:20px;padding:6px 14px}
+.pa-bar .pa-back:hover{border-color:#A9C584;color:#3F6118}
+.pa-bar a:focus-visible{outline:2px solid #5D8A25;outline-offset:2px;border-radius:6px}
+@media print{.pa-bar .pa-back{display:none}}
+</style>
+<script>if(window.self!==window.top)document.documentElement.classList.add('pa-framed');</script>
+<div class="pa-bar"><div class="pa-stripe" aria-hidden="true"><span style="background:#5D8A25"></span><span style="background:#CA4F2E"></span><span style="background:#3B3B3D"></span><span style="background:#D4B42B"></span></div>
+<div class="pa-row"><a class="pa-home" href="../index.html"><img src="../assets/pa-wordmark.png" alt="Productivity Advisors"></a><a class="pa-back" href="../index.html#resources">All resources</a></div></div>
+
+<div class="container">
+
+  <div class="kicker">Component library · Sales Cloud</div>
+  <h1>LWC Productivity Components</h1>
+
+  <div class="hero">
+    Most Sales Cloud orgs make reps leave the record to get anything done. These thirteen Lightning Web Components put the answer, and the next action, <strong>in place</strong> on the page a rep or manager is already looking at. Each one runs on standard objects, drops onto a Lightning page, and most take a week or less to build.
+  </div>
+
+  <nav class="jump" aria-label="Component groups">
+    <a href="#opportunity">Opportunity page<small>Components 1 to 5</small></a>
+    <a href="#account">Account page<small>Components 6 to 8</small></a>
+    <a href="#home">Home and mobile<small>Components 9 to 11</small></a>
+    <a href="#manager">Manager and RevOps<small>Components 12 and 13</small></a>
+  </nav>
+
+  <h2>What In-Place Means</h2>
+  <p>A standard record page shows fields and related lists. It rarely tells a rep whether the deal is healthy, what is missing, or what to do next, so that work moves to reports, spreadsheets and side tools. An in-place component answers one question and offers one action right where the question comes up.</p>
+  <p>Every component below follows the same rules: it reads data the org already has, it writes back to standard fields so reports keep working, and its thresholds live in Custom Metadata so an admin can tune them without a developer.</p>
+
+  <div class="tw"><table class="idx">
+    <thead><tr><th>#</th><th>Component</th><th>Where it sits</th><th>Build size</th></tr></thead>
+    <tbody>
+      <tr><td class="n">1</td><td>Deal Health Scorecard</td><td>Opportunity sidebar</td><td class="sz">Medium</td></tr>
+      <tr><td class="n">2</td><td>Stage Exit Checklist</td><td>Opportunity sidebar</td><td class="sz">Medium</td></tr>
+      <tr><td class="n">3</td><td>Buying Committee Map</td><td>Opportunity main column</td><td class="sz">Small</td></tr>
+      <tr><td class="n">4</td><td>Inline Product Editor</td><td>Opportunity main column</td><td class="sz">Large</td></tr>
+      <tr><td class="n">5</td><td>Close Plan</td><td>Opportunity tab</td><td class="sz">Medium</td></tr>
+      <tr><td class="n">6</td><td>Account 360 Header</td><td>Top of the Account page</td><td class="sz">Small</td></tr>
+      <tr><td class="n">7</td><td>Whitespace Grid</td><td>Account main column</td><td class="sz">Medium</td></tr>
+      <tr><td class="n">8</td><td>Relationship Timeline</td><td>Account sidebar</td><td class="sz">Medium</td></tr>
+      <tr><td class="n">9</td><td>My Pipeline Changes</td><td>Home page</td><td class="sz">Medium</td></tr>
+      <tr><td class="n">10</td><td>Stale Deal Nudger</td><td>Home page</td><td class="sz">Small</td></tr>
+      <tr><td class="n">11</td><td>Quick-Log Activity</td><td>Mobile quick action</td><td class="sz">Small</td></tr>
+      <tr><td class="n">12</td><td>Forecast Roll-up with Overrides</td><td>Manager home or app page</td><td class="sz">Large</td></tr>
+      <tr><td class="n">13</td><td>Data Quality Badge</td><td>Any record sidebar</td><td class="sz">Small</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout"><strong>Build size</strong> is a rough guide for a standard org. Small is one to three days, Medium is about a week, Large is two to three weeks including tests. All figures and names in the previews are sample data.</div>
+
+  <!-- ================= OPPORTUNITY ================= -->
+  <section class="group" id="opportunity">
+  <h2>Opportunity Page</h2>
+
+  <article class="comp side">
+    <div>
+      <div class="comp-h"><div class="num">1</div><h3>Deal Health Scorecard</h3></div>
+      <p>One card that scores the deal and shows why. Each signal is rated on its own, so a rep sees what to fix and a manager can scan a deal in seconds.</p>
+      <dl class="facts">
+        <dt>Reads</dt><dd>Opportunity, stage history, activities, contact roles</dd>
+        <dt>Writes</dt><dd>Nothing. The action button opens the standard dialog.</dd>
+        <dt>Tuned by</dt><dd>Signal weights and thresholds in Custom Metadata</dd>
+        <dt>Build size</dt><dd><span class="size">Medium</span></dd>
+      </dl>
+    </div>
+    <div class="mock"><div class="card">
+      <div class="ch"><div class="ico"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 8h3l2-5 3 10 2-5h4"/></svg></div><div class="ct">Deal Health</div><span class="pill a">Watch</span></div>
+      <div class="score"><div class="big">68</div><div style="flex:1"><div class="sub">Health score, out of 100. Down 9 since last week.</div><div class="bar"><span style="width:68%"></span></div></div></div>
+      <div class="row"><div class="grow"><div class="b">Days in stage</div><div class="sub">34 days in Negotiation. Stage average is 21.</div></div><span class="pill r">At risk</span></div>
+      <div class="row"><div class="grow"><div class="b">Last activity</div><div class="sub">Call logged 3 days ago.</div></div><span class="pill g">On track</span></div>
+      <div class="row"><div class="grow"><div class="b">Next step</div><div class="sub">Not updated in 19 days.</div></div><span class="pill a">Watch</span></div>
+      <div class="row"><div class="grow"><div class="b">Contact roles</div><div class="sub">2 of 4 key roles filled. No Economic Buyer.</div></div><span class="pill a">Watch</span></div>
+      <div class="row"><div class="grow"><div class="b">Close date</div><div class="sub">Pushed 2 times. Now Dec 18, 2026.</div></div><span class="pill r">At risk</span></div>
+      <div class="foot"><div class="sub">Biggest lift: add an Economic Buyer.</div><button type="button" class="btn out">Add role</button></div>
+    </div></div>
+  </article>
+
+  <article class="comp side">
+    <div>
+      <div class="comp-h"><div class="num">2</div><h3>Stage Exit Checklist</h3></div>
+      <p>Shows what the current stage requires and checks each item against the record. The advance button unlocks when the list is complete, which is friendlier than a validation rule error after the fact.</p>
+      <dl class="facts">
+        <dt>Reads</dt><dd>Opportunity fields, contact roles, quotes</dd>
+        <dt>Writes</dt><dd>Stage, when the rep advances</dd>
+        <dt>Tuned by</dt><dd>Criteria per stage and record type in Custom Metadata</dd>
+        <dt>Build size</dt><dd><span class="size">Medium</span></dd>
+      </dl>
+    </div>
+    <div class="mock"><div class="card">
+      <div class="ch"><div class="ico" style="background:#2E844A"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3 3 7-7"/></svg></div><div class="ct">Stage Exit Checklist</div></div>
+      <div style="padding:14px 16px;border-bottom:1px solid var(--border)"><div class="between"><span class="b">Proposal to Negotiation</span><span class="sub">4 of 6 complete</span></div><div class="bar ok"><span style="width:67%"></span></div></div>
+      <div class="row"><input id="k1" type="checkbox" checked><label class="grow" for="k1"><span class="b">Economic buyer identified</span><span class="sub">Dana Whitfield, CFO</span></label></div>
+      <div class="row"><input id="k2" type="checkbox" checked><label class="grow" for="k2"><span class="b">Decision criteria documented</span><span class="sub">From the Decision Criteria field</span></label></div>
+      <div class="row"><input id="k3" type="checkbox" checked><label class="grow" for="k3"><span class="b">Quote sent</span><span class="sub">Q-00412, sent Nov 4</span></label></div>
+      <div class="row"><input id="k4" type="checkbox" checked><label class="grow" for="k4"><span class="b">Champion confirmed</span><span class="sub">Marcus Lee, VP Operations</span></label></div>
+      <div class="row flag"><input id="k5" type="checkbox"><label class="grow" for="k5"><span class="b">Paper process mapped</span><span class="sub" style="color:var(--warn)">Required. Add legal and procurement steps.</span></label><a href="#opportunity" class="sub b" style="color:var(--link);white-space:nowrap">Fill in</a></div>
+      <div class="row flag"><input id="k6" type="checkbox"><label class="grow" for="k6"><span class="b">Mutual close date agreed</span><span class="sub" style="color:var(--warn)">Required. Confirm the date with the buyer.</span></label><a href="#opportunity" class="sub b" style="color:var(--link);white-space:nowrap">Fill in</a></div>
+      <div class="foot"><div class="sub">2 required items left.</div><button type="button" class="btn" disabled>Advance stage</button></div>
+    </div></div>
+  </article>
+
+  <article class="comp">
+    <div>
+      <div class="comp-h"><div class="num">3</div><h3>Buying Committee Map</h3></div>
+      <p>Turns the Contact Roles related list into a picture of the deal team: who is engaged, who has gone quiet, and which roles nobody has filled yet.</p>
+      <dl class="facts">
+        <dt>Reads</dt><dd>Opportunity contact roles, last activity per contact, account contacts for suggestions</dd>
+        <dt>Writes</dt><dd>New contact roles</dd>
+        <dt>Tuned by</dt><dd>Required roles and engagement windows in Custom Metadata</dd>
+        <dt>Build size</dt><dd><span class="size">Small</span></dd>
+      </dl>
+    </div>
+    <div class="mock"><div class="card">
+      <div class="ch"><div class="ico" style="background:var(--violet)"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="5.5" r="2.5"/><path d="M1 14c0-2.500 2-4 4.500-4s4.500 1.500 4.500 4"/><circle cx="11.5" cy="5" r="2"/><path d="M12 9.500c2 .2 3 1.600 3 3.500"/></svg></div><div class="ct">Buying Committee</div><span class="sub">4 of 6 roles covered</span><button type="button" class="btn out">Add contact role</button></div>
+      <div class="roles">
+        <div class="role"><div class="eyebrow">Economic buyer</div><div class="who"><div class="av">DW</div><div><div class="b">Dana Whitfield</div><div class="sub">CFO</div></div></div><div class="between"><span class="pill a">Cooling</span><span class="sub">16 days ago</span></div></div>
+        <div class="role"><div class="eyebrow">Champion</div><div class="who"><div class="av">ML</div><div><div class="b">Marcus Lee</div><div class="sub">VP Operations</div></div></div><div class="between"><span class="pill g">Engaged</span><span class="sub">2 days ago</span></div></div>
+        <div class="role"><div class="eyebrow">Technical evaluator</div><div class="who"><div class="av">PR</div><div><div class="b">Priya Raman</div><div class="sub">Director, IT Systems</div></div></div><div class="between"><span class="pill g">Engaged</span><span class="sub">5 days ago</span></div></div>
+        <div class="role"><div class="eyebrow">End user</div><div class="who"><div class="av">JO</div><div><div class="b">Jamie Okafor</div><div class="sub">Sales Ops Manager</div></div></div><div class="between"><span class="pill r">Silent</span><span class="sub">41 days ago</span></div></div>
+        <div class="role gap"><div class="eyebrow">Procurement</div><div class="b">No contact yet</div><div class="sub">3 contacts on the account have a purchasing title.</div><a href="#opportunity" class="sub b" style="color:var(--link)">See suggestions</a></div>
+        <div class="role gap"><div class="eyebrow">Legal</div><div class="b">No contact yet</div><div class="sub">Needed before the Negotiation stage.</div><a href="#opportunity" class="sub b" style="color:var(--link)">Add a contact</a></div>
+      </div>
+      <div class="foot"><div class="sub">Engaged: touched in the last 7 days. Cooling: 8 to 30 days. Silent: over 30 days.</div></div>
+    </div></div>
+  </article>
+
+  <article class="comp">
+    <div>
+      <div class="comp-h"><div class="num">4</div><h3>Inline Product Editor</h3></div>
+      <p>A spreadsheet-style grid for line items that replaces the standard multi-step editor. Discount, margin and the approval flag update as the rep types, so pricing problems show up before the quote does.</p>
+      <dl class="facts">
+        <dt>Reads</dt><dd>Opportunity products, price book entries, product cost</dd>
+        <dt>Writes</dt><dd>Opportunity products, so Amount rolls up as usual</dd>
+        <dt>Tuned by</dt><dd>Margin floor and discount limits in Custom Metadata</dd>
+        <dt>Build size</dt><dd><span class="size">Large</span></dd>
+      </dl>
+    </div>
+    <div class="mock"><div class="card">
+      <div class="ch"><div class="ico"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="12" height="12" rx="1.5"/><path d="M2 6h12M2 10h12M6 2v12"/></svg></div><div class="ct">Products (4)</div><button type="button" class="btn">Add products</button><button type="button" class="btn pri">Save</button></div>
+      <div class="scroll"><table class="t" style="min-width:680px">
+        <thead><tr><th>Product</th><th class="num-c">Qty</th><th class="num-c">List price</th><th class="num-c">Discount</th><th class="num-c">Net price</th><th class="num-c">Total</th><th class="num-c">Margin</th></tr></thead>
+        <tbody>
+          <tr><td><div class="b">Platform License, Enterprise</div><div class="sub">Per user, annual</div></td><td class="num-c"><input class="cell" aria-label="Quantity, Platform License" value="120"></td><td class="num-c">$900</td><td class="num-c"><input class="cell" aria-label="Discount, Platform License" value="15%"></td><td class="num-c">$765</td><td class="num-c b">$91,800</td><td class="num-c"><span class="pill g">78%</span></td></tr>
+          <tr><td><div class="b">Analytics Add-on</div><div class="sub">Per user, annual</div></td><td class="num-c"><input class="cell" aria-label="Quantity, Analytics Add-on" value="120"></td><td class="num-c">$240</td><td class="num-c"><input class="cell" aria-label="Discount, Analytics Add-on" value="20%"></td><td class="num-c">$192</td><td class="num-c b">$23,040</td><td class="num-c"><span class="pill g">74%</span></td></tr>
+          <tr><td><div class="b">Premium Support</div><div class="sub">Flat, annual</div></td><td class="num-c"><input class="cell" aria-label="Quantity, Premium Support" value="1"></td><td class="num-c">$28,000</td><td class="num-c"><input class="cell" aria-label="Discount, Premium Support" value="10%"></td><td class="num-c">$25,200</td><td class="num-c b">$25,200</td><td class="num-c"><span class="pill g">61%</span></td></tr>
+          <tr class="flag"><td><div class="b">Implementation Package</div><div class="sub" style="color:var(--warn)">Margin is below the 30% floor. Needs approval.</div></td><td class="num-c"><input class="cell" aria-label="Quantity, Implementation Package" value="1"></td><td class="num-c">$48,000</td><td class="num-c"><input class="cell on" aria-label="Discount, Implementation Package" value="25%"></td><td class="num-c">$36,000</td><td class="num-c b">$36,000</td><td class="num-c"><span class="pill r">22%</span></td></tr>
+        </tbody>
+      </table></div>
+      <div class="tiles" style="border-top:1px solid var(--border);border-bottom:0;background:#F8F8F8">
+        <div class="tile"><div class="sub">List total</div><div class="v">$212,800</div></div>
+        <div class="tile"><div class="sub">Blended discount</div><div class="v">17.3%</div></div>
+        <div class="tile"><div class="sub">Blended margin</div><div class="v">63.6%</div></div>
+        <div class="tile"><div class="sub">Opportunity amount</div><div class="v">$176,040</div></div>
+      </div>
+    </div></div>
+  </article>
+
+  <article class="comp">
+    <div>
+      <div class="comp-h"><div class="num">5</div><h3>Close Plan</h3></div>
+      <p>A mutual action plan on the deal: dated milestones, an owner on each side, and a clear view of what is late. It gives the forecast call something firmer than a close date.</p>
+      <dl class="facts">
+        <dt>Reads</dt><dd>A Close Plan Milestone custom object under Opportunity</dd>
+        <dt>Writes</dt><dd>Milestones. Templates per deal type seed a new plan.</dd>
+        <dt>Shares</dt><dd>As a PDF, or live through an Experience Cloud page</dd>
+        <dt>Build size</dt><dd><span class="size">Medium</span></dd>
+      </dl>
+    </div>
+    <div class="mock"><div class="card">
+      <div class="ch"><div class="ico" style="background:var(--teal)"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14V2M3 3h9l-2 3 2 3H3"/></svg></div><div class="ct">Close Plan</div><span class="sub">Target close Dec 18, 2026 · 36 days left</span><button type="button" class="btn out">Share with buyer</button></div>
+      <div class="scroll"><table class="t" style="min-width:600px">
+        <thead><tr><th>Due</th><th>Milestone</th><th>Owner</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td class="sub">Oct 28</td><td class="b">Technical validation complete</td><td>Priya Raman <span class="sub">· Buyer</span></td><td><span class="pill g">Done</span></td></tr>
+          <tr><td class="sub">Nov 4</td><td class="b">Proposal and quote delivered</td><td>You <span class="sub">· Seller</span></td><td><span class="pill g">Done</span></td></tr>
+          <tr class="late"><td class="b" style="color:var(--risk)">Nov 9</td><td class="b">Security questionnaire returned</td><td>You <span class="sub">· Seller</span></td><td><span class="pill r">3 days late</span></td></tr>
+          <tr><td class="sub">Nov 20</td><td class="b">Executive alignment call with CFO</td><td>Marcus Lee <span class="sub">· Buyer</span></td><td><span class="pill i">In progress</span></td></tr>
+          <tr><td class="sub">Dec 2</td><td class="b">Legal redlines complete</td><td>Unassigned <span class="sub">· Buyer</span></td><td><span class="pill n">Not started</span></td></tr>
+          <tr><td class="sub">Dec 11</td><td class="b">Procurement approval and PO</td><td>Unassigned <span class="sub">· Buyer</span></td><td><span class="pill n">Not started</span></td></tr>
+          <tr><td class="sub">Dec 18</td><td class="b">Signature</td><td>Dana Whitfield <span class="sub">· Buyer</span></td><td><span class="pill n">Not started</span></td></tr>
+        </tbody>
+      </table></div>
+      <div class="foot"><div class="sub">2 of 7 done. 1 late. 2 buyer milestones have no owner.</div><button type="button" class="btn">Add milestone</button></div>
+    </div></div>
+  </article>
+  </section>
+
+  <!-- ================= ACCOUNT ================= -->
+  <section class="group" id="account">
+  <h2>Account Page</h2>
+
+  <article class="comp">
+    <div>
+      <div class="comp-h"><div class="num">6</div><h3>Account 360 Header</h3></div>
+      <p>The five numbers anyone opening an account wants first, in one strip at the top of the page. Each tile links to the records behind it.</p>
+      <dl class="facts">
+        <dt>Reads</dt><dd>Open opportunities, assets or contracts for ARR, cases, events</dd>
+        <dt>Writes</dt><dd>Nothing</dd>
+        <dt>Tuned by</dt><dd>Which tiles show, per record type</dd>
+        <dt>Build size</dt><dd><span class="size">Small</span></dd>
+      </dl>
+    </div>
+    <div class="mock"><div class="card">
+      <div class="ch"><div class="ico" style="background:#5867E8;width:36px;height:36px;border-radius:8px"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 14V3h7v11M9 7h5v7M1 14h14M4.500 5.500h2M4.500 8h2M4.500 10.500h2"/></svg></div><div style="flex:1 1 auto"><div class="sub">Account</div><div style="font-size:18px;font-weight:700">Northwind Traders</div></div><span class="pill i">Customer · Tier 1</span><span class="sub">Owner: Alex Morgan</span><button type="button" class="btn">New opportunity</button></div>
+      <div class="tiles" style="border-bottom:0">
+        <div class="tile"><div class="sub">Open pipeline</div><div class="v">$412,000</div><a href="#account" class="sub" style="color:var(--link)">3 open opportunities</a></div>
+        <div class="tile"><div class="sub">Current ARR</div><div class="v">$268,000</div><div class="sub b" style="color:var(--ok)">Up 12% year over year</div></div>
+        <div class="tile"><div class="sub">Renewal date</div><div class="v" style="font-size:18px;line-height:30px;white-space:nowrap">Mar 31, 2027</div><div class="sub">139 days away</div></div>
+        <div class="tile"><div class="sub">Open cases</div><div class="v">2 <span class="pill r" style="vertical-align:middle">1 high</span></div><a href="#account" class="sub" style="color:var(--link)">Oldest open 9 days</a></div>
+        <div class="tile"><div class="sub">Last meeting</div><div class="v">Nov 5</div><div class="sub">7 days ago, with Marcus Lee</div></div>
+      </div>
+    </div></div>
+  </article>
+
+  <article class="comp">
+    <div>
+      <div class="comp-h"><div class="num">7</div><h3>Whitespace Grid</h3></div>
+      <p>Every product in the catalog against this account: owned, in an open deal, or untapped. One click turns a gap into an opportunity with the product already attached.</p>
+      <dl class="facts">
+        <dt>Reads</dt><dd>Products, assets, open opportunity products</dd>
+        <dt>Writes</dt><dd>A new opportunity with a line item</dd>
+        <dt>Tuned by</dt><dd>Product families shown and how potential is estimated</dd>
+        <dt>Build size</dt><dd><span class="size">Medium</span></dd>
+      </dl>
+    </div>
+    <div class="mock"><div class="card">
+      <div class="ch"><div class="ico"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="5" height="5"/><rect x="9" y="2" width="5" height="5" stroke-dasharray="2 2"/><rect x="2" y="9" width="5" height="5" stroke-dasharray="2 2"/><rect x="9" y="9" width="5" height="5"/></svg></div><div class="ct">Product Whitespace</div><span class="sub">3 of 6 products owned</span></div>
+      <div class="tiles">
+        <div class="tile"><div class="sub">Owned ARR</div><div class="v">$268,000</div></div>
+        <div class="tile"><div class="sub">In open opportunities</div><div class="v">$64,000</div></div>
+        <div class="tile"><div class="sub">Untapped potential</div><div class="v">$54,000</div></div>
+      </div>
+      <div class="scroll"><table class="t" style="min-width:600px">
+        <thead><tr><th>Product</th><th>Status</th><th class="num-c">Value</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="b">Platform License</td><td><span class="pill solid">Owned</span></td><td class="num-c">$188,000</td><td class="num-c sub">Since Apr 2024</td></tr>
+          <tr><td class="b">Analytics Add-on</td><td><span class="pill solid">Owned</span></td><td class="num-c">$52,000</td><td class="num-c sub">Since Apr 2025</td></tr>
+          <tr><td class="b">Premium Support</td><td><span class="pill solid">Owned</span></td><td class="num-c">$28,000</td><td class="num-c sub">Since Apr 2024</td></tr>
+          <tr><td><div class="b">Integration Hub</div><div class="sub">Proposal stage, closes Dec 18</div></td><td><span class="pill i">Open opportunity</span></td><td class="num-c">$64,000</td><td class="num-c"><a href="#account" class="sub b" style="color:var(--link)">View opportunity</a></td></tr>
+          <tr><td><div class="b">Data Archive</div><div class="sub">Owned by 62% of similar accounts</div></td><td><span class="pill dash">Whitespace</span></td><td class="num-c sub">$36,000 est.</td><td class="num-c"><button type="button" class="btn out" style="height:30px;font-size:12px">Create opportunity</button></td></tr>
+          <tr><td><div class="b">Training Subscription</div><div class="sub">Owned by 38% of similar accounts</div></td><td><span class="pill dash">Whitespace</span></td><td class="num-c sub">$18,000 est.</td><td class="num-c"><button type="button" class="btn out" style="height:30px;font-size:12px">Create opportunity</button></td></tr>
+        </tbody>
+      </table></div>
+    </div></div>
+  </article>
+
+  <article class="comp side">
+    <div>
+      <div class="comp-h"><div class="num">8</div><h3>Relationship Timeline</h3></div>
+      <p>Emails, meetings, deal changes and cases on one timeline, with filters. It answers what has been happening with this customer without opening four related lists.</p>
+      <dl class="facts">
+        <dt>Reads</dt><dd>Tasks, events, email messages, opportunity history, cases</dd>
+        <dt>Writes</dt><dd>Nothing</dd>
+        <dt>Tuned by</dt><dd>Which record types appear and the default date range</dd>
+        <dt>Build size</dt><dd><span class="size">Medium</span></dd>
+      </dl>
+    </div>
+    <div class="mock"><div class="card">
+      <div class="ch"><div class="ico" style="background:var(--teal)"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><path d="M8 4.500V8l2.500 1.500"/></svg></div><div class="ct">Relationship Timeline</div><span class="sub">Last 90 days</span></div>
+      <div class="chips"><button type="button" class="chip on" aria-pressed="true">All 23</button><button type="button" class="chip" aria-pressed="false">Emails 11</button><button type="button" class="chip" aria-pressed="false">Meetings 5</button><button type="button" class="chip" aria-pressed="false">Deals 4</button><button type="button" class="chip" aria-pressed="false">Cases 3</button></div>
+      <div class="tl">
+        <div class="ev" style="--c:#B0050F"><div class="when">Nov 9</div><div><div class="dot"></div></div><div><div class="eyebrow">Case · High priority</div><div class="b">Nightly sync failing for the EU region</div><div class="sub">Opened by Priya Raman. Still open.</div></div></div>
+        <div class="ev" style="--c:#5A1BA9"><div class="when">Nov 5</div><div><div class="dot"></div></div><div><div class="eyebrow">Meeting</div><div class="b">Integration Hub pricing review</div><div class="sub">45 min with Marcus Lee and Priya Raman.</div></div></div>
+        <div class="ev" style="--c:#0B5CAB"><div class="when">Nov 4</div><div><div class="dot"></div></div><div><div class="eyebrow">Email</div><div class="b">Quote Q-00412 sent to Marcus Lee</div><div class="sub">Opened 3 times. No reply yet.</div></div></div>
+        <div class="ev" style="--c:#8C4B02"><div class="when">Oct 22</div><div><div class="dot"></div></div><div><div class="eyebrow">Opportunity</div><div class="b">Integration Hub moved to Proposal</div><div class="sub">$64,000. Close date set to Dec 18.</div></div></div>
+        <div class="ev" style="--c:#1D6A34"><div class="when">Sep 30</div><div><div class="dot"></div></div><div><div class="eyebrow">Case · Closed</div><div class="b">SSO setup for new subsidiary</div><div class="sub">Resolved in 2 days.</div></div></div>
+      </div>
+      <div class="foot" style="justify-content:center"><a href="#account" class="sub b" style="color:var(--link);flex:none">Show 18 more</a></div>
+    </div></div>
+  </article>
+  </section>
+
+  <!-- ================= HOME ================= -->
+  <section class="group" id="home">
+  <h2>Home and Mobile</h2>
+
+  <article class="comp">
+    <div>
+      <div class="comp-h"><div class="num">9</div><h3>My Pipeline Changes</h3></div>
+      <p>What moved in a rep's pipeline since last week: deals that advanced, slipped, shrank, arrived or closed. It replaces the Monday ritual of comparing two report exports.</p>
+      <dl class="facts">
+        <dt>Reads</dt><dd>Opportunity field history for Stage, Amount and Close Date</dd>
+        <dt>Writes</dt><dd>Nothing</dd>
+        <dt>Needs</dt><dd>Field history tracking turned on for those three fields</dd>
+        <dt>Build size</dt><dd><span class="size">Medium</span></dd>
+      </dl>
+    </div>
+    <div class="mock"><div class="card">
+      <div class="ch"><div class="ico"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5h10l-2.500-2.500M14 11H4l2.500 2.500"/></svg></div><div class="ct">My Pipeline Changes</div><label for="since" class="sub">Since</label><select id="since" class="fld" style="width:auto"><option>Last Monday, Nov 2</option><option>Start of month</option><option>Start of quarter</option></select></div>
+      <div class="tiles">
+        <div class="tile"><div class="sub">Open pipeline now</div><div class="v">$1,420,000</div><div class="sub b" style="color:var(--risk)">Down $86,000</div></div>
+        <div class="tile"><div class="sub">Added</div><div class="v">+$95,000</div><div class="sub">2 new deals</div></div>
+        <div class="tile"><div class="sub">Closed out</div><div class="v">−$141,000</div><div class="sub">1 won, 1 lost</div></div>
+        <div class="tile"><div class="sub">Amount changes</div><div class="v">−$40,000</div><div class="sub">1 deal shrank</div></div>
+      </div>
+      <div class="scroll"><table class="t" style="min-width:600px">
+        <thead><tr><th>Change</th><th>Opportunity</th><th>What moved</th><th class="num-c">Amount</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill g">Advanced</span></td><td class="b">Northwind Traders, Integration Hub</td><td class="sub">Proposal to Negotiation</td><td class="num-c">$64,000</td></tr>
+          <tr><td><span class="pill r">Slipped</span></td><td class="b">Alder Health, Renewal Uplift</td><td class="sub">Close Nov 30 to Jan 15</td><td class="num-c">$120,000</td></tr>
+          <tr><td><span class="pill a">Shrank</span></td><td class="b">Kestrel Robotics, Platform</td><td class="sub">$220,000 to $180,000</td><td class="num-c">$180,000</td></tr>
+          <tr><td><span class="pill i">New</span></td><td class="b">Lumen Foods, Analytics</td><td class="sub">Created in Discovery</td><td class="num-c">$60,000</td></tr>
+          <tr><td><span class="pill i">New</span></td><td class="b">Pinecrest Bank, Training</td><td class="sub">Created in Qualification</td><td class="num-c">$35,000</td></tr>
+          <tr><td><span class="pill solid" style="background:var(--ok)">Won</span></td><td class="b">Harbor Freightways, Support</td><td class="sub">Negotiation to Closed Won</td><td class="num-c">$91,000</td></tr>
+          <tr><td><span class="pill n">Lost</span></td><td class="b">Solstice Media, Pilot</td><td class="sub">Discovery to Closed Lost</td><td class="num-c">$50,000</td></tr>
+        </tbody>
+      </table></div>
+    </div></div>
+  </article>
+
+  <article class="comp">
+    <div>
+      <div class="comp-h"><div class="num">10</div><h3>Stale Deal Nudger</h3></div>
+      <p>Lists the rep's deals with a passed close date or no recent activity and lets them fix each one right there. Saving a deal removes it from the list, so the list itself becomes the hygiene routine.</p>
+      <dl class="facts">
+        <dt>Reads</dt><dd>Open opportunities, close date, last activity date</dd>
+        <dt>Writes</dt><dd>Close date and next step</dd>
+        <dt>Tuned by</dt><dd>Staleness thresholds per stage in Custom Metadata</dd>
+        <dt>Build size</dt><dd><span class="size">Small</span></dd>
+      </dl>
+    </div>
+    <div class="mock"><div class="card">
+      <div class="ch"><div class="ico" style="background:#A96404"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2a4 4 0 0 0-4 4v3l-1.500 2.500h11L12 9V6a4 4 0 0 0-4-4zM6.500 13.500a1.500 1.500 0 0 0 3 0"/></svg></div><div class="ct">Deals That Need an Update</div><span class="sub">4 deals · $431,000</span></div>
+      <div class="chips"><button type="button" class="chip on" aria-pressed="true">All 4</button><button type="button" class="chip" aria-pressed="false">Close date passed 2</button><button type="button" class="chip" aria-pressed="false">No activity in 14 days 2</button></div>
+      <div class="edit">
+        <div class="between"><span class="b" style="color:var(--link)">Tidewater Energy, Renewal Uplift</span><span><span class="pill r">Close date passed 11 days ago</span> &nbsp;$120,000</span></div>
+        <div class="edit-row"><label style="flex:0 0 150px">Close date<input class="fld" style="border:2px solid var(--brand)" value="Jan 15, 2027"></label><label style="flex:1 1 220px">Next step<input class="fld" value="Budget review with CFO on Dec 3"></label><button type="button" class="btn pri">Save</button></div>
+      </div>
+      <div class="edit">
+        <div class="between"><span class="b" style="color:var(--link)">Kestrel Robotics, Platform</span><span><span class="pill a">No activity in 23 days</span> &nbsp;$180,000</span></div>
+        <div class="edit-row"><label style="flex:0 0 150px">Close date<input class="fld" value="Dec 22, 2026"></label><label style="flex:1 1 220px">Next step<input class="fld" placeholder="Add a next step"></label><button type="button" class="btn">Save</button></div>
+      </div>
+      <div class="row"><div class="grow"><span class="b" style="color:var(--link)">Brightwater Logistics, Platform</span></div><span class="pill r">Close date passed 4 days ago</span><span>$96,000</span><button type="button" class="btn">Update</button></div>
+      <div class="row"><div class="grow"><span class="b" style="color:var(--link)">Pinecrest Bank, Training</span></div><span class="pill a">No activity in 15 days</span><span>$35,000</span><button type="button" class="btn">Update</button></div>
+      <div class="foot"><div class="sub">Saving a deal removes it from this list.</div><button type="button" class="btn">Snooze all for a week</button></div>
+    </div></div>
+  </article>
+
+  <article class="comp side">
+    <div>
+      <div class="comp-h"><div class="num">11</div><h3>Quick-Log Activity</h3></div>
+      <p>Built for the phone, in the minute after a call. A few taps log the activity, record the outcome, set the next step on the deal and create the follow-up task.</p>
+      <dl class="facts">
+        <dt>Reads</dt><dd>The record it was opened from</dd>
+        <dt>Writes</dt><dd>A completed task, Next Step on the opportunity, a follow-up task</dd>
+        <dt>Tuned by</dt><dd>Outcome lists per activity type</dd>
+        <dt>Build size</dt><dd><span class="size">Small</span></dd>
+      </dl>
+    </div>
+    <div class="mock phone">
+      <div><div style="font-size:20px;font-weight:700">Log activity</div><div class="sub" style="font-size:13px">Northwind Traders, Integration Hub</div></div>
+      <div class="seg"><button type="button" class="tap on" aria-pressed="true">Call</button><button type="button" class="tap" aria-pressed="false">Meeting</button><button type="button" class="tap" aria-pressed="false">Email</button></div>
+      <div class="lbl">Outcome<div class="seg"><button type="button" class="tap on" aria-pressed="true">Connected</button><button type="button" class="tap" aria-pressed="false">Voicemail</button><button type="button" class="tap" aria-pressed="false">No answer</button></div></div>
+      <label class="lbl">Notes<textarea rows="3">Marcus confirmed budget. Legal review starts next week.</textarea></label>
+      <label class="lbl">Next step<input value="Send redline-ready MSA to legal"></label>
+      <div class="lbl">Follow up<div class="seg"><button type="button" class="tap" aria-pressed="false">Tomorrow</button><button type="button" class="tap on" aria-pressed="true">In 3 days</button><button type="button" class="tap" aria-pressed="false">Next week</button></div></div>
+      <button type="button" class="tap go">Log call and set next step</button>
+    </div>
+  </article>
+  </section>
+
+  <!-- ================= MANAGER ================= -->
+  <section class="group" id="manager">
+  <h2>Manager and RevOps</h2>
+
+  <article class="comp">
+    <div>
+      <div class="comp-h"><div class="num">12</div><h3>Forecast Roll-up with Overrides</h3></div>
+      <p>A lightweight team forecast for orgs where Collaborative Forecasts is more than they need. Managers see each rep's call, enter their own where they disagree, and every override is kept with who made it and when.</p>
+      <dl class="facts">
+        <dt>Reads</dt><dd>Opportunities by forecast category, quotas</dd>
+        <dt>Writes</dt><dd>A Forecast Override custom object, one row per rep and period</dd>
+        <dt>Tuned by</dt><dd>Period length and which categories count toward the call</dd>
+        <dt>Build size</dt><dd><span class="size">Large</span></dd>
+      </dl>
+    </div>
+    <div class="mock"><div class="card">
+      <div class="ch"><div class="ico" style="background:var(--violet)"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 14V9M6 14V5M10 14V8M14 14V2"/></svg></div><div class="ct">Team Forecast</div><label for="period" class="sub">Period</label><select id="period" class="fld" style="width:auto"><option>Q4 2026</option><option>Q1 2027</option></select><button type="button" class="btn pri">Submit forecast</button></div>
+      <div class="tiles">
+        <div class="tile"><div class="sub">Team quota</div><div class="v">$1,400K</div></div>
+        <div class="tile"><div class="sub">Closed won</div><div class="v">$725K</div></div>
+        <div class="tile"><div class="sub">Sum of rep calls</div><div class="v">$1,290K</div></div>
+        <div class="tile mine"><div class="sub">Your call</div><div class="v">$1,235K</div><div class="sub b" style="color:var(--warn)">88% of quota</div></div>
+      </div>
+      <div class="scroll"><table class="t" style="min-width:680px">
+        <thead><tr><th>Rep</th><th class="num-c">Quota</th><th class="num-c">Closed</th><th class="num-c">Commit</th><th class="num-c">Best case</th><th class="num-c">Rep call</th><th class="num-c">Your override</th><th class="num-c">Of quota</th></tr></thead>
+        <tbody>
+          <tr><td class="b">Alex Morgan</td><td class="num-c">$400K</td><td class="num-c">$210K</td><td class="num-c">$150K</td><td class="num-c">$90K</td><td class="num-c">$360K</td><td class="num-c"><input class="cell ovr" style="width:84px" aria-label="Override for Alex Morgan" value="$340K"></td><td class="num-c"><span class="pill a">85%</span></td></tr>
+          <tr><td class="b">Bianca Ortiz</td><td class="num-c">$350K</td><td class="num-c">$240K</td><td class="num-c">$120K</td><td class="num-c">$60K</td><td class="num-c">$370K</td><td class="num-c"><input class="cell" style="width:84px;font-size:11px" aria-label="Override for Bianca Ortiz" placeholder="Uses rep call"></td><td class="num-c"><span class="pill g">106%</span></td></tr>
+          <tr><td class="b">Chen Wei</td><td class="num-c">$300K</td><td class="num-c">$95K</td><td class="num-c">$110K</td><td class="num-c">$140K</td><td class="num-c">$240K</td><td class="num-c"><input class="cell ovr" style="width:84px" aria-label="Override for Chen Wei" value="$205K"></td><td class="num-c"><span class="pill r">68%</span></td></tr>
+          <tr><td class="b">Devon Price</td><td class="num-c">$350K</td><td class="num-c">$180K</td><td class="num-c">$130K</td><td class="num-c">$70K</td><td class="num-c">$320K</td><td class="num-c"><input class="cell" style="width:84px;font-size:11px" aria-label="Override for Devon Price" placeholder="Uses rep call"></td><td class="num-c"><span class="pill a">91%</span></td></tr>
+          <tr class="total"><td>Team</td><td class="num-c">$1,400K</td><td class="num-c">$725K</td><td class="num-c">$510K</td><td class="num-c">$360K</td><td class="num-c">$1,290K</td><td class="num-c">$1,235K</td><td class="num-c">88%</td></tr>
+        </tbody>
+      </table></div>
+    </div></div>
+  </article>
+
+  <article class="comp side">
+    <div>
+      <div class="comp-h"><div class="num">13</div><h3>Data Quality Badge</h3></div>
+      <p>A completeness score on any record, with the missing fields grouped by why they matter and a link to fix each one. Works on Accounts, Contacts, Leads and Opportunities from one component.</p>
+      <dl class="facts">
+        <dt>Reads</dt><dd>The record's own fields. No Apex needed.</dd>
+        <dt>Writes</dt><dd>Field fixes, through the standard record form</dd>
+        <dt>Tuned by</dt><dd>Key fields and their reasons, per object, in Custom Metadata</dd>
+        <dt>Build size</dt><dd><span class="size">Small</span></dd>
+      </dl>
+    </div>
+    <div class="mock"><div class="card">
+      <div class="ch"><div class="ico" style="background:var(--teal)"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1.500l5 2v4c0 3.500-2.200 5.800-5 7-2.800-1.200-5-3.500-5-7v-4z"/><path d="M5.500 8l2 2 3-3.500"/></svg></div><div class="ct">Record Completeness</div><span class="pill a">Needs work</span></div>
+      <div class="score"><div class="big">72%</div><div style="flex:1"><div class="sub">13 of 18 key fields filled. Team average is 84%.</div><div class="bar"><span style="width:72%"></span></div></div></div>
+      <div class="band">Needed for lead routing</div>
+      <div class="row"><div class="grow b">Industry</div><span class="sub">Empty</span><a href="#manager" class="sub b" style="color:var(--link)">Fix</a></div>
+      <div class="row" style="border-bottom:1px solid var(--border)"><div class="grow b">Billing Country</div><span class="sub">Empty</span><a href="#manager" class="sub b" style="color:var(--link)">Fix</a></div>
+      <div class="band">Needed for forecasting</div>
+      <div class="row" style="border-bottom:1px solid var(--border)"><div class="grow b">Renewal Date</div><span class="sub">Empty</span><a href="#manager" class="sub b" style="color:var(--link)">Fix</a></div>
+      <div class="band">Good to have</div>
+      <div class="row"><div class="grow b">Annual Revenue</div><span class="sub">Empty</span><a href="#manager" class="sub b" style="color:var(--link)">Fix</a></div>
+      <div class="row"><div class="grow b">Primary Contact</div><span class="sub" style="color:var(--warn)">Has left the company</span><a href="#manager" class="sub b" style="color:var(--link)">Fix</a></div>
+      <div class="foot"><div class="sub">Fixing the 3 needed fields takes this to 89%.</div><button type="button" class="btn pri">Fix all</button></div>
+    </div></div>
+  </article>
+  </section>
+
+  <h2>Want These in Your Org?</h2>
+  <p>Productivity Advisors builds these components to fit your stages, products and data model, with tests and admin-editable settings. Most teams start with two or three: the Deal Health Scorecard, the Stage Exit Checklist and the Buying Committee Map change rep behavior fastest. Reach out at <strong>greg@productivityadvisors.com</strong>.</p>
+
+  <p class="footnote">Productivity Advisors &middot; November 2026 &middot; Previews are design mockups with sample data. Salesforce, Sales Cloud and Lightning are trademarks of Salesforce, Inc.</p>
+
+</div>
+</body>
+</html>
