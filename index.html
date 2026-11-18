@@ -351,9 +351,9 @@ dialog.viewer::backdrop{background:rgba(42,42,44,0.55)}
     </div>
     <div class="grid g2">
       <div class="card svc">
-        <span class="meta">2 weeks · fixed fee</span>
-        <h3>RevOps Diagnostic</h3>
-        <p>Salesforce org audit, lead-to-cash process review, stakeholder interviews and a data quality read. You get a written current-state assessment, a prioritized roadmap, and a readout with your leadership team.</p>
+        <span class="meta">4 weeks · fixed fee</span>
+        <h3>The Diagnostic</h3>
+        <p>Stakeholder interviews, lead-to-cash swim lane maps and a Salesforce audit, scored across people, process and systems. You get a scorecard, a roadmap of what to fix, buy or hire, and a readout with your leadership team. <a href="#r-the-diagnostic">See how it works</a></p>
       </div>
       <div class="card svc">
         <span class="meta">3–6 months</span>
@@ -531,6 +531,9 @@ const RESOURCES = [
     if (b) openResource(b.dataset.slug);
   });
   if (location.hash.startsWith("#r-")) openResource(location.hash.slice(3));
+  window.addEventListener("hashchange", () => {
+    if (location.hash.startsWith("#r-")) openResource(location.hash.slice(3));
+  });
 
   /* highlight the tab for the section in view */
   const tabs = [...document.querySelectorAll(".tab")];
