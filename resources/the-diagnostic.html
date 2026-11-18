@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Diagnostic · Productivity Advisors</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<meta name="author" content="Productivity Advisors">
+
+<meta name="description" content="A four-week, fixed-scope diagnostic of the people, process and systems behind a company's revenue, ending in a plan for what to fix, what to buy and who to hire.">
+<style>
+  :root {
+    --navy: #1E2761;
+    --navy-light: #3A4487;
+    --accent-bg: #F4F5FA;
+    --border: #E0E2EE;
+    --text: #21242E;
+    --muted: #5B6070;
+    --accent: #2F6FD6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Google Sans", "Helvetica Neue", Arial, sans-serif;
+    color: var(--text); margin: 0; background: #fff;
+    font-size: 16px; line-height: 1.55;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 28px 24px 64px; }
+  .kicker { text-transform: uppercase; letter-spacing: 0.14em; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  h1 { color: var(--navy); font-size: 32px; line-height: 1.2; margin: 0 0 18px; }
+  h2 { color: var(--navy); font-size: 22px; margin: 44px 0 12px; padding-bottom: 6px; border-bottom: 2px solid var(--border); }
+  h3 { color: var(--navy); font-size: 16px; margin: 22px 0 8px; }
+  p { margin: 10px 0; }
+  ul, ol { margin: 8px 0; padding-left: 22px; }
+  li { margin: 5px 0; }
+  .hero {
+    background: var(--navy); color: #fff; border-radius: 6px;
+    padding: 26px 30px; margin: 0 0 28px; font-size: 19px; line-height: 1.5;
+  }
+  .hero strong { color: #fff; }
+  .callout { background: var(--accent-bg); border-left: 4px solid var(--navy); padding: 14px 18px; margin: 16px 0; font-size: 15px; }
+  .callout strong { color: var(--navy); }
+  .tw { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 15px; }
+  th { background: var(--navy); color: #fff; text-align: left; padding: 10px 14px; font-weight: 600; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--accent-bg); }
+  td.stage { white-space: nowrap; color: var(--navy); font-weight: 600; width: 1%; }
+
+  /* phase jump nav */
+  .jump { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin: 18px 0 8px; }
+  .jump a { display: block; text-decoration: none; border: 1px solid var(--border); border-top: 4px solid var(--navy); border-radius: 4px; padding: 10px 12px; color: var(--navy); font-weight: 600; font-size: 14px; }
+  .jump a small { display: block; color: var(--muted); font-weight: 400; font-size: 12px; }
+  .jump a:hover { background: var(--accent-bg); }
+
+  /* phase blocks */
+  .stage-h { display: flex; align-items: center; gap: 12px; margin: 48px 0 12px; padding-bottom: 6px; border-bottom: 2px solid var(--border); }
+  .stage-h h2 { margin: 0; padding: 0; border: 0; }
+  .stage-h .num { flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--navy); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 15px; }
+  .stage-h .days { margin-left: auto; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .purpose { font-size: 17px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 8px 0; }
+  .box { border: 1px solid var(--border); border-radius: 4px; padding: 4px 16px 10px; min-width: 0; }
+  .box h3 { margin-top: 12px; }
+  .box ul { font-size: 15px; }
+  .box.warn { border-left: 4px solid #C9822B; }
+  .box .tw table { margin: 8px 0; font-size: 14px; }
+  .box .tw th, .box .tw td { padding: 8px 10px; }
+  .meta { font-size: 15px; color: var(--muted); }
+  .meta strong { color: var(--text); }
+  .footnote { margin-top: 40px; font-size: 13px; color: var(--muted); }
+  a { color: var(--navy-light); }
+
+  /* diagnostic checklist */
+  .checks { list-style: none; padding: 0; }
+  .checks li { position: relative; padding-left: 24px; }
+  .checks li::before { content: ""; position: absolute; left: 0; top: 0.3em; width: 12px; height: 12px; border: 1.5px solid var(--navy-light); border-radius: 2px; }
+
+  .three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 8px 0; }
+  .lens-q { color: var(--muted); font-size: 15px; margin: 4px 0 8px; }
+  .box .out { font-size: 15px; }
+  .box .out b { display: block; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+  .score { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; color: #fff; font-weight: 700; font-size: 13px; }
+  .s1 { background: #B5442F; } .s2 { background: #C9822B; } .s3 { background: #3C8D5A; } .s4 { background: var(--navy); }
+
+  @media (max-width: 640px) {
+    .three { grid-template-columns: 1fr; }
+    .container { padding: 20px 16px 48px; }
+    h1 { font-size: 26px; }
+    .hero { padding: 20px; font-size: 17px; }
+    .two { grid-template-columns: 1fr; }
+    .jump { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .stage-h { flex-wrap: wrap; }
+    .stage-h .days { margin-left: 0; flex-basis: 100%; }
+  }
+  @media print {
+    .jump { display: none; }
+    h2 { break-after: avoid; }
+    table, .box, .callout, li { break-inside: avoid; }
+    .stage-sec { break-before: page; }
+  }
+</style>
+</head>
+<body>
+<!-- Productivity Advisors brand bar (hidden when the page is shown inside the site's viewer) -->
+<style>
+html.pa-framed .pa-bar{display:none}
+html:not(.pa-framed) body{padding-top:0!important}
+.pa-bar{width:100vw;margin-left:calc(50% - 50vw);background:#FFFFFF;font-family:"Google Sans","Product Sans",-apple-system,"Segoe UI",sans-serif;position:relative;z-index:5;margin-bottom:24px}
+.pa-bar .pa-stripe{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));height:3px}
+.pa-bar .pa-row{display:flex;align-items:center;gap:12px;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid #ECEDE8}
+.pa-bar a{color:#3B3B3D;text-decoration:none;font-size:14px;line-height:1.2}
+.pa-bar .pa-home{display:flex;align-items:center;gap:10px;font-weight:500}
+.pa-bar .pa-home img{height:24px;width:auto;display:block}
+.pa-bar .pa-home b{color:#5D8A25;font-weight:600}
+.pa-bar .pa-back{margin-left:auto;font-size:13px;color:#55574F;border:1px solid #E6E7E1;border-radius:20px;padding:6px 14px}
+.pa-bar .pa-back:hover{border-color:#A9C584;color:#3F6118}
+.pa-bar a:focus-visible{outline:2px solid #5D8A25;outline-offset:2px;border-radius:6px}
+</style>
+<script>if(window.self!==window.top)document.documentElement.classList.add('pa-framed');</script>
+<div class="pa-bar"><div class="pa-stripe" aria-hidden="true"><span style="background:#5D8A25"></span><span style="background:#CA4F2E"></span><span style="background:#3B3B3D"></span><span style="background:#D4B42B"></span></div>
+<div class="pa-row"><a class="pa-home" href="../index.html"><img src="../assets/pa-wordmark.png" alt="Productivity Advisors"></a><a class="pa-back" href="../index.html#resources">All resources</a></div></div>
+
+<div class="container">
+
+  <div class="kicker">Offer · Four-week diagnostic</div>
+  <h1>The Diagnostic</h1>
+
+  <div class="hero">
+    Growing companies often know they need ops help but can't say what kind. Over four weeks we look at the people, the process and the systems behind their revenue, then hand the team a plan for <strong>what to fix, what to buy and who to hire.</strong>
+  </div>
+
+  <nav class="jump" aria-label="Sections">
+    <a href="#signs">Signs<small>When it's time</small></a>
+    <a href="#lenses">Three lenses<small>People, process, systems</small></a>
+    <a href="#weeks">Four weeks<small>How it runs</small></a>
+    <a href="#deliverables">What you get<small>Scorecard to roadmap</small></a>
+    <a href="#referral">Referrals<small>Investors and recruiters</small></a>
+  </nav>
+
+  <h2>Why Diagnose First</h2>
+  <p>When revenue operations start to creak, the usual reflex is to hire someone or buy a tool. Often neither fixes it, because the mess shows up in Salesforce while the cause sits in ownership, hand-offs or definitions that nobody agreed on.</p>
+  <p>The Diagnostic is a fixed-scope way to find out what is actually broken before anyone spends real money. It is light on the team, mostly interviews and system access, and it ends with a plan the leadership team can act on.</p>
+
+  <h2 id="signs">Signs a Company Needs It</h2>
+  <div class="tw"><table>
+    <thead><tr><th>What you see</th><th>What it usually means</th></tr></thead>
+    <tbody>
+      <tr><td class="stage">Leadership doesn't trust the forecast</td><td>Stage definitions and data hygiene drifted, so the CRM number gets rebuilt in a spreadsheet</td></tr>
+      <tr><td class="stage">Tools bought, but not really used</td><td>The process was never settled, so the tool had nothing clear to support</td></tr>
+      <tr><td class="stage">"We need ops help, but what kind?"</td><td>Nobody has mapped the work, so the role is a guess between sales ops, GTM systems and an analyst</td></tr>
+      <tr><td class="stage">An ops leader just left, or a new round closed</td><td>The setup has to scale fast, and much of how it works lived in one person's head</td></tr>
+      <tr><td class="stage">A CRM rebuild or migration is coming</td><td>Nobody has written down how work really flows today</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- LENSES -->
+  <section class="stage-sec" id="lenses">
+  <div class="stage-h"><div class="num">1</div><h2>Three Lenses</h2><span class="days">What we look at</span></div>
+  <p class="purpose"><strong>Goal:</strong> look past the software to the people and process behind it.</p>
+  <div class="three">
+    <div class="box"><h3>People</h3><p class="lens-q">Who owns what, and is the team bought in?</p>
+      <p class="out"><b>Produces</b>A stakeholder findings summary with themes, quotes and where leaders disagree, plus a pain-point heat map by role and stage.</p></div>
+    <div class="box"><h3>Process</h3><p class="lens-q">How do deals, hand-offs and data really move?</p>
+      <p class="out"><b>Produces</b>As-is and future-state swim lane maps from lead to cash, with every break and hand-off gap marked.</p></div>
+    <div class="box"><h3>Systems</h3><p class="lens-q">Do the tools support the work or get in its way?</p>
+      <p class="out"><b>Produces</b>A Salesforce audit of configuration, data quality, automation, integrations and adoption.</p></div>
+  </div>
+
+  <h3>How each area is scored</h3>
+  <p>Twelve areas across people, process, systems and data are each rated 1 to 4. Every score is backed by evidence: a quote, a query result or a step on the process map.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Score</th><th>What it looks like</th></tr></thead>
+    <tbody>
+      <tr><td class="stage"><span class="score s1">1</span> Ad hoc</td><td>Depends on individuals; work happens outside the system</td></tr>
+      <tr><td class="stage"><span class="score s2">2</span> Inconsistent</td><td>Rules exist on paper but are often bypassed</td></tr>
+      <tr><td class="stage"><span class="score s3">3</span> Defined</td><td>Agreed, documented and mostly followed</td></tr>
+      <tr><td class="stage"><span class="score s4">4</span> Scaled</td><td>Measured, owned and improved on a schedule</td></tr>
+    </tbody>
+  </table></div>
+  </section>
+
+  <!-- WEEKS -->
+  <section class="stage-sec" id="weeks">
+  <div class="stage-h"><div class="num">2</div><h2>How the Four Weeks Run</h2><span class="days">Weeks 1–4</span></div>
+  <p class="purpose"><strong>Goal:</strong> listen, map, score and prioritize, in that order.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Week</th><th>The work</th><th>What the team gives</th></tr></thead>
+    <tbody>
+      <tr><td class="stage">1. Listen</td><td>Kickoff, system access and the first stakeholder interviews</td><td>A sponsor, an interview list and read access to Salesforce</td></tr>
+      <tr><td class="stage">2. Map</td><td>Finish interviews and map the as-is process</td><td>Thirty minutes with process owners to check the maps</td></tr>
+      <tr><td class="stage">3. Score</td><td>Salesforce audit, scorecard and the future-state design</td><td>A check-in with the sponsor on early findings</td></tr>
+      <tr><td class="stage">4. Prioritize</td><td>Roadmap and the leadership readout</td><td>Ninety minutes with the leadership team</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout"><strong>Out of scope during the four weeks:</strong> building or fixing anything. The point is a clear picture first. Delivery can follow if the company wants it.</div>
+  </section>
+
+  <!-- DELIVERABLES -->
+  <section class="stage-sec" id="deliverables">
+  <div class="stage-h"><div class="num">3</div><h2>What the Company Walks Away With</h2></div>
+  <div class="tw"><table>
+    <thead><tr><th>Deliverable</th><th>What it shows</th></tr></thead>
+    <tbody>
+      <tr><td class="stage">Scorecard</td><td>Twelve areas rated 1 to 4, each backed by evidence</td></tr>
+      <tr><td class="stage">Stakeholder findings</td><td>What's working, what isn't, and where leaders see it differently</td></tr>
+      <tr><td class="stage">Pain-point heat map</td><td>Where it hurts most, by role and process stage</td></tr>
+      <tr><td class="stage">Swim lane maps</td><td>Lead to close and close to cash, as-is and future state</td></tr>
+      <tr><td class="stage">Salesforce audit</td><td>Findings ranked by business impact</td></tr>
+      <tr><td class="stage">Roadmap</td><td>Quick wins and bigger bets, each tagged fix, buy or hire, with ownership gaps flagged</td></tr>
+    </tbody>
+  </table></div>
+  </section>
+
+  <!-- REFERRALS -->
+  <section class="stage-sec" id="referral">
+  <div class="stage-h"><div class="num">✓</div><h2>Why It's an Easy Referral</h2></div>
+  <div class="two">
+    <div class="box"><h3>For VC and PE operating teams</h3><ul>
+      <li>Clarity before capital, so a portfolio company spends on the right hire or tool once</li>
+      <li>One repeatable method across the portfolio, so findings are comparable</li>
+      <li>A light lift for the company: mostly interviews and system access</li>
+    </ul></div>
+    <div class="box"><h3>For recruiters</h3><ul>
+      <li>A useful next step for companies that aren't ready to hire yet</li>
+      <li>A sharper job spec when they are, because the role is named by the work</li>
+      <li>A plan the new hire can pick up on day one</li>
+    </ul></div>
+  </div>
+  </section>
+
+  <h2>The Takeaway</h2>
+  <div class="hero">
+    Most revenue system problems are people and process problems that happen to show up in software. Four weeks of listening, mapping and scoring turns "we need ops help" into a ranked plan. <strong>Find out what's broken, then decide whether to fix, buy or hire.</strong>
+  </div>
+
+  <h2>Want to Talk About a Company in This Spot?</h2>
+  <p>Productivity Advisors runs the Diagnostic for growth-stage companies and their investors, and can stay on to design, build and deliver the roadmap. Greg Robin brings 15+ years in revenue operations, Salesforce architecture and GTM systems, after starting in investment banking. Reach out at <strong>greg@productivityadvisors.com</strong></p>
+
+  <p class="footnote">Productivity Advisors &middot; November 2026</p>
+
+</div>
+</body>
+</html>
